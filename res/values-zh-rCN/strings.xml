@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    
+    <!-- navigation activity -->
+    <string name="defTitle">标题</string>
+    <string name="leftBtnDefTitle">返回</string>
+    <string name="rightBtnDefTitle">下一步</string>
+    
+</resources>
