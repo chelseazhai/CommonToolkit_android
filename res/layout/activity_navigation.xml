@@ -1,52 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
-    android:orientation="horizontal"
-    android:background="#424242" >
-
-    <Button
-        android:id="@+id/left_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:text="@string/leftBtnDefTitle" />
-    
-    <Button
-        android:id="@+id/right_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:text="@string/rightBtnDefTitle" />
+    android:layout_height="match_parent" >
 
     <RelativeLayout
+        android:id="@+id/navBar_relativeLayout"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/left_btn"
-        android:layout_toLeftOf="@id/right_btn"
-        android:gravity="center" >
+        android:layout_height="40dp"
+        android:background="@color/dark_dim_gray"
+        android:orientation="horizontal" >
 
-        <View
-            android:id="@+id/title_view"
+        <FrameLayout
+            android:id="@+id/left_btn_frameLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:background="#ff0000"
-            android:visibility="gone" />
-        
-        <TextView
-            android:id="@+id/title_textView"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true" >
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/left_btn_hint"
+                android:visibility="invisible" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/right_btn_frameLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/title_view"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
-            android:text="@string/defTitle" />
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" >
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/right_btn_hint"
+                android:visibility="invisible" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/right_btn_frameLayout"
+            android:layout_toRightOf="@id/left_btn_frameLayout"
+            android:gravity="center" >
+
+            <View
+                android:id="@+id/title_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/title_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="middle"
+                android:hint="@string/title_textView_hint"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/white" />
+        </FrameLayout>
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/navContent_relativeLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/navBar_relativeLayout"
+        android:layout_centerHorizontal="true" >
+    </LinearLayout>
 
 </RelativeLayout>

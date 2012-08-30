@@ -5,9 +5,8 @@
 
     <!-- navigation activity -->
     <string name="title_activity_navigation">NavigationActivity</string>
-    
-    <string name="defTitle">Title</string>
-    <string name="leftBtnDefTitle">Back</string>
-    <string name="rightBtnDefTitle">Next</string>
+    <string name="title_textView_hint">No Title</string>
+    <string name="left_btn_hint">Back</string>
+    <string name="right_btn_hint">Go</string>
 
 </resources>

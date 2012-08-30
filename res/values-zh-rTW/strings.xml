@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <!-- navigation activity -->
-    <string name="defTitle">標題</string>
-    <string name="leftBtnDefTitle">返回</string>
-    <string name="rightBtnDefTitle">下一步</string>
-    
+    <string name="title_textView_hint">無標題</string>
+    <string name="left_btn_hint">返回</string>
+    <string name="right_btn_hint">前往</string>
+
 </resources>
