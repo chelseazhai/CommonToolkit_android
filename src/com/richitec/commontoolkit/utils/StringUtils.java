@@ -1,5 +1,6 @@
 package com.richitec.commontoolkit.utils;
 
+import java.security.MessageDigest;
 import java.util.Vector;
 
 public class StringUtils {
@@ -83,6 +84,40 @@ public class StringUtils {
 		}
 
 		return _ret;
+	}
+
+	// string md5
+	public static String md5(String string) {
+		// hex digit array
+		char _hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+				'A', 'B', 'C', 'D', 'E', 'F' };
+
+		try {
+			// get message digest instance and update message
+			MessageDigest _MessageDigestInstance = MessageDigest
+					.getInstance("MD5");
+			_MessageDigestInstance.update(string.getBytes());
+
+			// get digest array and length
+			byte[] _digests = _MessageDigestInstance.digest();
+			int _digestsLength = _digests.length;
+
+			// define return result
+			char _ret[] = new char[_digestsLength * 2];
+
+			// process string byte array
+			for (int i = 0, k = 0; i < _digestsLength; i++) {
+				byte _byte = _digests[i];
+				_ret[k++] = _hexDigits[_byte >>> 4 & 0xf];
+				_ret[k++] = _hexDigits[_byte & 0xf];
+			}
+
+			return new String(_ret);
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			return null;
+		}
 	}
 
 	// phone number from string
