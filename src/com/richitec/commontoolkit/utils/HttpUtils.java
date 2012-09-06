@@ -438,16 +438,20 @@ public class HttpUtils {
 		protected void onPostExecute(RequestExecuteResult result) {
 			super.onPostExecute(result);
 
-			// check result
-			switch (result) {
-			case TIMEOUT:
-				_mHttpRequestListener.onTimeout(_mHttpRequest);
-				break;
+			// check http request listener and bind request response
+			// callback function
+			if (null != _mHttpRequestListener) {
+				// check result
+				switch (result) {
+				case TIMEOUT:
+					_mHttpRequestListener.onTimeout(_mHttpRequest);
+					break;
 
-			default:
-				_mHttpRequestListener.bindReqRespCallBackFunction(
-						_mHttpRequest, _mHttpResponse);
-				break;
+				default:
+					_mHttpRequestListener.bindReqRespCallBackFunction(
+							_mHttpRequest, _mHttpResponse);
+					break;
+				}
 			}
 		}
 
