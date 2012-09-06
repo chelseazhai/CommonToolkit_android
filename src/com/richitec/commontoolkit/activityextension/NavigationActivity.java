@@ -35,7 +35,11 @@ public class NavigationActivity extends Activity {
 		if (null != _data) {
 			// init default nav bar back button item
 			_mBackBarBtnItem = new BarButtonItem(this,
-					_data.getString(NAV_ACTIVITY_PARAM_KEY), null, null,
+					_data.getString(NAV_ACTIVITY_PARAM_KEY), getResources()
+							.getDrawable(
+									R.drawable.img_leftbarbtnitem_normal_bg),
+					getResources().getDrawable(
+							R.drawable.img_leftbarbtnitem_touchdown_bg),
 					new OnClickListener() {
 
 						@Override
@@ -103,6 +107,33 @@ public class NavigationActivity extends Activity {
 	public void setNavBarBackgroundDrawable(Drawable navBarBackgroundDrawable) {
 		((RelativeLayout) findViewById(R.id.navBar_relativeLayout))
 				.setBackgroundDrawable(navBarBackgroundDrawable);
+	}
+
+	// update nav back bar button item resource
+	public void updateNavBackBarBtnItemResource(
+			int navBackBarBtnItemNormalResId, int navBackBarBtnItemPressedResId) {
+		// set nav back bar button item normal and pressed drawable
+		_mBackBarBtnItem.setNormalBackgroundDrawable(getResources()
+				.getDrawable(navBackBarBtnItemNormalResId));
+		_mBackBarBtnItem.setPressedBackgroundDrawable(getResources()
+				.getDrawable(navBackBarBtnItemPressedResId));
+
+		// invalidate
+		_mBackBarBtnItem.invalidate();
+	}
+
+	// update nav back bar button item drawable
+	public void updateNavBackBarBtnItemDrawable(
+			Drawable navBackBarBtnItemNormalDrawable,
+			Drawable navBackBarBtnItemPressedDrawable) {
+		// set nav back bar button item normal and pressed drawable
+		_mBackBarBtnItem
+				.setNormalBackgroundDrawable(navBackBarBtnItemNormalDrawable);
+		_mBackBarBtnItem
+				.setPressedBackgroundDrawable(navBackBarBtnItemPressedDrawable);
+
+		// invalidate
+		_mBackBarBtnItem.invalidate();
 	}
 
 	// set left bar button item
