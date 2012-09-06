@@ -112,28 +112,32 @@ public class NavigationActivity extends Activity {
 	// update nav back bar button item resource
 	public void updateNavBackBarBtnItemResource(
 			int navBackBarBtnItemNormalResId, int navBackBarBtnItemPressedResId) {
-		// set nav back bar button item normal and pressed drawable
-		_mBackBarBtnItem.setNormalBackgroundDrawable(getResources()
-				.getDrawable(navBackBarBtnItemNormalResId));
-		_mBackBarBtnItem.setPressedBackgroundDrawable(getResources()
-				.getDrawable(navBackBarBtnItemPressedResId));
+		if (null != _mBackBarBtnItem) {
+			// set nav back bar button item normal and pressed drawable
+			_mBackBarBtnItem.setNormalBackgroundDrawable(getResources()
+					.getDrawable(navBackBarBtnItemNormalResId));
+			_mBackBarBtnItem.setPressedBackgroundDrawable(getResources()
+					.getDrawable(navBackBarBtnItemPressedResId));
 
-		// invalidate
-		_mBackBarBtnItem.invalidate();
+			// invalidate
+			_mBackBarBtnItem.invalidate();
+		}
 	}
 
 	// update nav back bar button item drawable
 	public void updateNavBackBarBtnItemDrawable(
 			Drawable navBackBarBtnItemNormalDrawable,
 			Drawable navBackBarBtnItemPressedDrawable) {
-		// set nav back bar button item normal and pressed drawable
-		_mBackBarBtnItem
-				.setNormalBackgroundDrawable(navBackBarBtnItemNormalDrawable);
-		_mBackBarBtnItem
-				.setPressedBackgroundDrawable(navBackBarBtnItemPressedDrawable);
+		if (null != _mBackBarBtnItem) {
+			// set nav back bar button item normal and pressed drawable
+			_mBackBarBtnItem
+					.setNormalBackgroundDrawable(navBackBarBtnItemNormalDrawable);
+			_mBackBarBtnItem
+					.setPressedBackgroundDrawable(navBackBarBtnItemPressedDrawable);
 
-		// invalidate
-		_mBackBarBtnItem.invalidate();
+			// invalidate
+			_mBackBarBtnItem.invalidate();
+		}
 	}
 
 	// set left bar button item
