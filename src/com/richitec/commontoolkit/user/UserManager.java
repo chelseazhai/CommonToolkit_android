@@ -33,6 +33,11 @@ public class UserManager {
 		return _mUserBean;
 	}
 
+	// set user
+	public UserBean setUser(UserBean pUser) {
+		return _mUserBean = pUser;
+	}
+
 	// set user with user name and password
 	public UserBean setUser(String pName, String pPassword) {
 		// generator user digit key

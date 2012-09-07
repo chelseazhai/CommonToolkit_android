@@ -26,6 +26,7 @@ import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -299,6 +300,27 @@ public class HttpUtils {
 		// send signature post request
 		postRequest(pUrl, pPostFormat, _signaturePostRequestParam, pUserInfo,
 				pRequestType, httpRequestListener);
+	}
+
+	// get http response entity string
+	public static String getHttpResponseEntityString(HttpResponse response) {
+		String _respEntityString = null;
+
+		// check response
+		if (null != response) {
+			try {
+				_respEntityString = EntityUtils.toString(response.getEntity());
+			} catch (Exception e) {
+				e.printStackTrace();
+
+				Log.e(LOG_TAG,
+						"Get http response entity excetion: " + e.getMessage());
+			}
+		} else {
+			Log.e(LOG_TAG, "Get http response entity, response is null");
+		}
+
+		return _respEntityString;
 	}
 
 	// inner class
