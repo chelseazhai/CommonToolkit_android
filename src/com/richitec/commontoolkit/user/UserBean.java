@@ -55,7 +55,7 @@ public class UserBean implements Serializable {
 		StringBuilder _userDescription = new StringBuilder();
 
 		// append user name, password and userKey
-		_userDescription.append("name: ").append(name).append(", ");
+		_userDescription.append("user name: ").append(name).append(", ");
 		_userDescription.append("password: ").append(password).append(", and ");
 		_userDescription.append("userKey: ").append(userKey).append('\n');
 
