@@ -135,6 +135,8 @@ public class HttpUtils {
 			break;
 
 		case ASYNCHRONOUS:
+			// new asynchronous http request task to do get request in
+			// background
 			new AsyncHttpRequestTask().execute(_getHttpRequest,
 					httpRequestListener);
 			break;
@@ -226,6 +228,8 @@ public class HttpUtils {
 			break;
 
 		case ASYNCHRONOUS:
+			// new asynchronous http request task to do post request in
+			// background
 			new AsyncHttpRequestTask().execute(_postHttpRequest,
 					httpRequestListener);
 			break;
@@ -430,12 +434,13 @@ public class HttpUtils {
 			// init return result
 			RequestExecuteResult _ret = RequestExecuteResult.NORMAL;
 
-			// set http request and request listener
+			// save http request and request listener
 			_mHttpRequest = (HttpUriRequest) getSuitableParam(
 					HttpUriRequest.class, params);
 			_mHttpRequestListener = (OnHttpRequestListener) getSuitableParam(
 					OnHttpRequestListener.class, params);
 
+			// save http response
 			try {
 				_mHttpResponse = getHttpClient().execute(_mHttpRequest);
 			} catch (Exception e) {
