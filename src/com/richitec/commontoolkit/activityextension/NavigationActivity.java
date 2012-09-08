@@ -204,7 +204,10 @@ public class NavigationActivity extends Activity {
 					_intent.putExtra(extraDataKey,
 							(String) extraData.get(extraDataKey));
 				}
-				// ??, others
+				// others, not implementation
+				else {
+					Log.d(LOG_TAG, "Type except of String not implementation");
+				}
 			}
 		}
 
