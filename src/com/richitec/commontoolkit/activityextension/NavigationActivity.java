@@ -1,5 +1,7 @@
 package com.richitec.commontoolkit.activityextension;
 
+import java.util.Map;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -186,16 +188,33 @@ public class NavigationActivity extends Activity {
 		((TextView) findViewById(R.id.title_textView)).setTextSize(textSize);
 	}
 
-	// push activity to navigation activity stack
-	public void pushActivity(Class<? extends Activity> activityClass) {
+	// push activity with extra data to navigation activity stack
+	public void pushActivity(Class<? extends Activity> activityClass,
+			Map<String, ?> extraData) {
 		// define the intent
 		Intent _intent = new Intent(this, activityClass);
 
 		// set intent extra parameter data
 		_intent.putExtra(NAV_ACTIVITY_PARAM_KEY, (String) this.getTitle());
 
+		if (null != extraData) {
+			for (String extraDataKey : extraData.keySet()) {
+				// String
+				if (extraData.get(extraDataKey) instanceof String) {
+					_intent.putExtra(extraDataKey,
+							(String) extraData.get(extraDataKey));
+				}
+				// ??, others
+			}
+		}
+
 		// go to the activity
 		startActivity(_intent);
+	}
+
+	// push activity to navigation activity stack
+	public void pushActivity(Class<? extends Activity> activityClass) {
+		this.pushActivity(activityClass, null);
 	}
 
 	// pop this activity from activity stack
