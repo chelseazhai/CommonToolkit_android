@@ -19,8 +19,9 @@ import com.richitec.commontoolkit.customui.BarButtonItem;
 
 public class NavigationActivity extends Activity {
 
-	private static final String LOG_TAG = "CommonToolkit - NavigationActivity";
+	private static final String LOG_TAG = "NavigationActivity";
 
+	// commonToolkit navigation activity onCreate param key
 	private static final String NAV_ACTIVITY_PARAM_KEY = "nav_back_btn_default_title";
 
 	// nav bar back button item
@@ -34,7 +35,7 @@ public class NavigationActivity extends Activity {
 		Bundle _data = getIntent().getExtras();
 
 		// check the data bundle
-		if (null != _data) {
+		if (null != _data && null != _data.getString(NAV_ACTIVITY_PARAM_KEY)) {
 			// init default nav bar back button item
 			_mBackBarBtnItem = new BarButtonItem(this,
 					_data.getString(NAV_ACTIVITY_PARAM_KEY), getResources()
