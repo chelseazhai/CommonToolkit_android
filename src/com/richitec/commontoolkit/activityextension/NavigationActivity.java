@@ -15,10 +15,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.richitec.commontoolkit.customui.BarButtonItem;
-import com.richitec.commontoolkit.customui.BarButtonItem.BarButtonItemStyle;
+import com.richitec.commontoolkit.customcomponent.BarButtonItem;
+import com.richitec.commontoolkit.customcomponent.BarButtonItem.BarButtonItemStyle;
+import com.richitec.commontoolkit.customcomponent.IBackBarButtonItemDrawable;
 
-public abstract class NavigationActivity extends Activity {
+public class NavigationActivity extends Activity implements
+		IBackBarButtonItemDrawable {
 
 	private static final String LOG_TAG = "NavigationActivity";
 
@@ -27,12 +29,6 @@ public abstract class NavigationActivity extends Activity {
 
 	// nav bar back button item
 	private BarButtonItem _mBackBarBtnItem;
-
-	// default nav back bar button item normal drawable
-	public abstract Drawable backBarBtnItemNormalDrawable();
-
-	// default nav back bar button item pressed drawable
-	public abstract Drawable backBarBtnItemPressedDrawable();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,22 +39,12 @@ public abstract class NavigationActivity extends Activity {
 
 		// check the data bundle
 		if (null != _data && null != _data.getString(NAV_ACTIVITY_PARAM_KEY)) {
-			// get default nav bar back button item normal and pressed drawable
-			Drawable _backBarBtnItemNormalDrawable = backBarBtnItemNormalDrawable();
-			Drawable _backBarBtnItemPressedDrawable = backBarBtnItemPressedDrawable();
-
 			// init default nav bar back button item
-			_mBackBarBtnItem = new BarButtonItem(
-					this,
+			_mBackBarBtnItem = new BarButtonItem(this,
 					_data.getString(NAV_ACTIVITY_PARAM_KEY),
 					BarButtonItemStyle.LEFT_BACK,
-					null != _backBarBtnItemNormalDrawable ? _backBarBtnItemNormalDrawable
-							: getResources().getDrawable(
-									R.drawable.img_leftbarbtnitem_normal_bg),
-					null != _backBarBtnItemPressedDrawable ? _backBarBtnItemPressedDrawable
-							: getResources().getDrawable(
-									R.drawable.img_leftbarbtnitem_touchdown_bg),
-					new OnClickListener() {
+					backBarBtnItemNormalDrawable(),
+					backBarBtnItemPressedDrawable(), new OnClickListener() {
 
 						@Override
 						public void onClick(View v) {
@@ -125,37 +111,6 @@ public abstract class NavigationActivity extends Activity {
 	public void setNavBarBackgroundDrawable(Drawable navBarBackgroundDrawable) {
 		((RelativeLayout) findViewById(R.id.navBar_relativeLayout))
 				.setBackgroundDrawable(navBarBackgroundDrawable);
-	}
-
-	// update nav back bar button item resource
-	public void updateNavBackBarBtnItemResource(
-			int navBackBarBtnItemNormalResId, int navBackBarBtnItemPressedResId) {
-		if (null != _mBackBarBtnItem) {
-			// set nav back bar button item normal and pressed drawable
-			_mBackBarBtnItem.setNormalBackgroundDrawable(getResources()
-					.getDrawable(navBackBarBtnItemNormalResId));
-			_mBackBarBtnItem.setPressedBackgroundDrawable(getResources()
-					.getDrawable(navBackBarBtnItemPressedResId));
-
-			// invalidate
-			_mBackBarBtnItem.invalidate();
-		}
-	}
-
-	// update nav back bar button item drawable
-	public void updateNavBackBarBtnItemDrawable(
-			Drawable navBackBarBtnItemNormalDrawable,
-			Drawable navBackBarBtnItemPressedDrawable) {
-		if (null != _mBackBarBtnItem) {
-			// set nav back bar button item normal and pressed drawable
-			_mBackBarBtnItem
-					.setNormalBackgroundDrawable(navBackBarBtnItemNormalDrawable);
-			_mBackBarBtnItem
-					.setPressedBackgroundDrawable(navBackBarBtnItemPressedDrawable);
-
-			// invalidate
-			_mBackBarBtnItem.invalidate();
-		}
 	}
 
 	// set left bar button item
@@ -240,6 +195,18 @@ public abstract class NavigationActivity extends Activity {
 	public void popActivity() {
 		// finish self activity
 		finish();
+	}
+
+	@Override
+	public Drawable backBarBtnItemNormalDrawable() {
+		return getResources().getDrawable(
+				R.drawable.img_leftbarbtnitem_normal_bg);
+	}
+
+	@Override
+	public Drawable backBarBtnItemPressedDrawable() {
+		return getResources().getDrawable(
+				R.drawable.img_leftbarbtnitem_touchdown_bg);
 	}
 
 }

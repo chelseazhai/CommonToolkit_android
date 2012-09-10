@@ -1,4 +1,4 @@
-package com.richitec.commontoolkit.customui;
+package com.richitec.commontoolkit.customcomponent;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.richitec.commontoolkit.activityextension.R;
 
-public class BarButtonItem extends Button {
+public class BarButtonItem extends Button implements IBarButtonItemDrawable {
 
 	// normal background drawable
 	private Drawable _mNormalBackgroundDrawable;
@@ -19,8 +19,9 @@ public class BarButtonItem extends Button {
 		super(context);
 	}
 
-	// constructor using bar button item style and normal background drawable
-	public BarButtonItem(Context context, BarButtonItemStyle barBtnItemStyle,
+	// private constructor using bar button item style and normal background
+	// drawable
+	private BarButtonItem(Context context, BarButtonItemStyle barBtnItemStyle,
 			Drawable normalBackgroundDrawable) {
 		this(context);
 
@@ -29,16 +30,14 @@ public class BarButtonItem extends Button {
 		case LEFT_BACK:
 			// set normal background drawable
 			setBackgroundDrawable(null != normalBackgroundDrawable ? normalBackgroundDrawable
-					: getResources().getDrawable(
-							R.drawable.img_leftbarbtnitem_normal_bg));
+					: leftBarBtnItemNormalDrawable());
 			break;
 
 		case RIGHT_GO:
 		default:
 			// set normal background drawable
 			setBackgroundDrawable(null != normalBackgroundDrawable ? normalBackgroundDrawable
-					: getResources().getDrawable(
-							R.drawable.img_rightbarbtnitem_normal_bg));
+					: rightBarBtnItemNormalDrawable());
 			break;
 		}
 	}
@@ -149,12 +148,16 @@ public class BarButtonItem extends Button {
 		super.onDraw(canvas);
 	}
 
-	public void setNormalBackgroundDrawable(Drawable normalBackgroundDrawable) {
-		_mNormalBackgroundDrawable = normalBackgroundDrawable;
+	@Override
+	public Drawable leftBarBtnItemNormalDrawable() {
+		return getResources().getDrawable(
+				R.drawable.img_leftbarbtnitem_normal_bg);
 	}
 
-	public void setPressedBackgroundDrawable(Drawable pressedBackgroundDrawable) {
-		_mPressedBackgroundDrawable = pressedBackgroundDrawable;
+	@Override
+	public Drawable rightBarBtnItemNormalDrawable() {
+		return getResources().getDrawable(
+				R.drawable.img_rightbarbtnitem_normal_bg);
 	}
 
 	// inner class
