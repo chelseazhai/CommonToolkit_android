@@ -344,31 +344,33 @@ public class HttpUtils {
 		// bind request response callback function
 		private void bindReqRespCallBackFunction(HttpRequest request,
 				HttpResponse response) {
-			// check response status code
-			switch (response.getStatusLine().getStatusCode()) {
-			case HttpStatus.SC_OK:
-				onFinished(request, response);
-				break;
+			// check response and status code
+			if (null != response) {
+				switch (response.getStatusLine().getStatusCode()) {
+				case HttpStatus.SC_OK:
+					onFinished(request, response);
+					break;
 
-			case HttpStatus.SC_BAD_REQUEST:
-				onBadRequest(request, response);
-				break;
+				case HttpStatus.SC_BAD_REQUEST:
+					onBadRequest(request, response);
+					break;
 
-			case HttpStatus.SC_FORBIDDEN:
-				onForbidden(request, response);
-				break;
+				case HttpStatus.SC_FORBIDDEN:
+					onForbidden(request, response);
+					break;
 
-			case HttpStatus.SC_NOT_FOUND:
-				onNotFound(request, response);
-				break;
+				case HttpStatus.SC_NOT_FOUND:
+					onNotFound(request, response);
+					break;
 
-			case HttpStatus.SC_INTERNAL_SERVER_ERROR:
-				onInternalServerError(request, response);
-				break;
+				case HttpStatus.SC_INTERNAL_SERVER_ERROR:
+					onInternalServerError(request, response);
+					break;
 
-			default:
-				onFailed(request, response);
-				break;
+				default:
+					onFailed(request, response);
+					break;
+				}
 			}
 		}
 
