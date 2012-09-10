@@ -19,6 +19,30 @@ public class BarButtonItem extends Button {
 		super(context);
 	}
 
+	// constructor using bar button item style and normal background drawable
+	public BarButtonItem(Context context, BarButtonItemStyle barBtnItemStyle,
+			Drawable normalBackgroundDrawable) {
+		this(context);
+
+		// check bar button item style
+		switch (barBtnItemStyle) {
+		case LEFT_BACK:
+			// set normal background drawable
+			setBackgroundDrawable(null != normalBackgroundDrawable ? normalBackgroundDrawable
+					: getResources().getDrawable(
+							R.drawable.img_leftbarbtnitem_normal_bg));
+			break;
+
+		case RIGHT_GO:
+		default:
+			// set normal background drawable
+			setBackgroundDrawable(null != normalBackgroundDrawable ? normalBackgroundDrawable
+					: getResources().getDrawable(
+							R.drawable.img_rightbarbtnitem_normal_bg));
+			break;
+		}
+	}
+
 	//
 	public BarButtonItem(Context context, int resId) {
 		super(context);
@@ -26,12 +50,13 @@ public class BarButtonItem extends Button {
 		//
 	}
 
-	// init with button title, normal background drawable, pressed background
-	// drawable and button click listener
+	// init with button title, bar button item style, normal background
+	// drawable, pressed background drawable and button click listener
 	public BarButtonItem(Context context, CharSequence title,
+			BarButtonItemStyle barBtnItemStyle,
 			Drawable normalBackgroundDrawable,
 			Drawable pressedBackgroundDrawable, OnClickListener btnClickListener) {
-		super(context);
+		this(context, barBtnItemStyle, normalBackgroundDrawable);
 
 		// set title and title color
 		setText(null == title ? "" : title);
@@ -47,7 +72,8 @@ public class BarButtonItem extends Button {
 
 	public BarButtonItem(Context context, CharSequence title,
 			OnClickListener btnClickListener) {
-		this(context, title, null, null, btnClickListener);
+		this(context, title, BarButtonItemStyle.RIGHT_GO, null, null,
+				btnClickListener);
 	}
 
 	public BarButtonItem(Context context, BarButtonItemStyle barBtnItemStyle,
@@ -55,6 +81,7 @@ public class BarButtonItem extends Button {
 		this(
 				context,
 				title,
+				barBtnItemStyle,
 				BarButtonItemStyle.LEFT_BACK == barBtnItemStyle ? context
 						.getResources().getDrawable(
 								R.drawable.img_leftbarbtnitem_normal_bg)
@@ -76,7 +103,8 @@ public class BarButtonItem extends Button {
 	public BarButtonItem(Context context, int titleId,
 			int normalBackgroundResId, int pressedBackgroundResId,
 			OnClickListener btnClickListener) {
-		super(context);
+		this(context, BarButtonItemStyle.RIGHT_GO, context.getResources()
+				.getDrawable(normalBackgroundResId));
 
 		// set title and title color
 		setText(titleId);

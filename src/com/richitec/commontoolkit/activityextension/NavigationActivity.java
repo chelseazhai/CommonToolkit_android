@@ -16,8 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.richitec.commontoolkit.customui.BarButtonItem;
+import com.richitec.commontoolkit.customui.BarButtonItem.BarButtonItemStyle;
 
-public class NavigationActivity extends Activity {
+public abstract class NavigationActivity extends Activity {
 
 	private static final String LOG_TAG = "NavigationActivity";
 
@@ -26,6 +27,12 @@ public class NavigationActivity extends Activity {
 
 	// nav bar back button item
 	private BarButtonItem _mBackBarBtnItem;
+
+	// default nav back bar button item normal drawable
+	public abstract Drawable backBarBtnItemNormalDrawable();
+
+	// default nav back bar button item pressed drawable
+	public abstract Drawable backBarBtnItemPressedDrawable();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -36,13 +43,21 @@ public class NavigationActivity extends Activity {
 
 		// check the data bundle
 		if (null != _data && null != _data.getString(NAV_ACTIVITY_PARAM_KEY)) {
+			// get default nav bar back button item normal and pressed drawable
+			Drawable _backBarBtnItemNormalDrawable = backBarBtnItemNormalDrawable();
+			Drawable _backBarBtnItemPressedDrawable = backBarBtnItemPressedDrawable();
+
 			// init default nav bar back button item
-			_mBackBarBtnItem = new BarButtonItem(this,
-					_data.getString(NAV_ACTIVITY_PARAM_KEY), getResources()
-							.getDrawable(
+			_mBackBarBtnItem = new BarButtonItem(
+					this,
+					_data.getString(NAV_ACTIVITY_PARAM_KEY),
+					BarButtonItemStyle.LEFT_BACK,
+					null != _backBarBtnItemNormalDrawable ? _backBarBtnItemNormalDrawable
+							: getResources().getDrawable(
 									R.drawable.img_leftbarbtnitem_normal_bg),
-					getResources().getDrawable(
-							R.drawable.img_leftbarbtnitem_touchdown_bg),
+					null != _backBarBtnItemPressedDrawable ? _backBarBtnItemPressedDrawable
+							: getResources().getDrawable(
+									R.drawable.img_leftbarbtnitem_touchdown_bg),
 					new OnClickListener() {
 
 						@Override
