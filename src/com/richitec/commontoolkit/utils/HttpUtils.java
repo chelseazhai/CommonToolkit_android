@@ -1,6 +1,7 @@
 package com.richitec.commontoolkit.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -126,10 +127,13 @@ public class HttpUtils {
 								+ e.getMessage());
 				e.printStackTrace();
 
-				// check http request listener
+				// process needed exception and check http request listener
 				if (ConnectTimeoutException.class == e.getClass()
 						&& null != httpRequestListener) {
 					httpRequestListener.onTimeout(_getHttpRequest);
+				} else if (UnknownHostException.class == e.getClass()
+						&& null != httpRequestListener) {
+					httpRequestListener.onUnknownHost(_getHttpRequest);
 				}
 			}
 			break;
@@ -219,10 +223,13 @@ public class HttpUtils {
 								+ e.getMessage());
 				e.printStackTrace();
 
-				// check http request listener
+				// process needed exception and check http request listener
 				if (ConnectTimeoutException.class == e.getClass()
 						&& null != httpRequestListener) {
 					httpRequestListener.onTimeout(_postHttpRequest);
+				} else if (UnknownHostException.class == e.getClass()
+						&& null != httpRequestListener) {
+					httpRequestListener.onUnknownHost(_postHttpRequest);
 				}
 			}
 			break;
@@ -344,33 +351,31 @@ public class HttpUtils {
 		// bind request response callback function
 		private void bindReqRespCallBackFunction(HttpRequest request,
 				HttpResponse response) {
-			// check response and status code
-			if (null != response) {
-				switch (response.getStatusLine().getStatusCode()) {
-				case HttpStatus.SC_OK:
-					onFinished(request, response);
-					break;
+			// check response status code
+			switch (response.getStatusLine().getStatusCode()) {
+			case HttpStatus.SC_OK:
+				onFinished(request, response);
+				break;
 
-				case HttpStatus.SC_BAD_REQUEST:
-					onBadRequest(request, response);
-					break;
+			case HttpStatus.SC_BAD_REQUEST:
+				onBadRequest(request, response);
+				break;
 
-				case HttpStatus.SC_FORBIDDEN:
-					onForbidden(request, response);
-					break;
+			case HttpStatus.SC_FORBIDDEN:
+				onForbidden(request, response);
+				break;
 
-				case HttpStatus.SC_NOT_FOUND:
-					onNotFound(request, response);
-					break;
+			case HttpStatus.SC_NOT_FOUND:
+				onNotFound(request, response);
+				break;
 
-				case HttpStatus.SC_INTERNAL_SERVER_ERROR:
-					onInternalServerError(request, response);
-					break;
+			case HttpStatus.SC_INTERNAL_SERVER_ERROR:
+				onInternalServerError(request, response);
+				break;
 
-				default:
-					onFailed(request, response);
-					break;
-				}
+			default:
+				onFailed(request, response);
+				break;
 			}
 		}
 
@@ -412,11 +417,17 @@ public class HttpUtils {
 			onFailed(request, null);
 		}
 
+		// on unknown host
+		public void onUnknownHost(HttpRequest request) {
+			// call onFailed callback function
+			onFailed(request, null);
+		}
+
 	}
 
 	// request execute result
 	enum RequestExecuteResult {
-		NORMAL, TIMEOUT
+		NORMAL, TIMEOUT, UNKNOWN_HOST
 	}
 
 	// asynchronous http request task
@@ -451,12 +462,15 @@ public class HttpUtils {
 								+ e.getMessage());
 				e.printStackTrace();
 
-				// check http request listener
+				// process needed exception and check http request listener
 				if (ConnectTimeoutException.class == e.getClass()
-						&& null != getSuitableParam(
-								OnHttpRequestListener.class, params)) {
+						&& null != _mHttpRequestListener) {
 					// update request execute result
 					_ret = RequestExecuteResult.TIMEOUT;
+				} else if (UnknownHostException.class == e.getClass()
+						&& null != _mHttpRequestListener) {
+					// update request execute result
+					_ret = RequestExecuteResult.UNKNOWN_HOST;
 				}
 			}
 
@@ -476,6 +490,11 @@ public class HttpUtils {
 					_mHttpRequestListener.onTimeout(_mHttpRequest);
 					break;
 
+				case UNKNOWN_HOST:
+					_mHttpRequestListener.onUnknownHost(_mHttpRequest);
+					break;
+
+				case NORMAL:
 				default:
 					_mHttpRequestListener.bindReqRespCallBackFunction(
 							_mHttpRequest, _mHttpResponse);
