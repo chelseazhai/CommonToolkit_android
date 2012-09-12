@@ -2,6 +2,7 @@ package com.richitec.commontoolkit.addressbook;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public class ContactBean implements Serializable {
 
@@ -10,8 +11,10 @@ public class ContactBean implements Serializable {
 	 */
 	private static final long serialVersionUID = -8836226421304538227L;
 
-	// id
-	private Integer id;
+	// aggregated id
+	private Long id;
+	// raw ids map. key: rawId and value: account name
+	private Map<Long, String> rawIds;
 	// groups
 	private List<String> groups;
 	// display name
@@ -25,12 +28,20 @@ public class ContactBean implements Serializable {
 	// photo
 	private Byte[] photo;
 
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Map<Long, String> getRawIds() {
+		return rawIds;
+	}
+
+	public void setRawIds(Map<Long, String> rawIds) {
+		this.rawIds = rawIds;
 	}
 
 	public List<String> getGroups() {
@@ -88,17 +99,18 @@ public class ContactBean implements Serializable {
 
 		// append contact id, display name, groups, fullNames, name phonetics,
 		// phone numbers and photo
-		_contactDescription.append("contact id: ").append(id).append(", ");
+		_contactDescription.append("contact aggregated id: ").append(id)
+				.append(", ");
+		_contactDescription.append("raw ids: ").append(rawIds).append(", ");
 		_contactDescription.append("display name: ").append(displayName)
 				.append(", ");
-		_contactDescription.append("groups: ").append(groups.toString())
+		_contactDescription.append("groups: ").append(groups).append(", ");
+		_contactDescription.append("fullNames: ").append(fullNames)
 				.append(", ");
-		_contactDescription.append("fullNames: ").append(fullNames.toString())
+		_contactDescription.append("name phonetics: ").append(namePhonetics)
 				.append(", ");
-		_contactDescription.append("name phonetics: ")
-				.append(namePhonetics.toString()).append(", ");
-		_contactDescription.append("phone numbers: ")
-				.append(phoneNumbers.toString()).append(", ");
+		_contactDescription.append("phone numbers: ").append(phoneNumbers)
+				.append(", ");
 		_contactDescription.append("photo: ").append(photo).append("\n");
 
 		return _contactDescription.toString();
