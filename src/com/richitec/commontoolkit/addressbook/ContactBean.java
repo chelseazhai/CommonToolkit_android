@@ -1,6 +1,7 @@
 package com.richitec.commontoolkit.addressbook;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,10 +24,23 @@ public class ContactBean implements Serializable {
 	private List<String> fullNames;
 	// name phonetics
 	private List<List<String>> namePhonetics;
+	// name phonetics string
+	private String namePhoneticsString;
 	// phone numbers
 	private List<String> phoneNumbers;
 	// photo
-	private Byte[] photo;
+	private byte[] photo;
+
+	// extension map
+	private Map<String, Object> extension;
+
+	// ContactBean constructor
+	public ContactBean() {
+		super();
+
+		// init extension map
+		extension = new HashMap<String, Object>();
+	}
 
 	public Long getId() {
 		return id;
@@ -74,6 +88,13 @@ public class ContactBean implements Serializable {
 
 	public void setNamePhonetics(List<List<String>> namePhonetics) {
 		this.namePhonetics = namePhonetics;
+
+		// set name phonetics string
+		this.namePhoneticsString = generateNamePhoneticsString(namePhonetics);
+	}
+
+	public String getNamePhoneticsString() {
+		return namePhoneticsString;
 	}
 
 	public List<String> getPhoneNumbers() {
@@ -84,12 +105,38 @@ public class ContactBean implements Serializable {
 		this.phoneNumbers = phoneNumbers;
 	}
 
-	public Byte[] getPhoto() {
+	public byte[] getPhoto() {
 		return photo;
 	}
 
-	public void setPhoto(Byte[] photo) {
+	public void setPhoto(byte[] photo) {
 		this.photo = photo;
+	}
+
+	public Map<String, Object> getExtension() {
+		return extension;
+	}
+
+	public void setExtension(Map<String, Object> extension) {
+		this.extension = extension;
+	}
+
+	// generate contact name phonetics string
+	private String generateNamePhoneticsString(List<List<String>> namePhonetics) {
+		StringBuilder _namePhoneticsStringBuilder = null;
+
+		if (null != namePhonetics) {
+			// init name phonetics string builder
+			_namePhoneticsStringBuilder = new StringBuilder();
+
+			for (List<String> _nameCharPhoneticsList : namePhonetics) {
+				_namePhoneticsStringBuilder.append(_nameCharPhoneticsList
+						.get(0));
+			}
+		}
+
+		return null == _namePhoneticsStringBuilder ? null
+				: _namePhoneticsStringBuilder.toString();
 	}
 
 	@Override
@@ -111,7 +158,9 @@ public class ContactBean implements Serializable {
 				.append(", ");
 		_contactDescription.append("phone numbers: ").append(phoneNumbers)
 				.append(", ");
-		_contactDescription.append("photo: ").append(photo).append("\n");
+		_contactDescription.append("photo: ").append(photo).append(", ");
+		_contactDescription.append("extension: ").append(extension)
+				.append("\n");
 
 		return _contactDescription.toString();
 	}
