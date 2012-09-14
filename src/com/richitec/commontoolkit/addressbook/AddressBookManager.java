@@ -20,6 +20,7 @@ import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.Groups;
 import android.provider.ContactsContract.RawContacts;
 import android.util.Log;
+import android.util.SparseArray;
 
 import com.richitec.commontoolkit.activityextension.AppLaunchActivity;
 import com.richitec.commontoolkit.utils.PinyinUtils;
@@ -96,6 +97,8 @@ public class AddressBookManager {
 	public static final String PHONENUMBER_MATCHING_INDEXES = "phoneNumberMatchingIndexes";
 	// contact name matching index array key
 	public static final String NAME_MATCHING_INDEXES = "nameMatchingIndexes";
+	// contact name character fuzzy matched length
+	public static Integer NAME_CHARACTER_FUZZYMATCHED_LENGTH = -1;
 
 	// private constructor
 	private AddressBookManager() {
@@ -726,29 +729,233 @@ public class AddressBookManager {
 			List<Map<String, Object>> _contactsSearchedResults = new ArrayList<Map<String, Object>>();
 
 			// split contact search name
-			List<String> _ContactSearchNameSplitList = null;
+			List<List<String>> _ContactSearchNameSplitList = null;
 			if (_searchScope.size() >= 1) {
 				// init contact search name split array
-				_ContactSearchNameSplitList = null;
+				_ContactSearchNameSplitList = splitContactSearchName(name);
 			}
 
 			// search in scope
 			for (ContactBean _contact : _searchScope) {
+				// skip the contact has not structured name
+				if (null == _contact.getNamePhonetics()) {
+					continue;
+				}
+
 				// traversal all search name split array
-				for (String _splitString : _ContactSearchNameSplitList) {
+				for (List<String> _splitObjects : _ContactSearchNameSplitList) {
 					// split name unmatch flag
 					boolean _splitNameUnmatch = false;
 
-					// name matching indexe's array array
-					List<Object> _nameMatchingIndexesList = new ArrayList<Object>();
+					// name matching indexes map
+					SparseArray<Integer> _nameMatchingIndexesMap = new SparseArray<Integer>();
 
-					//
+					// compare split objects(List) count with contact name
+					// phonetics(List) count
+					if (_splitObjects.size() > _contact.getNamePhonetics()
+							.size()) {
+						continue;
+					}
+
+					// check name matching type
+					switch (nameMatchingType) {
+					case FUZZY:
+						// check contact search name matching
+						if (!matchSplitNameListWithContactNamePhonetics(
+								_splitObjects, _contact.getNamePhonetics())) {
+							_splitNameUnmatch = true;
+						}
+						// fuzzy matched, set name matching indexes list
+						else {
+							// last split objects list element matched index
+							int _lastElementMatchedIndex = 0;
+
+							for (int i = 0; i < _splitObjects.size(); i++) {
+								for (int j = _lastElementMatchedIndex; j < _contact
+										.getNamePhonetics().size(); j++) {
+									// split objects list element matched flag
+									boolean _elementMatched = false;
+
+									for (int k = 0; k < _contact
+											.getNamePhonetics().get(j).size(); k++) {
+										// get the contact name character
+										// phonetic
+										String _nameCharPhonetic = _contact
+												.getNamePhonetics().get(j)
+												.get(k);
+
+										// check split objects list each element
+										// matched index
+										if (_nameCharPhonetic
+												.startsWith(_splitObjects
+														.get(i))) {
+											_elementMatched = true;
+
+											// save split name element matching
+											// index
+											_lastElementMatchedIndex = j + 1;
+
+											// put matching indexes integer
+											// range in name matching indexes
+											// map
+											_nameMatchingIndexesMap
+													.put(j,
+															_nameCharPhonetic
+																	.equalsIgnoreCase(_contact
+																			.getFullNames()
+																			.get(j)) ? _splitObjects
+																	.get(i)
+																	.length()
+																	: NAME_CHARACTER_FUZZYMATCHED_LENGTH);
+
+											break;
+										}
+									}
+
+									// find element matched index, if matched
+									if (_elementMatched) {
+										break;
+									}
+								}
+							}
+						}
+						break;
+
+					case ORDER:
+					default:
+						// slide split objects list on contact name phonetics
+						// list
+						for (int slideIndex = 0; slideIndex < _contact
+								.getNamePhonetics().size()
+								- _splitObjects.size() + 1; slideIndex++) {
+							// split objects list match flag in particular
+							// contact name phonetics list
+							boolean _splitObjectsMatched = false;
+
+							// compare each split object in list
+							for (int splitObjectIndex = 0; splitObjectIndex < _splitObjects
+									.size(); splitObjectIndex++) {
+								// one split object in split objects unmatch
+								// flag
+								boolean _oneSplitObjectUnmatched = false;
+
+								// traversal the particular contact phonetics
+								// list
+								for (int contactNameCharPhoneticsIndex = 0; contactNameCharPhoneticsIndex < _contact
+										.getNamePhonetics()
+										.get(slideIndex + splitObjectIndex)
+										.size(); contactNameCharPhoneticsIndex++) {
+									// matched, contact name char one phonetic
+									// has prefix with split object
+									if (_contact
+											.getNamePhonetics()
+											.get(slideIndex + splitObjectIndex)
+											.get(contactNameCharPhoneticsIndex)
+											.startsWith(
+													_splitObjects
+															.get(splitObjectIndex))) {
+										break;
+									} else if (contactNameCharPhoneticsIndex == _contact
+											.getNamePhonetics()
+											.get(slideIndex + splitObjectIndex)
+											.size() - 1) {
+										_oneSplitObjectUnmatched = true;
+									}
+								}
+
+								// one split object in split objects unmatch,
+								// break, slide split name array
+								if (_oneSplitObjectUnmatched) {
+									break;
+								}
+
+								// all split object in lists matched, break
+								if (!_oneSplitObjectUnmatched
+										&& splitObjectIndex == _splitObjects
+												.size() - 1) {
+									_splitObjectsMatched = true;
+									break;
+								}
+							}
+
+							// one particular split objects list matched, break
+							if (_splitObjectsMatched) {
+								// set name matching index array
+								for (int i = 0; i < _splitObjects.size(); i++) {
+									// traversal the contact each name phonetics
+									for (String _phonetic : _contact
+											.getNamePhonetics().get(
+													slideIndex + i)) {
+										// get the contact matched name
+										// phonetics and add matching indexes to
+										// name matching indexes list
+										if (_phonetic.startsWith(_splitObjects
+												.get(i))) {
+											// put matching indexes integer
+											// range in name matching indexes
+											// map
+											_nameMatchingIndexesMap
+													.put(slideIndex + i,
+															_phonetic
+																	.equalsIgnoreCase(_contact
+																			.getFullNames()
+																			.get(slideIndex
+																					+ i)) ? _splitObjects
+																	.get(i)
+																	.length()
+																	: NAME_CHARACTER_FUZZYMATCHED_LENGTH);
+										}
+									}
+								}
+
+								break;
+							}
+
+							// all split objects list unmatch, break, goto next
+							// contact
+							if (!_splitObjectsMatched
+									&& slideIndex == _contact
+											.getNamePhonetics().size()
+											- _splitObjects.size()) {
+								_splitNameUnmatch = true;
+								break;
+							}
+						}
+						break;
+					}
+
+					// has one contact name matched, add it in contact search
+					// result list
+					if (!_splitNameUnmatch) {
+						// add contact to result
+						_searchedContacts.add(_contact);
+
+						// append contact matching indexes map
+						_contact.getExtension().put(NAME_MATCHING_INDEXES,
+								_nameMatchingIndexesMap);
+
+						// generate contact searched result and add it to
+						// searched contact array
+						Map<String, Object> _contactsSearchedResult = new HashMap<String, Object>();
+						_contactsSearchedResult.put(MATCHING_RESULT_CONTACT,
+								_contact);
+						_contactsSearchedResult.put(MATCHING_RESULT_INDEXES,
+								_nameMatchingIndexesMap);
+
+						_contactsSearchedResults.add(_contactsSearchedResult);
+
+						break;
+					}
 				}
-
-				//
 			}
 
-			//
+			// add contact searched results to contacts search result map
+			_mContactsSearchResultMap.put(name, _contactsSearchedResults);
+		}
+
+		// check sorted type
+		if (ContactSortedType.PHONETICS == sortedType) {
+			Collections.sort(_searchedContacts, CONTACTNAMEPHONETIC_COMPARATOR);
 		}
 
 		return _searchedContacts;
@@ -777,6 +984,138 @@ public class AddressBookManager {
 		}
 
 		return _intRangeList;
+	}
+
+	// split contact search name
+	private List<List<String>> splitContactSearchName(String contactSearchName) {
+		List<List<String>> _splitNamesList = new ArrayList<List<String>>();
+
+		// check contact search name
+		if (null == contactSearchName || 0 == contactSearchName.length()) {
+			Log.d(LOG_TAG, "null or empty search name string mustn't split");
+		} else if (contactSearchName.length() > 1) {
+			// get first character and others
+			String _firster = contactSearchName.substring(0, 1);
+			String _others = contactSearchName.substring(1);
+
+			// add others all
+			_splitNamesList.addAll(multipliedFirster7SubSplit(_firster,
+					splitContactSearchName(_others)));
+		} else {
+			// generate only character string list with string
+			List<String> _oneCharStringList = new ArrayList<String>();
+			_oneCharStringList.add(contactSearchName);
+
+			// put the string list to split names list
+			_splitNamesList.add(_oneCharStringList);
+		}
+
+		return _splitNamesList;
+	}
+
+	// multiplied first string and sub split list
+	private List<List<String>> multipliedFirster7SubSplit(String firster,
+			List<List<String>> subSplit) {
+		List<List<String>> _subSplit = new ArrayList<List<String>>();
+
+		for (List<String> _subSplitList : subSplit) {
+			// {x1, x2}
+			List<String> _multipliedResult = new ArrayList<String>();
+			_multipliedResult.add(firster);
+			_multipliedResult.addAll(_subSplitList);
+
+			_subSplit.add(_multipliedResult);
+
+			// check sub split list count
+			if (1 == _subSplitList.size()) {
+				// {x1x2}
+				List<String> _multipliedResult2 = new ArrayList<String>();
+				_multipliedResult2.add(firster + _subSplitList.get(0));
+
+				_subSplit.add(_multipliedResult2);
+			} else {
+				// {x1x2}
+				List<String> _multipliedResult2 = new ArrayList<String>();
+				_multipliedResult2.add(firster + _subSplitList.get(0));
+				_multipliedResult2.addAll(_subSplitList.subList(1,
+						_subSplitList.size()));
+
+				_subSplit.add(_multipliedResult2);
+			}
+		}
+
+		return _subSplit;
+	}
+
+	// match split objects list with contact name phonetics and return matching
+	// indexes if matched
+	private boolean matchSplitNameListWithContactNamePhonetics(
+			List<String> splitObjects, List<List<String>> contactNamePhonetics) {
+		boolean _ret = false;
+
+		// check split objects list count
+		if (1 <= splitObjects.size()
+				&& splitObjects.size() <= contactNamePhonetics.size()) {
+			// split objects list just has one element
+			if (1 == splitObjects.size()) {
+				// split objects list matched
+				boolean _matched = false;
+
+				for (int i = 0; i < contactNamePhonetics.size(); i++) {
+					for (int j = 0; j < contactNamePhonetics.get(i).size(); j++) {
+						if (contactNamePhonetics.get(i).get(j)
+								.startsWith(splitObjects.get(0))) {
+							_ret = _matched = true;
+
+							break;
+						}
+					}
+
+					// if matched, break immediately
+					if (_matched) {
+						break;
+					}
+				}
+			} else {
+				// slide split objects list in contact name phonetics list
+				for (int i = 0; i < contactNamePhonetics.size()
+						- splitObjects.size() + 1; i++) {
+					// check first element in split objects list and contact
+					// name phonetics
+					boolean _headerMatched = false;
+
+					for (int j = 0; j < contactNamePhonetics.get(i).size(); j++) {
+						if (contactNamePhonetics.get(i).get(j)
+								.startsWith(splitObjects.get(0))) {
+							_headerMatched = true;
+
+							break;
+						}
+					}
+
+					// if header not matched, slide split objects list
+					if (!_headerMatched) {
+						continue;
+					}
+
+					// remove the header, compare others left
+					List<String> _leftSplitObjects = splitObjects.subList(1,
+							splitObjects.size());
+					List<List<String>> _contactLeftNamePhonetics = contactNamePhonetics
+							.subList(i + 1, contactNamePhonetics.size() - i);
+
+					// left matched
+					if (matchSplitNameListWithContactNamePhonetics(
+							_leftSplitObjects, _contactLeftNamePhonetics)) {
+						_ret = true;
+
+						break;
+					}
+				}
+			}
+		}
+
+		return _ret;
 	}
 
 	// inner class
