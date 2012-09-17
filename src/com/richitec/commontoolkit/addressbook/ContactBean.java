@@ -14,8 +14,9 @@ public class ContactBean implements Serializable {
 
 	// aggregated id
 	private Long id;
-	// raw ids map. key: rawId and value: account name
-	private Map<Long, String> rawIds;
+	// raw ids map. key: rawId and value: account name, version and raw contact
+	// dirty type map
+	private Map<Long, Map<String, Object>> rawIds;
 	// groups
 	private List<String> groups;
 	// display name
@@ -30,6 +31,8 @@ public class ContactBean implements Serializable {
 	private List<String> phoneNumbers;
 	// photo
 	private byte[] photo;
+	// contact dirty type, need to updating
+	private ContactDirtyType dirty;
 
 	// extension map
 	private Map<String, Object> extension;
@@ -37,6 +40,9 @@ public class ContactBean implements Serializable {
 	// ContactBean constructor
 	public ContactBean() {
 		super();
+
+		// set contact dirty default type
+		dirty = ContactDirtyType.NORMAL;
 
 		// init extension map
 		extension = new HashMap<String, Object>();
@@ -50,11 +56,11 @@ public class ContactBean implements Serializable {
 		this.id = id;
 	}
 
-	public Map<Long, String> getRawIds() {
+	public Map<Long, Map<String, Object>> getRawIds() {
 		return rawIds;
 	}
 
-	public void setRawIds(Map<Long, String> rawIds) {
+	public void setRawIds(Map<Long, Map<String, Object>> rawIds) {
 		this.rawIds = rawIds;
 	}
 
@@ -113,6 +119,14 @@ public class ContactBean implements Serializable {
 		this.photo = photo;
 	}
 
+	public ContactDirtyType getDirty() {
+		return dirty;
+	}
+
+	public void setDirty(ContactDirtyType dirty) {
+		this.dirty = dirty;
+	}
+
 	public Map<String, Object> getExtension() {
 		return extension;
 	}
@@ -159,10 +173,18 @@ public class ContactBean implements Serializable {
 		_contactDescription.append("phone numbers: ").append(phoneNumbers)
 				.append(", ");
 		_contactDescription.append("photo: ").append(photo).append(", ");
+		_contactDescription.append("is dirty: ")
+				.append(ContactDirtyType.NORMAL != dirty).append(", ");
 		_contactDescription.append("extension: ").append(extension)
 				.append("\n");
 
 		return _contactDescription.toString();
+	}
+
+	// inner class
+	// contact dirty type
+	public static enum ContactDirtyType {
+		NORMAL, NEW_ADDED, MODIFIED, DELETEED
 	}
 
 }
