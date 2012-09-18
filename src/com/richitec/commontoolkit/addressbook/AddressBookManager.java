@@ -375,7 +375,6 @@ public class AddressBookManager {
 											.matches("[\u4e00-\u9fa5]"))
 									&& (null == _givenName || !_givenName
 											.matches("[\u4e00-\u9fa5]"))) {
-								// update contact display name
 								_contact.setDisplayName(_displayName.toString());
 							}
 						} else {
@@ -398,10 +397,10 @@ public class AddressBookManager {
 						// set contact full names list and name phonetics if
 						// have
 						if (0 != _fullNamesList.size()) {
-							_contact.setFullNames(_fullNamesList);
+							_contact.setFullNames(trimContactFullNames(_fullNamesList));
 						}
 						if (0 != _namePhoneticsList.size()) {
-							_contact.setNamePhonetics(_namePhoneticsList);
+							_contact.setNamePhonetics(trimContactNamePhonetics(_namePhoneticsList));
 						}
 					}
 				}
@@ -602,6 +601,30 @@ public class AddressBookManager {
 			// close photo cursor
 			_photoCursor.close();
 		}
+	}
+
+	// trim contact full names list empty string
+	private List<String> trimContactFullNames(List<String> origFullNames) {
+		for (int i = 0; i < origFullNames.size(); i++) {
+			if (origFullNames.get(i).equalsIgnoreCase(" ")) {
+				origFullNames.remove(i);
+			}
+		}
+
+		return origFullNames;
+	}
+
+	// trim contact name phonetics list empty phonetic
+	private List<List<String>> trimContactNamePhonetics(
+			List<List<String>> origNamePhonetics) {
+		for (int i = 0; i < origNamePhonetics.size(); i++) {
+			if (1 == origNamePhonetics.get(i).size()
+					&& origNamePhonetics.get(i).get(0).equalsIgnoreCase(" ")) {
+				origNamePhonetics.remove(i);
+			}
+		}
+
+		return origNamePhonetics;
 	}
 
 	// get contact bean object by aggregated id
