@@ -206,6 +206,26 @@ public class StringUtils {
 		return _stringList;
 	}
 
+	// get sub string positions list in string
+	public static List<Integer> subStringPositions(String string,
+			String subString) {
+		List<Integer> _positions = new ArrayList<Integer>();
+
+		while (string.contains(subString)) {
+			// get the first appearance position
+			int _position = string.indexOf(subString);
+
+			// add position to return position list
+			_positions.add(0 == _positions.size() ? _position : _position
+					+ _positions.get(_positions.size() - 1) + 1);
+
+			// reset string
+			string = string.substring(_position + 1);
+		}
+
+		return _positions;
+	}
+
 	// phone number from string
 	public static String phoneNumberFromString(String string) {
 		StringBuffer _ret = new StringBuffer();

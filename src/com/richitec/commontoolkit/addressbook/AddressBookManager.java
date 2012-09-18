@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -139,8 +140,18 @@ public class AddressBookManager {
 	}
 
 	// get original all contacts detail info array
-	public List<ContactBean> allContactsInfoArray() {
+	public List<ContactBean> getAllContactsInfoArray() {
 		return _mAllContactsInfoArray;
+	}
+
+	// get all name phonetic sorted contacts detail info array
+	public List<ContactBean> getAllNamePhoneticSortedContactsInfoArray() {
+		List<ContactBean> _allNamePhoneticSortedContactsInfoArray = new ArrayList<ContactBean>();
+		_allNamePhoneticSortedContactsInfoArray.addAll(_mAllContactsInfoArray);
+		Collections.sort(_allNamePhoneticSortedContactsInfoArray,
+				CONTACTNAMEPHONETIC_COMPARATOR);
+
+		return _allNamePhoneticSortedContactsInfoArray;
 	}
 
 	// traversal addressBook, important, do it first
@@ -151,14 +162,10 @@ public class AddressBookManager {
 		Log.d(LOG_TAG, "getAllContactsDetailInfo - begin");
 		getAllContactsDetailInfo();
 
-		// sorted all contacts detail info array
-		List<ContactBean> _newCopyArray = new ArrayList<ContactBean>();
-		_newCopyArray.addAll(_mAllContactsInfoArray);
-		Collections.sort(_newCopyArray, CONTACTNAMEPHONETIC_COMPARATOR);
-
-		// add contacts changed ContentObserver
-		_mContentResolver.registerContentObserver(Contacts.CONTENT_URI, false,
-				new ContactsContentObserver());
+		// // add contacts changed ContentObserver
+		// _mContentResolver.registerContentObserver(Contacts.CONTENT_URI,
+		// false,
+		// new ContactsContentObserver());
 
 		Log.d(LOG_TAG, "getAllContactsDetailInfo - end");
 	}
@@ -330,19 +337,62 @@ public class AddressBookManager {
 						// name to it and generate name phonetics
 						List<String> _fullNamesList = new ArrayList<String>();
 						List<List<String>> _namePhoneticsList = new ArrayList<List<String>>();
-						if (null != _familyName) {
-							_fullNamesList.addAll(StringUtils
-									.toStringList(_familyName));
 
-							_namePhoneticsList.addAll(PinyinUtils
-									.pinyins4String(_familyName));
-						}
-						if (null != _givenName) {
-							_fullNamesList.addAll(StringUtils
-									.toStringList(_givenName));
+						// check locale language
+						if (Locale.CHINESE
+								.getLanguage()
+								.equals(AppLaunchActivity.getAppContext()
+										.getResources().getConfiguration().locale
+										.getLanguage())) {
+							// display name
+							StringBuilder _displayName = new StringBuilder();
 
-							_namePhoneticsList.addAll(PinyinUtils
-									.pinyins4String(_givenName));
+							if (null != _familyName) {
+								_fullNamesList.addAll(StringUtils
+										.toStringList(_familyName));
+
+								_namePhoneticsList.addAll(PinyinUtils
+										.pinyins4String(_familyName));
+
+								_displayName.append(_familyName);
+							}
+							if (null != _givenName) {
+								_fullNamesList.addAll(StringUtils
+										.toStringList(_givenName));
+
+								_namePhoneticsList.addAll(PinyinUtils
+										.pinyins4String(_givenName));
+
+								if (0 != _displayName.length()) {
+									_displayName.append(' ');
+								}
+								_displayName.append(_givenName);
+							}
+
+							// update contact display name
+							if (0 != _fullNamesList.size()
+									&& (null == _familyName || !_familyName
+											.matches("[\u4e00-\u9fa5]"))
+									&& (null == _givenName || !_givenName
+											.matches("[\u4e00-\u9fa5]"))) {
+								// update contact display name
+								_contact.setDisplayName(_displayName.toString());
+							}
+						} else {
+							if (null != _givenName) {
+								_fullNamesList.addAll(StringUtils
+										.toStringList(_givenName));
+
+								_namePhoneticsList.addAll(PinyinUtils
+										.pinyins4String(_givenName));
+							}
+							if (null != _familyName) {
+								_fullNamesList.addAll(StringUtils
+										.toStringList(_familyName));
+
+								_namePhoneticsList.addAll(PinyinUtils
+										.pinyins4String(_familyName));
+							}
 						}
 
 						// set contact full names list and name phonetics if
@@ -1126,7 +1176,7 @@ public class AddressBookManager {
 					List<String> _leftSplitObjects = splitObjects.subList(1,
 							splitObjects.size());
 					List<List<String>> _contactLeftNamePhonetics = contactNamePhonetics
-							.subList(i + 1, contactNamePhonetics.size() - i);
+							.subList(i + 1, contactNamePhonetics.size());
 
 					// left matched
 					if (matchSplitNameListWithContactNamePhonetics(

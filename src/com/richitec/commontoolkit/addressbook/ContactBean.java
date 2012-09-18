@@ -3,7 +3,10 @@ package com.richitec.commontoolkit.addressbook;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+
+import com.richitec.commontoolkit.activityextension.AppLaunchActivity;
 
 public class ContactBean implements Serializable {
 
@@ -105,6 +108,37 @@ public class ContactBean implements Serializable {
 
 	public List<String> getPhoneNumbers() {
 		return phoneNumbers;
+	}
+
+	public String getFormatPhoneNumbers() {
+		StringBuilder _formatPhoneNumbers = new StringBuilder();
+
+		//
+		if (null == phoneNumbers || 0 == phoneNumbers.size()) {
+			// get locale object
+			Locale _locale = AppLaunchActivity.getAppContext().getResources()
+					.getConfiguration().locale;
+
+			// check locale country code
+			if (Locale.CHINA.equals(_locale)) {
+				_formatPhoneNumbers.append("无号码");
+			} else if (Locale.TAIWAN.equals(_locale)) {
+				_formatPhoneNumbers.append("無號碼");
+			} else {
+				_formatPhoneNumbers.append("No Phone");
+			}
+		} else {
+			// generate format phone numbers string
+			for (int i = 0; i < phoneNumbers.size(); i++) {
+				_formatPhoneNumbers.append(phoneNumbers.get(i));
+
+				if (phoneNumbers.size() - 1 != i) {
+					_formatPhoneNumbers.append('\n');
+				}
+			}
+		}
+
+		return _formatPhoneNumbers.toString();
 	}
 
 	public void setPhoneNumbers(List<String> phoneNumbers) {
