@@ -627,6 +627,26 @@ public class AddressBookManager {
 		return origNamePhonetics;
 	}
 
+	// get contacts list by given phone number: full matching
+	private List<ContactBean> getContactsListByPhone(String phoneNumber) {
+		List<ContactBean> _contacts = new ArrayList<ContactBean>();
+
+		// traversal all contacts detail info array
+		for (ContactBean _contact : _mAllContactsInfoArray) {
+			// get contact phone numbers list
+			List<String> _contactPhoneNumbers = _contact.getPhoneNumbers();
+
+			// check the contact phone numbers
+			if (null != _contactPhoneNumbers
+					&& 0 != _contactPhoneNumbers.size()
+					&& _contactPhoneNumbers.contains(phoneNumber)) {
+				_contacts.add(_contact);
+			}
+		}
+
+		return _contacts;
+	}
+
 	// get contact bean object by aggregated id
 	public ContactBean getContactByAggregatedId(Long aggregatedId) {
 		ContactBean _contact = null;
@@ -642,17 +662,22 @@ public class AddressBookManager {
 	public List<String> getContactsDisplayNamesByPhone(String phoneNumber) {
 		List<String> _displayNames = new ArrayList<String>();
 
-		// traversal all contacts detail info array
-		for (ContactBean _contact : _mAllContactsInfoArray) {
-			// get contact phone numbers list
-			List<String> _contactPhoneNumbers = _contact.getPhoneNumbers();
+		// // traversal all contacts detail info array
+		// for (ContactBean _contact : _mAllContactsInfoArray) {
+		// // get contact phone numbers list
+		// List<String> _contactPhoneNumbers = _contact.getPhoneNumbers();
+		//
+		// // check the contact phone numbers
+		// if (null != _contactPhoneNumbers
+		// && 0 != _contactPhoneNumbers.size()
+		// && _contactPhoneNumbers.contains(phoneNumber)) {
+		// _displayNames.add(_contact.getDisplayName());
+		// }
+		// }
 
-			// check the contact phone numbers
-			if (null != _contactPhoneNumbers
-					&& 0 != _contactPhoneNumbers.size()
-					&& _contactPhoneNumbers.contains(phoneNumber)) {
-				_displayNames.add(_contact.getDisplayName());
-			}
+		// traversal all matched contacts detail info array
+		for (ContactBean _contact : getContactsListByPhone(phoneNumber)) {
+			_displayNames.add(_contact.getDisplayName());
 		}
 
 		// check return display names list
@@ -661,6 +686,29 @@ public class AddressBookManager {
 		}
 
 		return _displayNames;
+	}
+
+	// get contacts photo list by given phone number
+	public List<byte[]> getContactsPhotosByPhone(String phoneNumber) {
+		List<byte[]> _photos = new ArrayList<byte[]>();
+
+		// traversal all matched contacts detail info array
+		for (ContactBean _contact : getContactsListByPhone(phoneNumber)) {
+			// get contact photo
+			byte[] _photo = _contact.getPhoto();
+
+			// check contact photo
+			if (null != _photo) {
+				_photos.add(_photo);
+			}
+		}
+
+		// check return photos list
+		if (0 == _photos.size()) {
+			_photos.add(null);
+		}
+
+		return _photos;
 	}
 
 	// get contacts list by phone number with sorted type
