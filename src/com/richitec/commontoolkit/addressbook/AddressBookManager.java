@@ -84,8 +84,8 @@ public class AddressBookManager {
 			if (null == _leftContactNamePhoneticsString
 					&& null == _rightContactNamePhoneticsString) {
 				_ret = (int) (lhs.getId() - rhs.getId());
-			} else if (null != _leftContactNamePhoneticsString
-					&& null == _rightContactNamePhoneticsString) {
+			} else if (null == _leftContactNamePhoneticsString
+					&& null != _rightContactNamePhoneticsString) {
 				_ret = 1;
 			} else if (null != _leftContactNamePhoneticsString
 					&& null != _rightContactNamePhoneticsString) {
