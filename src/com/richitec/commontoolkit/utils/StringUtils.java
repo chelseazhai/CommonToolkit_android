@@ -147,7 +147,7 @@ public class StringUtils {
 	}
 
 	// convert string to json object
-	public static JSONObject toJsonObject(String string) {
+	public static JSONObject toJSONObject(String string) {
 		JSONObject _stringJson = null;
 
 		// check string
