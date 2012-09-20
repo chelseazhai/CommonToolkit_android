@@ -2,6 +2,7 @@ package com.richitec.commontoolkit.customcomponent;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -120,10 +121,16 @@ public abstract class CommonPopupWindow extends PopupWindow {
 
 	@Override
 	public void dismiss() {
-		// reset popup window
-		resetPopupWindow();
-
 		super.dismiss();
+
+		// reset popup window using an new handle
+		new Handler().postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				resetPopupWindow();
+			}
+		}, 0);
 	}
 
 	// bind popup window content view and its present child view listener
