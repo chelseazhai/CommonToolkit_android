@@ -1,5 +1,6 @@
 package com.richitec.commontoolkit.activityextension;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import android.app.Activity;
@@ -170,14 +171,37 @@ public class NavigationActivity extends Activity implements
 
 		if (null != extraData) {
 			for (String extraDataKey : extraData.keySet()) {
-				// String
-				if (extraData.get(extraDataKey) instanceof String) {
-					_intent.putExtra(extraDataKey,
-							(String) extraData.get(extraDataKey));
-				}
-				// others, not implementation
-				else {
-					Log.d(LOG_TAG, "Type except of String not implementation");
+				// get value object
+				Object _valueObject = extraData.get(extraDataKey);
+
+				// check extra data type
+				if (_valueObject instanceof Short) {
+					_intent.putExtra(extraDataKey, (Short) _valueObject);
+				} else if (_valueObject instanceof Integer) {
+					_intent.putExtra(extraDataKey, (Integer) _valueObject);
+				} else if (_valueObject instanceof Long) {
+					_intent.putExtra(extraDataKey, (Long) _valueObject);
+				} else if (_valueObject instanceof Float) {
+					_intent.putExtra(extraDataKey, (Float) _valueObject);
+				} else if (_valueObject instanceof Double) {
+					_intent.putExtra(extraDataKey, (Double) _valueObject);
+				} else if (_valueObject instanceof Character) {
+					_intent.putExtra(extraDataKey, (Character) _valueObject);
+				} else if (_valueObject instanceof Byte) {
+					_intent.putExtra(extraDataKey, (Byte) _valueObject);
+				} else if (_valueObject instanceof Boolean) {
+					_intent.putExtra(extraDataKey, (Boolean) _valueObject);
+				} else if (_valueObject instanceof String) {
+					_intent.putExtra(extraDataKey, (String) _valueObject);
+				} else if (_valueObject instanceof CharSequence) {
+					_intent.putExtra(extraDataKey, (CharSequence) _valueObject);
+				} else if (_valueObject instanceof Serializable) {
+					_intent.putExtra(extraDataKey, (Serializable) _valueObject);
+				} else {
+					// others, not implementation
+					Log.d(LOG_TAG, "Type = "
+							+ extraData.get(extraDataKey).getClass().getName()
+							+ " not implementation");
 				}
 			}
 		}
