@@ -18,10 +18,8 @@ import android.widget.TextView;
 
 import com.richitec.commontoolkit.customcomponent.BarButtonItem;
 import com.richitec.commontoolkit.customcomponent.BarButtonItem.BarButtonItemStyle;
-import com.richitec.commontoolkit.customcomponent.IBackBarButtonItemDrawable;
 
-public class NavigationActivity extends Activity implements
-		IBackBarButtonItemDrawable {
+public class NavigationActivity extends Activity {
 
 	private static final String LOG_TAG = "NavigationActivity";
 
@@ -130,6 +128,18 @@ public class NavigationActivity extends Activity implements
 		_rightBtnLayout.addView(barButtonItem);
 	}
 
+	// nav back bar button item normal drawable
+	protected Drawable backBarBtnItemNormalDrawable() {
+		return getResources().getDrawable(
+				R.drawable.img_leftbarbtnitem_normal_bg);
+	}
+
+	// nav back bar button item pressed drawable
+	protected Drawable backBarBtnItemPressedDrawable() {
+		return getResources().getDrawable(
+				R.drawable.img_leftbarbtnitem_touchdown_bg);
+	}
+
 	@Override
 	public void setTitle(CharSequence title) {
 		super.setTitle(title);
@@ -219,18 +229,6 @@ public class NavigationActivity extends Activity implements
 	public void popActivity() {
 		// finish self activity
 		finish();
-	}
-
-	@Override
-	public Drawable backBarBtnItemNormalDrawable() {
-		return getResources().getDrawable(
-				R.drawable.img_leftbarbtnitem_normal_bg);
-	}
-
-	@Override
-	public Drawable backBarBtnItemPressedDrawable() {
-		return getResources().getDrawable(
-				R.drawable.img_leftbarbtnitem_touchdown_bg);
 	}
 
 }
