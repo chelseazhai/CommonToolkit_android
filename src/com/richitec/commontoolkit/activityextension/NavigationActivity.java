@@ -55,19 +55,31 @@ public class NavigationActivity extends Activity {
 		}
 	}
 
+	// hide navigation bar when navigation activity on created
+	protected boolean hideNavigationBarWhenOnCreated() {
+		return false;
+	}
+
 	@Override
 	public void setContentView(int layoutResID) {
 		// set content view
 		super.setContentView(R.layout.activity_navigation);
 
+		// check is hide navigation bar on navigation activity created
+		if (!hideNavigationBarWhenOnCreated()) {
+			// show navigation bar
+			((RelativeLayout) findViewById(R.id.navBar_relativeLayout))
+					.setVisibility(View.VISIBLE);
+
+			// set nav bar back button item, if not null
+			if (null != _mBackBarBtnItem) {
+				setLeftBarButtonItem(_mBackBarBtnItem);
+			}
+		}
+
 		// set parameter view to navigation content linearLayout
 		getLayoutInflater().inflate(layoutResID,
 				(LinearLayout) findViewById(R.id.navContent_relativeLayout));
-
-		// set nav bar back button item, if not null
-		if (null != _mBackBarBtnItem) {
-			setLeftBarButtonItem(_mBackBarBtnItem);
-		}
 	}
 
 	@Override
@@ -84,14 +96,21 @@ public class NavigationActivity extends Activity {
 		// set content view
 		super.setContentView(view);
 
+		// check is hide navigation bar on navigation activity created
+		if (!hideNavigationBarWhenOnCreated()) {
+			// show navigation bar
+			((RelativeLayout) findViewById(R.id.navBar_relativeLayout))
+					.setVisibility(View.VISIBLE);
+
+			// set nav bar back button item, if not null
+			if (null != _mBackBarBtnItem) {
+				setLeftBarButtonItem(_mBackBarBtnItem);
+			}
+		}
+
 		// set parameter view to navigation content linearLayout
 		((LinearLayout) findViewById(R.id.navContent_relativeLayout))
 				.addView(view);
-
-		// set nav bar back button item, if not null
-		if (null != _mBackBarBtnItem) {
-			setLeftBarButtonItem(_mBackBarBtnItem);
-		}
 	}
 
 	// set navBar background color
@@ -112,6 +131,18 @@ public class NavigationActivity extends Activity {
 				.setBackgroundDrawable(navBarBackgroundDrawable);
 	}
 
+	// nav back bar button item normal drawable
+	protected Drawable backBarBtnItemNormalDrawable() {
+		return getResources().getDrawable(
+				R.drawable.img_leftbarbtnitem_normal_bg);
+	}
+
+	// nav back bar button item pressed drawable
+	protected Drawable backBarBtnItemPressedDrawable() {
+		return getResources().getDrawable(
+				R.drawable.img_leftbarbtnitem_touchdown_bg);
+	}
+
 	// set left bar button item
 	public void setLeftBarButtonItem(BarButtonItem barButtonItem) {
 		// remove default navigation bar left button item and add the new one
@@ -126,18 +157,6 @@ public class NavigationActivity extends Activity {
 		FrameLayout _rightBtnLayout = (FrameLayout) findViewById(R.id.right_btn_frameLayout);
 		_rightBtnLayout.removeAllViews();
 		_rightBtnLayout.addView(barButtonItem);
-	}
-
-	// nav back bar button item normal drawable
-	protected Drawable backBarBtnItemNormalDrawable() {
-		return getResources().getDrawable(
-				R.drawable.img_leftbarbtnitem_normal_bg);
-	}
-
-	// nav back bar button item pressed drawable
-	protected Drawable backBarBtnItemPressedDrawable() {
-		return getResources().getDrawable(
-				R.drawable.img_leftbarbtnitem_touchdown_bg);
 	}
 
 	@Override
