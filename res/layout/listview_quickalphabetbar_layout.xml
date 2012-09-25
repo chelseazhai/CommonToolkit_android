@@ -5,13 +5,14 @@
 
     <RelativeLayout
         android:id="@+id/alphabet_relativeLayout"
-        android:layout_width="34dp"
+        android:layout_width="28dp"
         android:layout_height="fill_parent"
         android:layout_gravity="right"
         android:layout_marginBottom="6dp"
+        android:layout_marginRight="4dp"
         android:layout_marginTop="6dp"
-        android:paddingBottom="4dp"
-        android:paddingTop="4dp" >
+        android:paddingBottom="2dp"
+        android:paddingTop="2dp" >
 
         <TextView
             android:id="@+id/headLetter_textView"
@@ -19,7 +20,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:gravity="center"
-            android:text="A"
             android:textColor="@color/gray"
             android:textStyle="bold" />
 
@@ -37,7 +37,6 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:gravity="bottom|center_horizontal"
-                android:text="#"
                 android:textColor="@color/gray"
                 android:textStyle="bold" />
         </LinearLayout>

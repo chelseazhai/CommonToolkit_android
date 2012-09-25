@@ -83,7 +83,7 @@ public class ListViewQuickAlphabetBar {
 			if (MotionEvent.ACTION_DOWN == event.getAction()) {
 				// update alphabet relativeLayout background resource
 				_mAlphabetRelativeLayout
-						.setBackgroundResource(R.drawable.listview_quickalphabetbar_bg);
+						.setBackgroundResource(R.drawable.listview_alphabetrelativelayout_bg);
 
 				// check touch listener
 				if (null != _mOnTouchListener && null != _mDependentListView) {
