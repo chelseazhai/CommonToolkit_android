@@ -66,7 +66,7 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 		_mAlphabetRelativeLayout
 				.setOnTouchListener(new OnAlphabetRelativeLayoutTouchListener());
 
-		if (null != dependentListView) {
+		if (null != dependentListView && null != dependentListView.getAdapter()) {
 			// init alphabet touched letter toast
 			_mAlphabetTouchedLetterToast = new AlphabetTouchedLetterToast(
 					dependentListView);
@@ -76,6 +76,11 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 
 			// bind listView and alphabet
 			bindListViewAlphabet(dependentListView);
+		} else {
+			Log.e(LOG_TAG,
+					null == dependentListView ? "Dependent listView is null"
+							: "Dependent listView = " + dependentListView
+									+ " and its adapter is null");
 		}
 	}
 
