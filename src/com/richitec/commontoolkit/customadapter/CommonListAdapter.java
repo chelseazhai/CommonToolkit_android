@@ -160,6 +160,7 @@ public abstract class CommonListAdapter extends BaseAdapter {
 				String _alphabetIndexString = (String) _data
 						.get(ALPHABET_INDEX);
 
+				// add to alphabet
 				_alphabet
 						.add(null == _alphabetIndexString ? OTHER_ALPHABET_INDEX
 								: _alphabetIndexString.matches("^[A-Za-z]+.*") ? _alphabetIndexString
