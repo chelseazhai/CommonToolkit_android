@@ -104,8 +104,8 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 		// check dependent listView
 		if (null != dependentListView && null != dependentListView.getParent()
 				&& dependentListView.getParent() instanceof FrameLayout) {
-			// hide scroll bar
-			dependentListView.setScrollBarStyle(View.INVISIBLE);
+			// hide vertical scroll bar
+			dependentListView.setVerticalScrollBarEnabled(false);
 
 			// add alphabet relativeLayout to dependent listView
 			((FrameLayout) dependentListView.getParent())
