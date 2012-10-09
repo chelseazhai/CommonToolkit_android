@@ -247,10 +247,10 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 
 		// check touch event location bounds
 		float _touchedLocationY = event.getY();
-		// at least on letter
-		if (0 != headLetterEndPoint.y) {
+		// at least one letter
+		if (0 != _mAlphabet.size()/* 0 != headLetterEndPoint.y */) {
 			// only one letter
-			if (0 == otherLettersEndPoint.y) {
+			if (1 == _mAlphabet.size()/* 0 == otherLettersEndPoint.y */) {
 				// init touched letter(head letter) and show alphabet touched
 				// letter toast
 				_touchedLetter = _mAlphabet.get(0);
