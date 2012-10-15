@@ -13,4 +13,7 @@
     <string name="left_btn_hint">Back</string>
     <string name="right_btn_hint">Go</string>
 
+    <!-- tab spec indicator -->
+    <string name="tabWidget_itemIcon_imageView_content_description">Common tab widget item icon image view</string>
+
 </resources>
