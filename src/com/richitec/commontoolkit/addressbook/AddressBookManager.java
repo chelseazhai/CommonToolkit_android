@@ -429,8 +429,9 @@ public class AddressBookManager {
 				// get aggregated id and phone number
 				Long _aggregatedId = _phoneCursor.getLong(_phoneCursor
 						.getColumnIndex(Phone.CONTACT_ID));
-				String _phoneNumber = _phoneCursor.getString(_phoneCursor
-						.getColumnIndex(Phone.NUMBER));
+				String _phoneNumber = StringUtils.trim(_phoneCursor
+						.getString(_phoneCursor.getColumnIndex(Phone.NUMBER)),
+						"-()");
 
 				// Log.d(LOG_TAG,
 				// "getAllContactsPhoneNumbers - aggregated id = "
