@@ -2,6 +2,7 @@ package com.richitec.commontoolkit.calllog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import android.content.ContentResolver;
@@ -14,6 +15,7 @@ import android.util.Log;
 
 import com.richitec.commontoolkit.activityextension.AppLaunchActivity;
 import com.richitec.commontoolkit.calllog.CallLogBean.CallType;
+import com.richitec.commontoolkit.utils.DeviceUtils;
 
 public class CallLogManager {
 
@@ -65,11 +67,18 @@ public class CallLogManager {
 				// new call log bean
 				CallLogBean _callLog = new CallLogBean();
 
+				// get system current setting language
+				Locale _systemCurrentSettingLanguage = DeviceUtils
+						.getSystemCurrentSettingLanguage();
+
 				// set call log id, callee name, callee phone, call date, call
 				// duration and call type
 				_callLog.setCallLogId(_callLogId);
-				_callLog.setCalleeName(null == _calleeName ? _calleePhone
-						: _calleeName);
+				_callLog.setCalleeName(null == _calleeName ? Locale.SIMPLIFIED_CHINESE
+						.equals(_systemCurrentSettingLanguage) ? "未知"
+						: Locale.TRADITIONAL_CHINESE
+								.equals(_systemCurrentSettingLanguage) ? "未知"
+								: "Unknown" : _calleeName);
 				_callLog.setCalleePhone(_calleePhone);
 				_callLog.setCallDate(_callDate);
 				_callLog.setCallDuration(_callDuration);
