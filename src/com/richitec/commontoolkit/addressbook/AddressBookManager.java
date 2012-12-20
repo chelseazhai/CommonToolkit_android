@@ -658,7 +658,8 @@ public class AddressBookManager {
 	// get contacts list by given phone number: full matching and ignore strings
 	private List<ContactBean> getContactsListByPhone(String phoneNumber,
 			List<String> ignoreStrings,
-			List<AreaAbbreviation> analyzableAreaeAbbreviations) {
+			List<AreaAbbreviation> analyzableAreaeAbbreviations,
+			List<AreaAbbreviation> recognizableAreaeAbbreviations) {
 		List<ContactBean> _contacts = new ArrayList<ContactBean>();
 
 		// traversal all contacts detail info array
@@ -672,7 +673,8 @@ public class AddressBookManager {
 				// traversal analyze phone number array
 				for (String analyzedPhoneNumber : analyzePhoneNumber(
 						phoneNumber, ignoreStrings,
-						analyzableAreaeAbbreviations)) {
+						analyzableAreaeAbbreviations,
+						recognizableAreaeAbbreviations)) {
 					// check contact phone numbers contains analyzed phone
 					// number
 					if (_contactPhoneNumbers.contains(analyzedPhoneNumber)) {
@@ -690,15 +692,17 @@ public class AddressBookManager {
 	}
 
 	// get contacts display name list by given phone number, ignore strings and
-	// analyzable areae abbreviations
+	// analyzable, recognizable areae abbreviations
 	public List<String> getContactsDisplayNamesByPhone(String phoneNumber,
 			List<String> ignoreStrings,
-			List<AreaAbbreviation> analyzableAreaeAbbreviations) {
+			List<AreaAbbreviation> analyzableAreaeAbbreviations,
+			List<AreaAbbreviation> recognizableAreaeAbbreviations) {
 		List<String> _displayNames = new ArrayList<String>();
 
 		// traversal all matched contacts detail info array
 		for (ContactBean _contact : getContactsListByPhone(phoneNumber,
-				ignoreStrings, analyzableAreaeAbbreviations)) {
+				ignoreStrings, analyzableAreaeAbbreviations,
+				recognizableAreaeAbbreviations)) {
 			_displayNames.add(_contact.getDisplayName());
 		}
 
@@ -710,22 +714,33 @@ public class AddressBookManager {
 		return _displayNames;
 	}
 
+	// get contacts display name list by given phone number, ignore strings and
+	// areae abbreviations
+	public List<String> getContactsDisplayNamesByPhone(String phoneNumber,
+			List<String> ignoreStrings,
+			List<AreaAbbreviation> areaeAbbreviations) {
+		return getContactsDisplayNamesByPhone(phoneNumber, ignoreStrings,
+				areaeAbbreviations, areaeAbbreviations);
+	}
+
 	// get contacts display name list by given phone number
 	public List<String> getContactsDisplayNamesByPhone(String phoneNumber) {
 		return getContactsDisplayNamesByPhone(phoneNumber, null,
-				CN_ABBREVIATION);
+				CN_ABBREVIATION, CN_ABBREVIATION);
 	}
 
 	// get contacts photo list by given phone number, ignore strings and
-	// analyzable areae abbreviations
+	// analyzable, recognizable areae abbreviations
 	public List<byte[]> getContactsPhotosByPhone(String phoneNumber,
 			List<String> ignoreStrings,
-			List<AreaAbbreviation> analyzableAreaeAbbreviations) {
+			List<AreaAbbreviation> analyzableAreaeAbbreviations,
+			List<AreaAbbreviation> recognizableAreaeAbbreviations) {
 		List<byte[]> _photos = new ArrayList<byte[]>();
 
 		// traversal all matched contacts detail info array
 		for (ContactBean _contact : getContactsListByPhone(phoneNumber,
-				ignoreStrings, analyzableAreaeAbbreviations)) {
+				ignoreStrings, analyzableAreaeAbbreviations,
+				recognizableAreaeAbbreviations)) {
 			// get contact photo
 			byte[] _photo = _contact.getPhoto();
 
@@ -743,9 +758,19 @@ public class AddressBookManager {
 		return _photos;
 	}
 
+	// get contacts photo list by given phone number, ignore strings and areae
+	// abbreviations
+	public List<byte[]> getContactsPhotosByPhone(String phoneNumber,
+			List<String> ignoreStrings,
+			List<AreaAbbreviation> areaeAbbreviations) {
+		return getContactsPhotosByPhone(phoneNumber, ignoreStrings,
+				areaeAbbreviations, areaeAbbreviations);
+	}
+
 	// get contacts photo list by given phone number
 	public List<byte[]> getContactsPhotosByPhone(String phoneNumber) {
-		return getContactsPhotosByPhone(phoneNumber, null, CN_ABBREVIATION);
+		return getContactsPhotosByPhone(phoneNumber, null, CN_ABBREVIATION,
+				CN_ABBREVIATION);
 	}
 
 	// is contact with the given phone number in address book, return the
@@ -1536,11 +1561,24 @@ public class AddressBookManager {
 	}
 
 	// analyze phone number of get contacts which user input for searching
-	public List<String> analyzePhoneNumber(String phoneNumber,
+	private List<String> analyzePhoneNumber(String phoneNumber,
 			List<String> ignoreStrings,
-			List<AreaAbbreviation> analyzableAreaeAbbreviations) {
+			List<AreaAbbreviation> analyzableAreaeAbbreviations,
+			List<AreaAbbreviation> recognizableAreaeAbbreviations) {
 		// define return result
 		List<String> _ret = new ArrayList<String>();
+
+		// trim ignore strings "" string
+		// check ignore strings
+		if (null != ignoreStrings && !ignoreStrings.isEmpty()) {
+			// traversal objects list
+			for (String string : ignoreStrings) {
+				// check object
+				if ("".equals(string.trim())) {
+					ignoreStrings.remove(string);
+				}
+			}
+		}
 
 		// get analyzable areae abbreviations international codes
 		List<Integer> _allInternationalCodes = InternationalCodeHelper
@@ -1575,33 +1613,13 @@ public class AddressBookManager {
 			if (phoneNumber.startsWith(_internationalCode,
 					_phoneNumberInternationalPrefix.length())) {
 				// get phone number without international prefix and code
-				String _phoneNumberWithInternationalPrefix7Code = phoneNumber
-						.substring(_phoneNumberInternationalPrefix.length()
-								+ _internationalCode.length());
-
-				// trim ignore strings and check it
-				trimNilString4StringArrayList(ignoreStrings);
-				if (null != ignoreStrings && !ignoreStrings.isEmpty()) {
-					// traversal all ignore strings
-					for (String ignoreString : ignoreStrings) {
-						// check phone number without international prefix and
-						// code start with ignore string
-						if (_phoneNumberWithInternationalPrefix7Code
-								.startsWith(ignoreString)) {
-							// update phone number without international prefix
-							// and code
-							_phoneNumberWithInternationalPrefix7Code = _phoneNumberWithInternationalPrefix7Code
-									.substring(ignoreString.length());
-
-							// break immediately
-							break;
-						}
-					}
-				}
+				String _phoneNumberWithInternationalPrefix7Code = getAnalyzePhoneNumberWithoutInternationalPrefix7CodeExcept4IgnoreString(
+						phoneNumber.substring(_phoneNumberInternationalPrefix
+								.length() + _internationalCode.length()),
+						ignoreStrings);
 
 				// add phone number for searching format to return result
 				// list
-				_ret.add(_phoneNumberWithInternationalPrefix7Code);
 				for (String internationalPrefix : InternationalCodeHelper
 						.getInternationalPrefix(null)) {
 					if (null != ignoreStrings && !ignoreStrings.isEmpty()) {
@@ -1617,6 +1635,7 @@ public class AddressBookManager {
 					_ret.add(internationalPrefix
 							+ _phoneNumberWithInternationalPrefix7Code);
 				}
+				_ret.add(_phoneNumberWithInternationalPrefix7Code);
 
 				// break immediately
 				break;
@@ -1625,20 +1644,36 @@ public class AddressBookManager {
 			// example: +phonenumber, phonenumber
 			if (i == _allInternationalCodes.size() - 1) {
 				// get phone number without international prefix
-				String _phoneNumberWithInternationalPrefix = phoneNumber
-						.substring(_phoneNumberInternationalPrefix.length());
+				String _phoneNumberWithoutInternationalPrefix = getAnalyzePhoneNumberWithoutInternationalPrefix7CodeExcept4IgnoreString(
+						phoneNumber.substring(_phoneNumberInternationalPrefix
+								.length()), ignoreStrings);
 
 				// add phone number for searching format to return result
 				// list
 				for (String internationalPrefix : InternationalCodeHelper
 						.getInternationalPrefix(null)) {
+					if (null != ignoreStrings && !ignoreStrings.isEmpty()) {
+						for (String ignoreString : ignoreStrings) {
+							_ret.add(internationalPrefix + ignoreString
+									+ _phoneNumberWithoutInternationalPrefix);
+						}
+					}
+
 					_ret.add(internationalPrefix
-							+ _phoneNumberWithInternationalPrefix);
+							+ _phoneNumberWithoutInternationalPrefix);
 				}
 				for (String internationalCodesWithInternationalPrefix : InternationalCodeHelper
-						.getAllInternationalCodesWithInternationalPrefix()) {
+						.getInternationalCodeWithInternationalPrefixByAbbreviation(recognizableAreaeAbbreviations)) {
+					if (null != ignoreStrings && !ignoreStrings.isEmpty()) {
+						for (String ignoreString : ignoreStrings) {
+							_ret.add(internationalCodesWithInternationalPrefix
+									+ ignoreString
+									+ _phoneNumberWithoutInternationalPrefix);
+						}
+					}
+
 					_ret.add(internationalCodesWithInternationalPrefix
-							+ _phoneNumberWithInternationalPrefix);
+							+ _phoneNumberWithoutInternationalPrefix);
 				}
 			}
 		}
@@ -1646,18 +1681,34 @@ public class AddressBookManager {
 		return _ret;
 	}
 
-	// trim "" string of string array list
-	private void trimNilString4StringArrayList(List<String> stringList) {
-		// check string list
-		if (null != stringList && !stringList.isEmpty()) {
-			// traversal objects
-			for (String string : stringList) {
-				// check object
-				if ("".equals(string.trim())) {
-					stringList.remove(string);
+	// get analyze phone number without international prefix and code, except
+	// for ignore strings
+	private String getAnalyzePhoneNumberWithoutInternationalPrefix7CodeExcept4IgnoreString(
+			String phoneNumberWithInternationalPrefix7Code,
+			List<String> ignoreStrings) {
+		// define return result
+		String _ret = phoneNumberWithInternationalPrefix7Code;
+
+		// check ignore strings
+		if (null != ignoreStrings && !ignoreStrings.isEmpty()) {
+			// traversal all ignore strings
+			for (String ignoreString : ignoreStrings) {
+				// check phone number without international prefix and
+				// code start with ignore string
+				if (phoneNumberWithInternationalPrefix7Code
+						.startsWith(ignoreString)) {
+					// update phone number without international prefix
+					// and code for return
+					_ret = phoneNumberWithInternationalPrefix7Code
+							.substring(ignoreString.length());
+
+					// break immediately
+					break;
 				}
 			}
 		}
+
+		return _ret;
 	}
 
 	// inner class
