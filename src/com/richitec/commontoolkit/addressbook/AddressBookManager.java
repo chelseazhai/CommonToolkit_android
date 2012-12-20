@@ -27,8 +27,11 @@ import android.util.SparseArray;
 
 import com.richitec.commontoolkit.activityextension.AppLaunchActivity;
 import com.richitec.commontoolkit.addressbook.ContactBean.ContactDirtyType;
+import com.richitec.commontoolkit.utils.CommonUtils;
 import com.richitec.commontoolkit.utils.PinyinUtils;
 import com.richitec.commontoolkit.utils.StringUtils;
+import com.richitec.internationalcode.AreaAbbreviation;
+import com.richitec.internationalcode.utils.InternationalCodeHelper;
 
 public class AddressBookManager {
 
@@ -108,6 +111,11 @@ public class AddressBookManager {
 	public static final String NAME_MATCHING_INDEXES = "nameMatchingIndexes";
 	// contact name character fuzzy matched length
 	public static Integer NAME_CHARACTER_FUZZYMATCHED_LENGTH = -1;
+
+	// default abbreviation list only include People's republic of China
+	@SuppressWarnings("unchecked")
+	private final List<AreaAbbreviation> CN_ABBREVIATION = (List<AreaAbbreviation>) CommonUtils
+			.array2List(new AreaAbbreviation[] { AreaAbbreviation.CN });
 
 	// private constructor
 	private AddressBookManager() {
@@ -647,8 +655,10 @@ public class AddressBookManager {
 		return origNamePhonetics;
 	}
 
-	// get contacts list by given phone number: full matching
-	private List<ContactBean> getContactsListByPhone(String phoneNumber) {
+	// get contacts list by given phone number: full matching and ignore strings
+	private List<ContactBean> getContactsListByPhone(String phoneNumber,
+			List<String> ignoreStrings,
+			List<AreaAbbreviation> analyzableAreaeAbbreviations) {
 		List<ContactBean> _contacts = new ArrayList<ContactBean>();
 
 		// traversal all contacts detail info array
@@ -658,32 +668,37 @@ public class AddressBookManager {
 
 			// check the contact phone numbers
 			if (null != _contactPhoneNumbers
-					&& 0 != _contactPhoneNumbers.size()
-					&& _contactPhoneNumbers.contains(phoneNumber)) {
-				_contacts.add(_contact);
+					&& 0 != _contactPhoneNumbers.size()) {
+				// traversal analyze phone number array
+				for (String analyzedPhoneNumber : analyzePhoneNumber(
+						phoneNumber, ignoreStrings,
+						analyzableAreaeAbbreviations)) {
+					// check contact phone numbers contains analyzed phone
+					// number
+					if (_contactPhoneNumbers.contains(analyzedPhoneNumber)) {
+						// add contact to return result
+						_contacts.add(_contact);
+
+						// break immediately
+						break;
+					}
+				}
 			}
 		}
 
 		return _contacts;
 	}
 
-	// get contact bean object by aggregated id
-	public ContactBean getContactByAggregatedId(Long aggregatedId) {
-		ContactBean _contact = null;
-
-		if (_mAllContactsInfoMap.containsKey(aggregatedId)) {
-			_contact = _mAllContactsInfoMap.get(aggregatedId);
-		}
-
-		return _contact;
-	}
-
-	// get contacts display name list by given phone number
-	public List<String> getContactsDisplayNamesByPhone(String phoneNumber) {
+	// get contacts display name list by given phone number, ignore strings and
+	// analyzable areae abbreviations
+	public List<String> getContactsDisplayNamesByPhone(String phoneNumber,
+			List<String> ignoreStrings,
+			List<AreaAbbreviation> analyzableAreaeAbbreviations) {
 		List<String> _displayNames = new ArrayList<String>();
 
 		// traversal all matched contacts detail info array
-		for (ContactBean _contact : getContactsListByPhone(phoneNumber)) {
+		for (ContactBean _contact : getContactsListByPhone(phoneNumber,
+				ignoreStrings, analyzableAreaeAbbreviations)) {
 			_displayNames.add(_contact.getDisplayName());
 		}
 
@@ -695,12 +710,22 @@ public class AddressBookManager {
 		return _displayNames;
 	}
 
-	// get contacts photo list by given phone number
-	public List<byte[]> getContactsPhotosByPhone(String phoneNumber) {
+	// get contacts display name list by given phone number
+	public List<String> getContactsDisplayNamesByPhone(String phoneNumber) {
+		return getContactsDisplayNamesByPhone(phoneNumber, null,
+				CN_ABBREVIATION);
+	}
+
+	// get contacts photo list by given phone number, ignore strings and
+	// analyzable areae abbreviations
+	public List<byte[]> getContactsPhotosByPhone(String phoneNumber,
+			List<String> ignoreStrings,
+			List<AreaAbbreviation> analyzableAreaeAbbreviations) {
 		List<byte[]> _photos = new ArrayList<byte[]>();
 
 		// traversal all matched contacts detail info array
-		for (ContactBean _contact : getContactsListByPhone(phoneNumber)) {
+		for (ContactBean _contact : getContactsListByPhone(phoneNumber,
+				ignoreStrings, analyzableAreaeAbbreviations)) {
 			// get contact photo
 			byte[] _photo = _contact.getPhoto();
 
@@ -716,6 +741,11 @@ public class AddressBookManager {
 		}
 
 		return _photos;
+	}
+
+	// get contacts photo list by given phone number
+	public List<byte[]> getContactsPhotosByPhone(String phoneNumber) {
+		return getContactsPhotosByPhone(phoneNumber, null, CN_ABBREVIATION);
 	}
 
 	// is contact with the given phone number in address book, return the
@@ -739,6 +769,17 @@ public class AddressBookManager {
 		}
 
 		return _ret;
+	}
+
+	// get contact bean object by aggregated id
+	public ContactBean getContactByAggregatedId(Long aggregatedId) {
+		ContactBean _contact = null;
+
+		if (_mAllContactsInfoMap.containsKey(aggregatedId)) {
+			_contact = _mAllContactsInfoMap.get(aggregatedId);
+		}
+
+		return _contact;
 	}
 
 	// get contacts list by phone number with sorted type
@@ -1492,6 +1533,131 @@ public class AddressBookManager {
 		}
 
 		return _ret;
+	}
+
+	// analyze phone number of get contacts which user input for searching
+	public List<String> analyzePhoneNumber(String phoneNumber,
+			List<String> ignoreStrings,
+			List<AreaAbbreviation> analyzableAreaeAbbreviations) {
+		// define return result
+		List<String> _ret = new ArrayList<String>();
+
+		// get analyzable areae abbreviations international codes
+		List<Integer> _allInternationalCodes = InternationalCodeHelper
+				.getInternationalCodeByAbbreviation(analyzableAreaeAbbreviations);
+
+		// define phone number international prefix
+		String _phoneNumberInternationalPrefix = "";
+
+		// check phone number start with international prefix
+		for (String internationalPrefix : InternationalCodeHelper.INTERNATIONAL_PREFIXES) {
+			// trim null or empty international prefix
+			if (null == internationalPrefix || "".equals(internationalPrefix)) {
+				continue;
+			}
+
+			if (phoneNumber.startsWith(internationalPrefix)) {
+				// update phone number international prefix
+				_phoneNumberInternationalPrefix = internationalPrefix;
+
+				// break immediately
+				break;
+			}
+		}
+
+		// check phone number start with international code
+		for (int i = 0; i < _allInternationalCodes.size(); i++) {
+			// get international code
+			String _internationalCode = _allInternationalCodes.get(i)
+					.toString();
+
+			// example: +86phonenumber, 86phonenumber
+			if (phoneNumber.startsWith(_internationalCode,
+					_phoneNumberInternationalPrefix.length())) {
+				// get phone number without international prefix and code
+				String _phoneNumberWithInternationalPrefix7Code = phoneNumber
+						.substring(_phoneNumberInternationalPrefix.length()
+								+ _internationalCode.length());
+
+				// trim ignore strings and check it
+				trimNilString4StringArrayList(ignoreStrings);
+				if (null != ignoreStrings && !ignoreStrings.isEmpty()) {
+					// traversal all ignore strings
+					for (String ignoreString : ignoreStrings) {
+						// check phone number without international prefix and
+						// code start with ignore string
+						if (_phoneNumberWithInternationalPrefix7Code
+								.startsWith(ignoreString)) {
+							// update phone number without international prefix
+							// and code
+							_phoneNumberWithInternationalPrefix7Code = _phoneNumberWithInternationalPrefix7Code
+									.substring(ignoreString.length());
+
+							// break immediately
+							break;
+						}
+					}
+				}
+
+				// add phone number for searching format to return result
+				// list
+				_ret.add(_phoneNumberWithInternationalPrefix7Code);
+				for (String internationalPrefix : InternationalCodeHelper
+						.getInternationalPrefix(null)) {
+					if (null != ignoreStrings && !ignoreStrings.isEmpty()) {
+						for (String ignoreString : ignoreStrings) {
+							_ret.add(internationalPrefix + _internationalCode
+									+ ignoreString
+									+ _phoneNumberWithInternationalPrefix7Code);
+						}
+					}
+
+					_ret.add(internationalPrefix + _internationalCode
+							+ _phoneNumberWithInternationalPrefix7Code);
+					_ret.add(internationalPrefix
+							+ _phoneNumberWithInternationalPrefix7Code);
+				}
+
+				// break immediately
+				break;
+			}
+
+			// example: +phonenumber, phonenumber
+			if (i == _allInternationalCodes.size() - 1) {
+				// get phone number without international prefix
+				String _phoneNumberWithInternationalPrefix = phoneNumber
+						.substring(_phoneNumberInternationalPrefix.length());
+
+				// add phone number for searching format to return result
+				// list
+				for (String internationalPrefix : InternationalCodeHelper
+						.getInternationalPrefix(null)) {
+					_ret.add(internationalPrefix
+							+ _phoneNumberWithInternationalPrefix);
+				}
+				for (String internationalCodesWithInternationalPrefix : InternationalCodeHelper
+						.getAllInternationalCodesWithInternationalPrefix()) {
+					_ret.add(internationalCodesWithInternationalPrefix
+							+ _phoneNumberWithInternationalPrefix);
+				}
+			}
+		}
+
+		return _ret;
+	}
+
+	// trim "" string of string array list
+	private void trimNilString4StringArrayList(List<String> stringList) {
+		// check string list
+		if (null != stringList && !stringList.isEmpty()) {
+			// traversal objects
+			for (String string : stringList) {
+				// check object
+				if ("".equals(string.trim())) {
+					stringList.remove(string);
+				}
+			}
+		}
 	}
 
 	// inner class
