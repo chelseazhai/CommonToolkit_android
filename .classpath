@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="libs/apache-mime4j-core-0.7.2.jar"/>
 	<classpathentry kind="lib" path="libs/internationalcode4j-0.1.0.jar"/>
 	<classpathentry kind="lib" path="libs/json4j-0.1.0.jar"/>
+	<classpathentry kind="lib" path="libs/sqlite-jdbc-3.7.2.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
