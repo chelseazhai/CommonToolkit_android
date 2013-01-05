@@ -23,7 +23,7 @@ import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.Groups;
 import android.provider.ContactsContract.RawContacts;
 import android.util.Log;
-import android.util.SparseArray;
+import android.util.SparseIntArray;
 
 import com.richitec.commontoolkit.activityextension.AppLaunchActivity;
 import com.richitec.commontoolkit.addressbook.ContactBean.ContactDirtyType;
@@ -482,8 +482,17 @@ public class AddressBookManager {
 						// set contact phone numbers list
 						_contact.setPhoneNumbers(_phoneNumbers);
 					} else {
-						// add phone number to phone number list
-						_contact.getPhoneNumbers().add(_phoneNumber);
+						// check and add phone number to phone number list
+						if (!_contact.getPhoneNumbers().contains(_phoneNumber)) {
+							_contact.getPhoneNumbers().add(_phoneNumber);
+						} else {
+							Log.d(LOG_TAG,
+									"Contact his name = "
+											+ _contact.getDisplayName()
+											+ " and phone number = "
+											+ _phoneNumber
+											+ " had been existed in his phone number list");
+						}
 					}
 				}
 			}
@@ -1095,7 +1104,7 @@ public class AddressBookManager {
 					boolean _splitNameUnmatch = false;
 
 					// name matching indexes map
-					SparseArray<Integer> _nameMatchingIndexesMap = new SparseArray<Integer>();
+					SparseIntArray _nameMatchingIndexesMap = new SparseIntArray();
 
 					// compare split objects(List) count with contact name
 					// phonetics(List) count
@@ -1377,7 +1386,7 @@ public class AddressBookManager {
 				boolean _splitNameUnmatch = false;
 
 				// name matching indexes map
-				SparseArray<Integer> _nameMatchingIndexesMap = new SparseArray<Integer>();
+				SparseIntArray _nameMatchingIndexesMap = new SparseIntArray();
 
 				// compare split objects(List) count with contact full
 				// names(List) count
