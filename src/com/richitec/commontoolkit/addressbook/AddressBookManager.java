@@ -1044,7 +1044,7 @@ public class AddressBookManager {
 		List<ContactBean> _searchedContacts = new ArrayList<ContactBean>();
 
 		// name to lower case
-		name = name.toLowerCase();
+		name = name.toLowerCase(Locale.getDefault());
 
 		// check all contacts detail info array
 		if (0 == _mAllContactsInfoArray.size()) {
@@ -1331,7 +1331,7 @@ public class AddressBookManager {
 		List<ContactBean> _searchedContacts = new ArrayList<ContactBean>();
 
 		// name to lower case
-		name = name.toLowerCase();
+		name = name.toLowerCase(Locale.getDefault());
 
 		// check all contacts detail info array
 		if (0 == _mAllContactsInfoArray.size()) {
