@@ -53,7 +53,7 @@ public class CallLogManager {
 		// use contentResolver to query calls table
 		Cursor _callLogCursor = getContentResolver().query(
 				CallLog.Calls.CONTENT_URI, _projection, null, null,
-				CallLog.Calls.DEFAULT_SORT_ORDER + " limit 100");
+				CallLog.Calls.DEFAULT_SORT_ORDER);
 
 		// check call log cursor and traverse result
 		if (null != _callLogCursor) {
@@ -205,7 +205,7 @@ public class CallLogManager {
 	}
 
 	// convert call type from integer to CallType
-	private static CallType getCallType(Integer callType) {
+	public static CallType getCallType(Integer callType) {
 		// define return value
 		CallType _ret;
 
