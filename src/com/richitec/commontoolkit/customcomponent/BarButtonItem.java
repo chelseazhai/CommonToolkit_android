@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.widget.Button;
 
-import com.richitec.commontoolkit.activityextension.R;
+import com.richitec.commontoolkit.R;
 
 public class BarButtonItem extends Button {
 

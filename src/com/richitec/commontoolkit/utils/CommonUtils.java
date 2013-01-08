@@ -9,7 +9,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.util.Log;
 
-import com.richitec.commontoolkit.activityextension.AppLaunchActivity;
+import com.richitec.commontoolkit.CommonToolkitApplication;
 
 public class CommonUtils {
 
@@ -34,7 +34,7 @@ public class CommonUtils {
 		boolean _ret = true;
 
 		// get application context
-		Context _appContext = AppLaunchActivity.getAppContext();
+		Context _appContext = CommonToolkitApplication.getContext();
 
 		// get and check intent resolve info list
 		List<ResolveInfo> _resolveInfoList = _appContext.getPackageManager()

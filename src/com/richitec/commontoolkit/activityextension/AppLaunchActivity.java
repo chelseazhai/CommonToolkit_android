@@ -1,7 +1,6 @@
 package com.richitec.commontoolkit.activityextension;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -9,12 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.richitec.commontoolkit.R;
+
 public abstract class AppLaunchActivity extends Activity {
 
 	private static final String LOG_TAG = "AppLaunchActivity";
-
-	// application context
-	private static volatile Context _mAppContext = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -23,20 +21,12 @@ public abstract class AppLaunchActivity extends Activity {
 		// set content view
 		setContentView(R.layout.app_launch_activity_layout);
 
-		// save application context
-		_mAppContext = this.getApplicationContext();
-
 		// set loading splash image
 		((ImageView) findViewById(R.id.appSplash_imageView))
 				.setImageDrawable(splashImg());
 
 		// new application launching task to do didFinishLaunching in background
 		new AppLaunchingTask().execute(intentActivity());
-	}
-
-	// get application context
-	public static Context getAppContext() {
-		return _mAppContext;
 	}
 
 	// application loading splash image
