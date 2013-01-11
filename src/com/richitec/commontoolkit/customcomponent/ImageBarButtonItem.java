@@ -59,7 +59,8 @@ public class ImageBarButtonItem extends ImageButton {
 			Drawable pressedBackgroundDrawable, OnClickListener btnClickListener) {
 		this(context, barBtnItemStyle, normalBackgroundDrawable);
 
-		// set src drawable
+		// set src scale type and drawable
+		setScaleType(ScaleType.CENTER_INSIDE);
 		setImageDrawable(srcDrawable);
 
 		// set normal and pressed background drawable
@@ -106,7 +107,8 @@ public class ImageBarButtonItem extends ImageButton {
 		this(context, BarButtonItemStyle.RIGHT_GO, context.getResources()
 				.getDrawable(normalBackgroundResId));
 
-		// set src drawable
+		// set src scale type and drawable
+		setScaleType(ScaleType.CENTER_INSIDE);
 		setImageResource(srcId);
 
 		// set normal and pressed background drawable
