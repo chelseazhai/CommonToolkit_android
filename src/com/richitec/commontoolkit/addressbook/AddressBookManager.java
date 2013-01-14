@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import android.content.ContentResolver;
@@ -46,7 +47,7 @@ public class AddressBookManager {
 	private Collator _mCollator;
 
 	// all contacts detail info array
-	private final List<ContactBean> _mAllContactsInfoArray = new ArrayList<ContactBean>();
+	private final List<ContactBean> _mAllContactsInfoArray = new CopyOnWriteArrayList<ContactBean>();
 
 	// all contacts detail info map. key: aggregated id and value: contacts
 	// detail info
