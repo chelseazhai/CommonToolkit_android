@@ -1,0 +1,50 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activityextension.AppInstructionActivity" >
+
+    <RelativeLayout
+        android:id="@+id/instructionNavigationRelativeLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/black"
+        android:padding="12dp" >
+
+        <ImageView
+            android:id="@+id/instructionNav_PreviousImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:contentDescription="@string/instruction_previousNavigation_imageView_content_description"
+            android:src="@android:drawable/arrow_up_float" />
+
+        <ImageView
+            android:id="@+id/instructionNav_NextImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:contentDescription="@string/instruction_nextNavigation_imageView_content_description"
+            android:src="@android:drawable/arrow_down_float" />
+
+        <LinearLayout
+            android:id="@+id/instructionCursorLinearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@id/instructionNav_NextImageView"
+            android:layout_toRightOf="@id/instructionNav_PreviousImageView"
+            android:orientation="horizontal" >
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ViewFlipper
+        android:id="@+id/instructionViewFlipper"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@id/instructionNavigationRelativeLayout"
+        android:layout_centerHorizontal="true" >
+    </ViewFlipper>
+
+</RelativeLayout>
