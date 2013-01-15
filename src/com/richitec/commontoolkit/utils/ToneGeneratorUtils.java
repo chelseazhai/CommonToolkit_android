@@ -8,7 +8,7 @@ import android.media.ToneGenerator;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.richitec.commontoolkit.CommonToolkitApplication;
+import com.richitec.commontoolkit.CTApplication;
 
 public class ToneGeneratorUtils {
 
@@ -45,7 +45,7 @@ public class ToneGeneratorUtils {
 	// private constructor
 	private ToneGeneratorUtils() {
 		// init audio manager
-		_mAudioManager = (AudioManager) CommonToolkitApplication.getContext()
+		_mAudioManager = (AudioManager) CTApplication.getContext()
 				.getSystemService(Context.AUDIO_SERVICE);
 	}
 
@@ -126,7 +126,7 @@ public class ToneGeneratorUtils {
 	// play dtmf sound with tone id
 	public void playDTMFSound(Integer toneId) {
 		// get and check system dtmf sound enable or disable when dial
-		if (1 == Settings.System.getInt(CommonToolkitApplication.getContext()
+		if (1 == Settings.System.getInt(CTApplication.getContext()
 				.getContentResolver(), Settings.System.DTMF_TONE_WHEN_DIALING,
 				1)) {
 			// play dtmf sound with tone id

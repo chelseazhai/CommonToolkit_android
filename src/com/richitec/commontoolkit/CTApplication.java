@@ -3,13 +3,12 @@ package com.richitec.commontoolkit;
 import android.app.Application;
 import android.content.Context;
 
-public class CommonToolkitApplication extends Application {
+public class CTApplication extends Application {
 
 	// singleton instance
-	private static volatile CommonToolkitApplication _singletonInstance;
+	private static volatile CTApplication _singletonInstance;
 
-	// private constructor
-	public CommonToolkitApplication() {
+	public CTApplication() {
 		super();
 
 		// init singleton instance

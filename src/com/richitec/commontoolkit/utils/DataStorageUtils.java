@@ -6,7 +6,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.richitec.commontoolkit.CommonToolkitApplication;
+import com.richitec.commontoolkit.CTApplication;
 
 public class DataStorageUtils {
 
@@ -33,7 +33,7 @@ public class DataStorageUtils {
 		default:
 			// put object to shared preferences editor
 			putObject2SharedPreferencesStorage(
-					CommonToolkitApplication
+					CTApplication
 							.getContext()
 							.getSharedPreferences(
 									null == fileName ? SHARED_PREFERENCES_FILEDEFNAME
@@ -64,7 +64,7 @@ public class DataStorageUtils {
 		case SHARED_PREFERENCES:
 		default: {
 			// get shared preferences editor
-			SharedPreferences.Editor _sharedPreferencesEditor = CommonToolkitApplication
+			SharedPreferences.Editor _sharedPreferencesEditor = CTApplication
 					.getContext()
 					.getSharedPreferences(
 							null == fileName ? SHARED_PREFERENCES_FILEDEFNAME
@@ -161,7 +161,7 @@ public class DataStorageUtils {
 		case SHARED_PREFERENCES:
 		default: {
 			// get shared preferences
-			SharedPreferences _sharedPreferences = CommonToolkitApplication
+			SharedPreferences _sharedPreferences = CTApplication
 					.getContext().getSharedPreferences(
 							null == fileName ? SHARED_PREFERENCES_FILEDEFNAME
 									: fileName, Activity.MODE_PRIVATE);
@@ -239,7 +239,7 @@ public class DataStorageUtils {
 		case SHARED_PREFERENCES:
 		default: {
 			// get shared preferences
-			SharedPreferences _sharedPreferences = CommonToolkitApplication
+			SharedPreferences _sharedPreferences = CTApplication
 					.getContext().getSharedPreferences(
 							null == fileName ? SHARED_PREFERENCES_FILEDEFNAME
 									: fileName, Activity.MODE_PRIVATE);
