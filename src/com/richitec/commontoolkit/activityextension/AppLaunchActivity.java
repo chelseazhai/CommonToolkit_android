@@ -39,7 +39,10 @@ public abstract class AppLaunchActivity extends Activity {
 	public abstract Drawable splashImg();
 
 	// application instruction content images resource id
-	public abstract List<Integer> instructionContentImgResIds();
+	protected List<Integer> instructionContentImgResIds() {
+		// default return null
+		return null;
+	}
 
 	// application intent activity
 	public abstract Intent intentActivity();
