@@ -193,4 +193,48 @@ public class JSONUtils {
 		return getJSONArrayObject(jsonArray, index, Object.class);
 	}
 
+	// convert string to json object
+	public static JSONObject toJSONObject(String parseString) {
+		JSONObject _stringJsonObject = null;
+
+		// check string
+		if (null != parseString) {
+			// convert
+			try {
+				_stringJsonObject = new JSONObject(parseString);
+			} catch (JSONException e) {
+				e.printStackTrace();
+
+				Log.e(LOG_TAG, "Convert string = " + parseString
+						+ " to json object exception: " + e.getMessage());
+			}
+		} else {
+			Log.e(LOG_TAG, "Convert to json object string is null");
+		}
+
+		return _stringJsonObject;
+	}
+
+	// convert string to json array
+	public static JSONArray toJSONArray(String parseString) {
+		JSONArray _stringJsonArray = null;
+
+		// check string
+		if (null != parseString) {
+			// convert
+			try {
+				_stringJsonArray = new JSONArray(parseString);
+			} catch (JSONException e) {
+				e.printStackTrace();
+
+				Log.e(LOG_TAG, "Convert string = " + parseString
+						+ " to json array exception: " + e.getMessage());
+			}
+		} else {
+			Log.e(LOG_TAG, "Convert to json array string is null");
+		}
+
+		return _stringJsonArray;
+	}
+
 }

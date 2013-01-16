@@ -115,8 +115,7 @@ public class AddressBookManager {
 	// private constructor
 	private AddressBookManager() {
 		// init content resolver
-		_mContentResolver = CTApplication.getContext()
-				.getContentResolver();
+		_mContentResolver = CTApplication.getContext().getContentResolver();
 
 		// init pinyin4j
 		PinyinHelper.toHanyuPinyinStringArray(PinyinUtils.PINYINUTILS_INIT);
@@ -354,10 +353,9 @@ public class AddressBookManager {
 						List<List<String>> _namePhoneticsList = new ArrayList<List<String>>();
 
 						// check locale language
-						if (Locale.CHINESE
-								.getLanguage()
-								.equals(CTApplication.getContext()
-										.getResources().getConfiguration().locale
+						if (Locale.CHINESE.getLanguage().equals(
+								CTApplication.getContext().getResources()
+										.getConfiguration().locale
 										.getLanguage())) {
 							// display name
 							StringBuilder _displayName = new StringBuilder();

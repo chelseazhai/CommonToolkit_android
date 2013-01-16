@@ -10,7 +10,6 @@
         android:layout_height="fill_parent"
         android:layout_gravity="center"
         android:flipInterval="1000"
-        android:foregroundGravity="center"
         android:persistentDrawingCache="animation" >
 
         <include
@@ -21,38 +20,32 @@
         <include
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            layout="@layout/app_instruction_content_layout"
-            android:visibility="gone" />
+            layout="@layout/app_instruction_content_layout" />
 
         <include
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            layout="@layout/app_instruction_content_layout"
-            android:visibility="gone" />
+            layout="@layout/app_instruction_content_layout" />
 
         <include
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            layout="@layout/app_instruction_content_layout"
-            android:visibility="gone" />
+            layout="@layout/app_instruction_content_layout" />
 
         <include
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            layout="@layout/app_instruction_content_layout"
-            android:visibility="gone" />
+            layout="@layout/app_instruction_content_layout" />
 
         <include
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            layout="@layout/app_instruction_content_layout"
-            android:visibility="gone" />
+            layout="@layout/app_instruction_content_layout" />
 
         <include
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            layout="@layout/app_instruction_content_layout"
-            android:visibility="gone" />
+            layout="@layout/app_instruction_content_layout" />
     </ViewFlipper>
 
     <RelativeLayout

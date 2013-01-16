@@ -83,13 +83,46 @@ public class HttpUtils {
 		return _singletonInstance.getDefaultHttpClient();
 	}
 
+	// perfect http request url with prefix
+	public static String perfectHttpRequestUrl(String url,
+			HttpUrlPrefix httpUrlPrefix) {
+		String _ret = url;
+
+		// check url is nil and has prefix "http://" or "https://"
+		if (null != url && null != httpUrlPrefix && !url.equalsIgnoreCase("")) {
+			// check need to perfect http request url
+			if (!url.startsWith(httpUrlPrefix.prefix())) {
+				// define url string builder
+				StringBuilder _urlStringBuilder = new StringBuilder();
+
+				// need to split with prefix
+				if (url.startsWith(httpUrlPrefix.anotherHttpUrlPrefix()
+						.prefix())) {
+					_ret = _urlStringBuilder
+							.append(httpUrlPrefix.prefix())
+							.append(url.substring(httpUrlPrefix
+									.anotherHttpUrlPrefix().prefix().length()))
+							.toString();
+				} else {
+					_ret = _urlStringBuilder.append(httpUrlPrefix.prefix())
+							.append(url).toString();
+				}
+			}
+		} else {
+			Log.e(LOG_TAG, "perfect http request url error, url = " + url
+					+ " and prefix = " + httpUrlPrefix);
+		}
+
+		return _ret;
+	}
+
 	// send get request
 	public static void getRequest(String pUrl, Map<String, String> pParam,
 			Map<String, ?> pUserInfo, HttpRequestType pRequestType,
 			OnHttpRequestListener httpRequestListener) {
 		// perfect http request url
 		StringBuilder _httpRequestUrl = new StringBuilder(
-				StringUtils.perfectHttpRequestUrl(pUrl));
+				perfectHttpRequestUrl(pUrl, HttpUrlPrefix.HTTP));
 		// append char '?' first and param pairs, if param not null
 		if (null != pParam && !pParam.isEmpty()) {
 			_httpRequestUrl.append('?');
@@ -153,8 +186,8 @@ public class HttpUtils {
 			HttpRequestType pRequestType,
 			OnHttpRequestListener httpRequestListener) {
 		// new httpPost object
-		HttpPost _postHttpRequest = new HttpPost(
-				StringUtils.perfectHttpRequestUrl(pUrl));
+		HttpPost _postHttpRequest = new HttpPost(perfectHttpRequestUrl(pUrl,
+				HttpUrlPrefix.HTTP));
 
 		// check param and set post request param
 		if (null != pParam && !pParam.isEmpty()) {
@@ -335,6 +368,56 @@ public class HttpUtils {
 	}
 
 	// inner class
+	// http url prefix
+	public static enum HttpUrlPrefix {
+		HTTP, HTTPS;
+
+		// http url prefix string
+		public String prefix() {
+			// define return result
+			String _ret = this.name();
+
+			// set return result
+			switch (this) {
+			case HTTPS:
+				_ret = "https://";
+				break;
+
+			case HTTP:
+				_ret = "http://";
+			default:
+				break;
+			}
+
+			return _ret;
+		}
+
+		// another http url prefix
+		public HttpUrlPrefix anotherHttpUrlPrefix() {
+			HttpUrlPrefix _ret = this;
+
+			// set return result
+			switch (this) {
+			case HTTPS:
+				_ret = HTTP;
+				break;
+
+			case HTTP:
+			default:
+				_ret = HTTPS;
+				break;
+			}
+
+			return _ret;
+		}
+
+		@Override
+		public String toString() {
+			return prefix();
+		}
+
+	}
+
 	// http request type
 	public static enum HttpRequestType {
 		SYNCHRONOUS, ASYNCHRONOUS

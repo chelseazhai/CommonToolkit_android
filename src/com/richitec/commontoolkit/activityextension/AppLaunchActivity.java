@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.richitec.commontoolkit.R;
 import com.richitec.commontoolkit.utils.DataStorageUtils;
+import com.richitec.commontoolkit.utils.VersionUtils;
 
 public abstract class AppLaunchActivity extends Activity {
 
@@ -40,8 +41,8 @@ public abstract class AppLaunchActivity extends Activity {
 
 	// application instruction content images resource id
 	protected List<Integer> instructionContentImgResIds() {
-		// default return null
-		return null;
+		// default return empty list
+		return new ArrayList<Integer>();
 	}
 
 	// application intent activity
@@ -96,13 +97,34 @@ public abstract class AppLaunchActivity extends Activity {
 			if (0 == result) {
 				// check intent activity
 				if (null != _mIntent) {
-					// get application instruction launch flag
-					Boolean _need2LaunchAppInstruction = DataStorageUtils
-							.getBoolean(AppInstructionActivity.APPINSTRUCTION_LAUNCHFLAG);
+					// define application instruction launch flag
+					boolean _need2LaunchAppInstruction = true;
+
+					// key for application version name
+					final String APP_VERSIONNAME = "application_version_name";
+
+					// compare last storage and current application version name
+					try {
+						if (VersionUtils.compareVersionName(
+								DataStorageUtils.getString(APP_VERSIONNAME),
+								VersionUtils.versionName()) >= 0) {
+							// go to target intent immediately
+							_need2LaunchAppInstruction = false;
+						}
+					} catch (Exception e) {
+						Log.e(LOG_TAG,
+								"Compare application version name error, exception message = "
+										+ e.getMessage());
+
+						e.printStackTrace();
+					}
+
+					// save current application version
+					DataStorageUtils.putObject(APP_VERSIONNAME,
+							VersionUtils.versionName());
 
 					// need to launch application instruction
-					if (null == _need2LaunchAppInstruction
-							|| true == _need2LaunchAppInstruction) {
+					if (true == _need2LaunchAppInstruction) {
 						// check application instruction content image list
 						if (null != _mInstructionImgResIds
 								&& !_mInstructionImgResIds.isEmpty()) {
