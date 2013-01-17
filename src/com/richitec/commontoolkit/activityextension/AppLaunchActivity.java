@@ -107,14 +107,13 @@ public abstract class AppLaunchActivity extends Activity {
 					// define application instruction launch flag
 					boolean _need2LaunchAppInstruction = true;
 
-					// key for application version name
-					final String APP_VERSIONNAME = "application_version_name";
-
 					// compare last storage and current application version name
 					try {
-						if (VersionUtils.compareVersionName(
-								DataStorageUtils.getString(APP_VERSIONNAME),
-								VersionUtils.versionName()) >= 0) {
+						if (VersionUtils
+								.compareVersionName(
+										DataStorageUtils
+												.getString(AppInstructionActivity.NEED2LAUNCH_APPINSTRUCTION),
+										VersionUtils.versionName()) >= 0) {
 							// go to target intent immediately
 							_need2LaunchAppInstruction = false;
 						}
@@ -125,10 +124,6 @@ public abstract class AppLaunchActivity extends Activity {
 
 						e.printStackTrace();
 					}
-
-					// save current application version
-					DataStorageUtils.putObject(APP_VERSIONNAME,
-							VersionUtils.versionName());
 
 					// need to launch application instruction
 					if (true == _need2LaunchAppInstruction) {

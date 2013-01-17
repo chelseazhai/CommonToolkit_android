@@ -9,11 +9,11 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,10 +23,15 @@ import android.widget.ViewFlipper;
 
 import com.richitec.commontoolkit.CTApplication;
 import com.richitec.commontoolkit.R;
+import com.richitec.commontoolkit.utils.DataStorageUtils;
+import com.richitec.commontoolkit.utils.VersionUtils;
 
 public class AppInstructionActivity extends Activity {
 
 	private static final String LOG_TAG = "AppInstructionActivity";
+
+	// key for saving application version name
+	public static final String NEED2LAUNCH_APPINSTRUCTION = "application_version_name";
 
 	// application instruction activity onCreate param key
 	public static final String APPINSTRUCTION_ACTIVITY_TARGETINTENT_PARAM_KEY = "application_target_intent";
@@ -37,6 +42,10 @@ public class AppInstructionActivity extends Activity {
 
 	// instruction viewFlipper
 	private ViewFlipper _mInstructionViewFlipper;
+
+	// gesture detector
+	private final GestureDetector GESTUREDETECTOR = new GestureDetector(
+			new InstructionActivityOnFlingGestureListener());
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +70,6 @@ public class AppInstructionActivity extends Activity {
 			// get instruction viewFlipper
 			_mInstructionViewFlipper = ((ViewFlipper) findViewById(R.id.instructionViewFlipper));
 
-			// set instruction viewFlipper on touch listener
-			_mInstructionViewFlipper.setOnTouchListener(new InstructionViewFlipperOnTouchListener());
-
 			// init application instruction activity UI
 			initInstructionUI(
 					_appInstructionImgIds.subList(0,
@@ -87,7 +93,7 @@ public class AppInstructionActivity extends Activity {
 			// check valid instruction images count and instruction viewFlipper
 			// child count
 			if (_validInstructionImagesCount < _mInstructionViewFlipper
-					.getChildCount()) {
+					.getChildCount() - 1) {
 				// get each instruction image
 				Drawable _instructionImage = CTApplication.getContext()
 						.getResources()
@@ -153,6 +159,12 @@ public class AppInstructionActivity extends Activity {
 			finish();
 		}
 
+		// remove invisible instruction content imageViews
+		while (_mInstructionViewFlipper.getChildCount() > _validInstructionImagesCount) {
+			_mInstructionViewFlipper.removeViewAt(_mInstructionViewFlipper
+					.getChildCount() - 1);
+		}
+
 		// init instruction next navigation and cursors
 		if (1 < _validInstructionImagesCount) {
 			// show next instruction image navigation imageView
@@ -175,16 +187,82 @@ public class AppInstructionActivity extends Activity {
 		// nothing to do
 	}
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// use gesture detector to implement on fling gesture listener
+		return GESTUREDETECTOR.onTouchEvent(event);
+	}
+
+	// update instruction cursor imageView image
+	private void updateInstructionCursorImageViewImg(
+			int viewFlipperDisplayChildIndex, FlingDirection flingDirection) {
+		// get instruction cursor imageView parent linearLayout
+		LinearLayout _instructionCursorImageViewParentLinearLayout = (LinearLayout) findViewById(R.id.instructionCursorLinearLayout);
+
+		// update cursor imageView image
+		((ImageView) _instructionCursorImageViewParentLinearLayout
+				.getChildAt(viewFlipperDisplayChildIndex))
+				.setImageResource(R.drawable.img_instructioncursor_unselected);
+		((ImageView) _instructionCursorImageViewParentLinearLayout
+				.getChildAt(viewFlipperDisplayChildIndex
+						+ (FlingDirection.LEFT == flingDirection ? 1 : -1)))
+				.setImageResource(R.drawable.img_instructioncursor_selected);
+	}
+
 	// inner class
-	// instruction viewFlipper on touch listener
-	class InstructionViewFlipperOnTouchListener implements OnTouchListener {
+	// fling direction
+	enum FlingDirection {
+		LEFT, RIGHT
+	}
+
+	// instruction activity on fling gesture listener
+	class InstructionActivityOnFlingGestureListener extends
+			SimpleOnGestureListener {
 
 		@Override
-		public boolean onTouch(View v, MotionEvent event) {
-			// TODO Auto-generated method stub
-			new GestureDetector(null);
-			
-			return false;
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+			// define consumed result
+			boolean _consumed = true;
+
+			// define fling minimum distance and velocity
+			final int FLING_MIN_DISTANCE = 100, FLING_MIN_VELOCITY = 200;
+
+			// compare motion event x position
+			if (e1.getX() == e2.getX()) {
+				_consumed = false;
+			} else {
+				// get display child index
+				int _displayedChildIndex = _mInstructionViewFlipper
+						.getDisplayedChild();
+
+				// check fling direction and strength
+				if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE
+						&& Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+					// check bound
+					if (_mInstructionViewFlipper.getChildCount() - 1 != _displayedChildIndex) {
+						// update cursor imageView image
+						updateInstructionCursorImageViewImg(
+								_displayedChildIndex, FlingDirection.LEFT);
+
+						// fling left
+						_mInstructionViewFlipper.showNext();
+					}
+				} else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE
+						&& Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+					// check bound
+					if (0 != _displayedChildIndex) {
+						// update cursor imageView image
+						updateInstructionCursorImageViewImg(
+								_displayedChildIndex, FlingDirection.RIGHT);
+
+						// fling right
+						_mInstructionViewFlipper.showPrevious();
+					}
+				}
+			}
+
+			return _consumed;
 		}
 
 	}
@@ -194,6 +272,10 @@ public class AppInstructionActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
+			// save current application version
+			DataStorageUtils.putObject(NEED2LAUNCH_APPINSTRUCTION,
+					VersionUtils.versionName());
+
 			// go to intent activity
 			startActivity(_mAppTargetIntent);
 
