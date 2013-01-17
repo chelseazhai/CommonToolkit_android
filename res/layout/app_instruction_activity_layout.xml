@@ -67,7 +67,8 @@
             <include
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                layout="@layout/app_instruction_cursor_layout" />
+                layout="@layout/app_instruction_cursor_layout"
+                android:visibility="gone" />
 
             <include
                 android:layout_width="wrap_content"

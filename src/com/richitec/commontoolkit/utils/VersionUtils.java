@@ -50,7 +50,7 @@ public class VersionUtils {
 
 	// compare version name
 	public static int compareVersionName(String lhs, String rhs)
-			throws Exception {
+			throws VersionCompareException {
 		// define return result
 		int _ret = 0;
 
@@ -64,7 +64,9 @@ public class VersionUtils {
 					"compare version name unnecessary, left version name = "
 							+ lhs + " and right version name = " + rhs);
 
-			throw new Exception("Compare version name unnecessary");
+			throw new VersionCompareException(
+					"unnecessary to compare, left handside = " + lhs
+							+ " and right handside = " + rhs);
 		}
 
 		// get left and right handle side version name string list
@@ -101,6 +103,21 @@ public class VersionUtils {
 		}
 
 		return _ret;
+	}
+
+	// inner class
+	// version name compare exception
+	public static class VersionCompareException extends Exception {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 6622844578793344270L;
+
+		public VersionCompareException(String reason) {
+			super("Version compare error, the reason is " + reason);
+		}
+
 	}
 
 }

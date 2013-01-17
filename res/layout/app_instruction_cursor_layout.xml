@@ -2,7 +2,6 @@
 <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:contentDescription="@string/instructionContent_cursor_imageView_content_description"
-    android:src="@drawable/img_instructioncursor_selected" >
+    android:contentDescription="@string/instructionContent_cursor_imageView_content_description" >
 
 </ImageView>
