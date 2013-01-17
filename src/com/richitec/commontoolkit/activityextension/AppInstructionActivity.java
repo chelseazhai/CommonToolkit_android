@@ -193,9 +193,34 @@ public class AppInstructionActivity extends Activity {
 		return GESTUREDETECTOR.onTouchEvent(event);
 	}
 
-	// update instruction cursor imageView image
-	private void updateInstructionCursorImageViewImg(
+	// update instruction navigation visibility and cursor imageView image
+	private void updateInstructionNavVisibility7CursorImageViewImg(
 			int viewFlipperDisplayChildIndex, FlingDirection flingDirection) {
+		// get previous and next navigation imageView
+		ImageView _previousNavImageView = (ImageView) findViewById(R.id.instructionNav_PreviousImageView);
+		ImageView _nextNavImageView = (ImageView) findViewById(R.id.instructionNav_NextImageView);
+
+		// check fling direction
+		if (FlingDirection.LEFT == flingDirection) {
+			// show previous navigate imageView
+			_previousNavImageView.setVisibility(View.VISIBLE);
+
+			// hide next navigation prognosis
+			if (_mInstructionViewFlipper.getChildCount() - 1 == viewFlipperDisplayChildIndex + 1) {
+				// hide next navigate imageView
+				_nextNavImageView.setVisibility(View.GONE);
+			}
+		} else if (FlingDirection.RIGHT == flingDirection) {
+			// show next navigate imageView
+			_nextNavImageView.setVisibility(View.VISIBLE);
+
+			// hide previous navigation prognosis
+			if (1 == viewFlipperDisplayChildIndex) {
+				// hide previous navigate imageView
+				_previousNavImageView.setVisibility(View.GONE);
+			}
+		}
+
 		// get instruction cursor imageView parent linearLayout
 		LinearLayout _instructionCursorImageViewParentLinearLayout = (LinearLayout) findViewById(R.id.instructionCursorLinearLayout);
 
@@ -241,8 +266,9 @@ public class AppInstructionActivity extends Activity {
 						&& Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 					// check bound
 					if (_mInstructionViewFlipper.getChildCount() - 1 != _displayedChildIndex) {
-						// update cursor imageView image
-						updateInstructionCursorImageViewImg(
+						// update navigation visibility and cursor imageView
+						// image
+						updateInstructionNavVisibility7CursorImageViewImg(
 								_displayedChildIndex, FlingDirection.LEFT);
 
 						// fling left
@@ -252,8 +278,9 @@ public class AppInstructionActivity extends Activity {
 						&& Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 					// check bound
 					if (0 != _displayedChildIndex) {
-						// update cursor imageView image
-						updateInstructionCursorImageViewImg(
+						// update navigation visibility and cursor imageView
+						// image
+						updateInstructionNavVisibility7CursorImageViewImg(
 								_displayedChildIndex, FlingDirection.RIGHT);
 
 						// fling right
