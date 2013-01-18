@@ -271,7 +271,11 @@ public class AppInstructionActivity extends Activity {
 						updateInstructionNavVisibility7CursorImageViewImg(
 								_displayedChildIndex, FlingDirection.LEFT);
 
-						// fling left
+						// fling left with animation
+						_mInstructionViewFlipper.setInAnimation(
+								AppInstructionActivity.this, R.anim.push_in);
+						_mInstructionViewFlipper.setOutAnimation(
+								AppInstructionActivity.this, R.anim.push_out);
 						_mInstructionViewFlipper.showNext();
 					}
 				} else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE
@@ -283,7 +287,11 @@ public class AppInstructionActivity extends Activity {
 						updateInstructionNavVisibility7CursorImageViewImg(
 								_displayedChildIndex, FlingDirection.RIGHT);
 
-						// fling right
+						// fling right with animation
+						_mInstructionViewFlipper.setInAnimation(
+								AppInstructionActivity.this, R.anim.pull_in);
+						_mInstructionViewFlipper.setOutAnimation(
+								AppInstructionActivity.this, R.anim.pull_out);
 						_mInstructionViewFlipper.showPrevious();
 					}
 				}
