@@ -251,7 +251,7 @@ public class AppInstructionActivity extends Activity {
 			boolean _consumed = true;
 
 			// define fling minimum distance and velocity
-			final int FLING_MIN_DISTANCE = 100, FLING_MIN_VELOCITY = 200;
+			final int FLING_MIN_DISTANCE = 50, FLING_MIN_VELOCITY = 100;
 
 			// compare motion event x position
 			if (e1.getX() == e2.getX()) {
