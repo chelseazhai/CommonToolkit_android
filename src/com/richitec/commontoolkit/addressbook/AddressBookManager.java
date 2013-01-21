@@ -58,7 +58,7 @@ public class AddressBookManager {
 	private final Map<Long, List<Long>> _mAllGroupsMembersMap = new HashMap<Long, List<Long>>();
 
 	// contact name and Chinese name searching max length
-	private final Integer CONTACTNAME7CHINESENAME_SEARCHING_MAXLENGTH = 20;
+	private final Integer CONTACTNAME7CHINESENAME_SEARCHING_MAXLENGTH = 14;
 
 	// contacts search result map. key: search keyword (String), value: array of
 	// contact bean (ContactBean) and contact matching index array map
