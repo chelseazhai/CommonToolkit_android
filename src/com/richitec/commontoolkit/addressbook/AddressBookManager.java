@@ -57,6 +57,9 @@ public class AddressBookManager {
 	// aggregated id list
 	private final Map<Long, List<Long>> _mAllGroupsMembersMap = new HashMap<Long, List<Long>>();
 
+	// contact name and Chinese name searching max length
+	private final Integer CONTACTNAME7CHINESENAME_SEARCHING_MAXLENGTH = 20;
+
 	// contacts search result map. key: search keyword (String), value: array of
 	// contact bean (ContactBean) and contact matching index array map
 	private final Map<String, List<Map<String, Object>>> _mContactsSearchResultMap = new HashMap<String, List<Map<String, Object>>>();
@@ -1043,7 +1046,9 @@ public class AddressBookManager {
 		List<ContactBean> _searchedContacts = new ArrayList<ContactBean>();
 
 		// name to lower case
-		name = name.toLowerCase(Locale.getDefault());
+		name = (CONTACTNAME7CHINESENAME_SEARCHING_MAXLENGTH >= name.length() ? name
+				: name.substring(0, CONTACTNAME7CHINESENAME_SEARCHING_MAXLENGTH))
+				.toLowerCase(Locale.getDefault());
 
 		// check all contacts detail info array
 		if (0 == _mAllContactsInfoArray.size()) {
@@ -1330,7 +1335,9 @@ public class AddressBookManager {
 		List<ContactBean> _searchedContacts = new ArrayList<ContactBean>();
 
 		// name to lower case
-		name = name.toLowerCase(Locale.getDefault());
+		name = (CONTACTNAME7CHINESENAME_SEARCHING_MAXLENGTH >= name.length() ? name
+				: name.substring(0, CONTACTNAME7CHINESENAME_SEARCHING_MAXLENGTH))
+				.toLowerCase(Locale.getDefault());
 
 		// check all contacts detail info array
 		if (0 == _mAllContactsInfoArray.size()) {
