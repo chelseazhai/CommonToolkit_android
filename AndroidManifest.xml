@@ -21,15 +21,18 @@
         <activity
             android:name=".activityextension.AppLaunchActivity"
             android:label="@string/title_activity_app_launch"
+            android:screenOrientation="portrait"
             android:theme="@style/AppLaunchActivityTheme" >
         </activity>
         <activity
-            android:name=".activityextension.NavigationActivity"
-            android:label="@string/title_activity_navigation" >
+            android:name=".activityextension.AppInstructionActivity"
+            android:label="@string/title_activity_app_instruction"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".activityextension.AppInstructionActivity"
-            android:label="@string/title_activity_app_instruction" >
+            android:name=".activityextension.NavigationActivity"
+            android:label="@string/title_activity_navigation"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 
