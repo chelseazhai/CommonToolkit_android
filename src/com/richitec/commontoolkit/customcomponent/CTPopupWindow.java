@@ -16,9 +16,9 @@ import android.widget.PopupWindow;
 
 import com.richitec.commontoolkit.CTApplication;
 
-public abstract class CommonPopupWindow extends PopupWindow {
+public abstract class CTPopupWindow extends PopupWindow {
 
-	public CommonPopupWindow() {
+	public CTPopupWindow() {
 		super();
 
 		// bind popup window content view and its present child view listener
@@ -28,7 +28,7 @@ public abstract class CommonPopupWindow extends PopupWindow {
 		bindPopupWindowComponentsListener();
 	}
 
-	public CommonPopupWindow(Context context, AttributeSet attrs, int defStyle) {
+	public CTPopupWindow(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 
 		// bind popup window content view and its present child view listener
@@ -38,7 +38,7 @@ public abstract class CommonPopupWindow extends PopupWindow {
 		bindPopupWindowComponentsListener();
 	}
 
-	public CommonPopupWindow(Context context, AttributeSet attrs) {
+	public CTPopupWindow(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
 		// bind popup window content view and its present child view listener
@@ -48,7 +48,7 @@ public abstract class CommonPopupWindow extends PopupWindow {
 		bindPopupWindowComponentsListener();
 	}
 
-	public CommonPopupWindow(Context context) {
+	public CTPopupWindow(Context context) {
 		super(context);
 
 		// bind popup window content view and its present child view listener
@@ -58,7 +58,7 @@ public abstract class CommonPopupWindow extends PopupWindow {
 		bindPopupWindowComponentsListener();
 	}
 
-	public CommonPopupWindow(int width, int height) {
+	public CTPopupWindow(int width, int height) {
 		super(width, height);
 
 		// bind popup window content view and its present child view listener
@@ -68,7 +68,7 @@ public abstract class CommonPopupWindow extends PopupWindow {
 		bindPopupWindowComponentsListener();
 	}
 
-	public CommonPopupWindow(View contentView, int width, int height,
+	public CTPopupWindow(View contentView, int width, int height,
 			boolean focusable) {
 		super(contentView, width, height, focusable);
 
@@ -79,7 +79,7 @@ public abstract class CommonPopupWindow extends PopupWindow {
 		bindPopupWindowComponentsListener();
 	}
 
-	public CommonPopupWindow(View contentView, int width, int height) {
+	public CTPopupWindow(View contentView, int width, int height) {
 		super(contentView, width, height);
 
 		// bind popup window content view and its present child view listener
@@ -89,7 +89,7 @@ public abstract class CommonPopupWindow extends PopupWindow {
 		bindPopupWindowComponentsListener();
 	}
 
-	public CommonPopupWindow(View contentView) {
+	public CTPopupWindow(View contentView) {
 		super(contentView);
 
 		// bind popup window content view and its present child view listener
@@ -100,11 +100,11 @@ public abstract class CommonPopupWindow extends PopupWindow {
 	}
 
 	// constructor with popup window layout resource id
-	public CommonPopupWindow(int resource, int width, int height,
+	public CTPopupWindow(int resource, int width, int height,
 			boolean focusable, boolean isBindDefListener) {
-		super(((LayoutInflater) CTApplication.getContext()
-				.getSystemService(Activity.LAYOUT_INFLATER_SERVICE)).inflate(
-				resource, null), width, height, focusable);
+		super(((LayoutInflater) CTApplication.getContext().getSystemService(
+				Activity.LAYOUT_INFLATER_SERVICE)).inflate(resource, null),
+				width, height, focusable);
 
 		// check bind default content view and its present child view listener
 		if (isBindDefListener) {
@@ -115,7 +115,7 @@ public abstract class CommonPopupWindow extends PopupWindow {
 		bindPopupWindowComponentsListener();
 	}
 
-	public CommonPopupWindow(int resource, int width, int height) {
+	public CTPopupWindow(int resource, int width, int height) {
 		this(resource, width, height, true, true);
 	}
 

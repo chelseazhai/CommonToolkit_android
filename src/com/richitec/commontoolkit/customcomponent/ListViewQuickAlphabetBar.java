@@ -22,7 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.richitec.commontoolkit.R;
-import com.richitec.commontoolkit.customadapter.CommonListAdapter;
+import com.richitec.commontoolkit.customadapter.CTListAdapter;
 
 public class ListViewQuickAlphabetBar extends DataSetObserver {
 
@@ -128,7 +128,7 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 		_mDepedentListViewDataPreviousCount = dependentListViewAdapter
 				.getCount();
 
-		if (dependentListViewAdapter instanceof CommonListAdapter) {
+		if (dependentListViewAdapter instanceof CTListAdapter) {
 			// clear alphabet relativeLayout
 			// hide head letter textView
 			TextView _headLetterTextView = (TextView) _mAlphabetRelativeLayout
@@ -145,7 +145,7 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 			}
 
 			// check dependent listView adapter alphabet set
-			Set<Character> _dependentListViewAdapterAlphabetSet = ((CommonListAdapter) dependentListViewAdapter)
+			Set<Character> _dependentListViewAdapterAlphabetSet = ((CTListAdapter) dependentListViewAdapter)
 					.getAlphabet();
 			if (0 != _dependentListViewAdapterAlphabetSet.size()) {
 				// init present alphabet
@@ -309,8 +309,9 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 		Toast _mAlphabetTouchedLetterToast;
 
 		public AlphabetTouchedLetterToast(ListView dependentListView) {
-			_mAlphabetTouchedLetterToast = Toast.makeText(
-					dependentListView.getContext(), "", Toast.LENGTH_SHORT);
+			// init alphabet touched letter toast
+			_mAlphabetTouchedLetterToast = new Toast(
+					dependentListView.getContext());
 
 			// get dependent listView original point
 			final int[] _location = new int[2];
