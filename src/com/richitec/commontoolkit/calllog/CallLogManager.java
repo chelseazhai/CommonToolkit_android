@@ -19,7 +19,8 @@ import com.richitec.commontoolkit.utils.DeviceUtils;
 
 public class CallLogManager {
 
-	private static final String LOG_TAG = "CallLogManager";
+	private static final String LOG_TAG = CallLogManager.class
+			.getCanonicalName();
 
 	// call log sqlite query content resolver
 	private static volatile ContentResolver _contentResolver;

@@ -10,7 +10,8 @@ import com.richitec.commontoolkit.CTApplication;
 
 public class DataStorageUtils {
 
-	private static final String LOG_TAG = "DataStorageUtils";
+	private static final String LOG_TAG = DataStorageUtils.class
+			.getCanonicalName();
 
 	// shared preferences xml file default name
 	private static final String SHARED_PREFERENCES_FILEDEFNAME = "sharedPreferencesDataStorage";
@@ -161,8 +162,8 @@ public class DataStorageUtils {
 		case SHARED_PREFERENCES:
 		default: {
 			// get shared preferences
-			SharedPreferences _sharedPreferences = CTApplication
-					.getContext().getSharedPreferences(
+			SharedPreferences _sharedPreferences = CTApplication.getContext()
+					.getSharedPreferences(
 							null == fileName ? SHARED_PREFERENCES_FILEDEFNAME
 									: fileName, Activity.MODE_PRIVATE);
 
@@ -239,8 +240,8 @@ public class DataStorageUtils {
 		case SHARED_PREFERENCES:
 		default: {
 			// get shared preferences
-			SharedPreferences _sharedPreferences = CTApplication
-					.getContext().getSharedPreferences(
+			SharedPreferences _sharedPreferences = CTApplication.getContext()
+					.getSharedPreferences(
 							null == fileName ? SHARED_PREFERENCES_FILEDEFNAME
 									: fileName, Activity.MODE_PRIVATE);
 

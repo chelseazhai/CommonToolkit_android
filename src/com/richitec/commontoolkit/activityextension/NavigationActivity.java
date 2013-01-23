@@ -23,7 +23,8 @@ import com.richitec.commontoolkit.customcomponent.ImageBarButtonItem;
 
 public class NavigationActivity extends Activity {
 
-	private static final String LOG_TAG = "NavigationActivity";
+	private static final String LOG_TAG = NavigationActivity.class
+			.getCanonicalName();
 
 	// commonToolkit navigation activity onCreate param key
 	private static final String NAV_ACTIVITY_PARAM_KEY = "nav_back_btn_default_title";

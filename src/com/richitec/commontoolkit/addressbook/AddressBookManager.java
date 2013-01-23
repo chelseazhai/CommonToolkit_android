@@ -35,7 +35,8 @@ import com.richitec.internationalcode.utils.InternationalCodeHelper;
 
 public class AddressBookManager {
 
-	private static final String LOG_TAG = "AddressBookManager";
+	private static final String LOG_TAG = AddressBookManager.class
+			.getCanonicalName();
 
 	// singleton instance
 	private static volatile AddressBookManager _singletonInstance;

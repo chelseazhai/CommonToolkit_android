@@ -18,6 +18,9 @@ import com.richitec.commontoolkit.CTApplication;
 
 public abstract class CTPopupWindow extends PopupWindow {
 
+	private static final String LOG_TAG = CTPopupWindow.class
+			.getCanonicalName();
+
 	public CTPopupWindow() {
 		super();
 
@@ -177,8 +180,8 @@ public abstract class CTPopupWindow extends PopupWindow {
 
 		@Override
 		public boolean onKey(View v, int keyCode, KeyEvent event) {
-			Log.d("CommonPopupWindow", "view = " + v + ", key code = "
-					+ keyCode + " and key event = " + event);
+			Log.d(LOG_TAG, "view = " + v + ", key code = " + keyCode
+					+ " and key event = " + event);
 
 			// listen back button pressed
 			if (KeyEvent.KEYCODE_BACK == keyCode

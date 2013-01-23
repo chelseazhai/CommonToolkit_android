@@ -14,7 +14,8 @@ import android.widget.CursorAdapter;
 
 public abstract class CTListCursorAdapter extends CursorAdapter {
 
-	private static final String LOG_TAG = "CTListCursorAdapter";
+	private static final String LOG_TAG = CTListCursorAdapter.class
+			.getCanonicalName();
 
 	// context
 	protected Context _mContext;
