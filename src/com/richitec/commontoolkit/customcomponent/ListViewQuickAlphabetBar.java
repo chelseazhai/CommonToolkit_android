@@ -310,8 +310,8 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 
 		public AlphabetTouchedLetterToast(ListView dependentListView) {
 			// init alphabet touched letter toast
-			_mAlphabetTouchedLetterToast = new Toast(
-					dependentListView.getContext());
+			_mAlphabetTouchedLetterToast = Toast.makeText(
+					dependentListView.getContext(), "", Toast.LENGTH_SHORT);
 
 			// get dependent listView original point
 			final int[] _location = new int[2];
