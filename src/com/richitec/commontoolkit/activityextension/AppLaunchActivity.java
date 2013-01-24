@@ -22,7 +22,8 @@ import com.richitec.commontoolkit.utils.VersionUtils.VersionCompareException;
 
 public abstract class AppLaunchActivity extends Activity {
 
-	private static final String LOG_TAG = "AppLaunchActivity";
+	private static final String LOG_TAG = AppLaunchActivity.class
+			.getCanonicalName();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +90,7 @@ public abstract class AppLaunchActivity extends Activity {
 				_ret = 0;
 			} else {
 				Log.e(LOG_TAG,
-						"open application launching task failed, param = "
+						"Open application launching task failed, param = "
 								+ params.toString());
 			}
 
@@ -119,7 +120,7 @@ public abstract class AppLaunchActivity extends Activity {
 						}
 					} catch (VersionCompareException e) {
 						Log.e(LOG_TAG,
-								"compare application version name error, exception message = "
+								"Compare application version name error, exception message = "
 										+ e.getMessage());
 
 						e.printStackTrace();
@@ -170,14 +171,14 @@ public abstract class AppLaunchActivity extends Activity {
 								startActivity(_appInstructionIntent);
 							} catch (Exception e) {
 								Log.e(LOG_TAG,
-										"instruction active image not exist in image list and exception message = "
+										"Instruction active image not exist in image list and exception message = "
 												+ e.getMessage());
 
 								e.printStackTrace();
 							}
 						} else {
 							Log.w(LOG_TAG,
-									"launch application instruction error, instruction image = "
+									"Launch application instruction error, instruction image = "
 											+ _mInstructionImgRes7LayoutIds);
 
 							// go to intent activity
@@ -188,7 +189,7 @@ public abstract class AppLaunchActivity extends Activity {
 						startActivity(_mIntent);
 					}
 				} else {
-					Log.e(LOG_TAG, "intent activity is null");
+					Log.e(LOG_TAG, "Intent activity is null");
 				}
 
 				// finish application launch activity

@@ -10,7 +10,7 @@ import com.richitec.commontoolkit.CTApplication;
 
 public class VersionUtils {
 
-	private static final String LOG_TAG = "VersionUtils";
+	private static final String LOG_TAG = VersionUtils.class.getCanonicalName();
 
 	// get current version code
 	public static Integer versionCode() {
@@ -24,6 +24,10 @@ public class VersionUtils {
 			_currentVersionCode = _appContext.getPackageManager()
 					.getPackageInfo(_appContext.getPackageName(), 0).versionCode;
 		} catch (NameNotFoundException e) {
+			Log.e(LOG_TAG,
+					"Get application version code error, exception message = "
+							+ e.getMessage());
+
 			e.printStackTrace();
 		}
 
@@ -42,6 +46,10 @@ public class VersionUtils {
 			_currentVersionName = _appContext.getPackageManager()
 					.getPackageInfo(_appContext.getPackageName(), 0).versionName;
 		} catch (NameNotFoundException e) {
+			Log.e(LOG_TAG,
+					"Get application version name error, exception message = "
+							+ e.getMessage());
+
 			e.printStackTrace();
 		}
 
@@ -61,7 +69,7 @@ public class VersionUtils {
 		if (null == lhs || null == rhs
 				|| ("".equalsIgnoreCase(lhs) && "".equalsIgnoreCase(rhs))) {
 			Log.e(LOG_TAG,
-					"compare version name unnecessary, left version name = "
+					"Compare version name unnecessary, left version name = "
 							+ lhs + " and right version name = " + rhs);
 
 			throw new VersionCompareException(

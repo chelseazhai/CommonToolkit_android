@@ -12,7 +12,8 @@ import com.richitec.commontoolkit.CTApplication;
 
 public class ToneGeneratorUtils {
 
-	private static final String LOG_TAG = "ToneGeneratorUtils";
+	private static final String LOG_TAG = ToneGeneratorUtils.class
+			.getCanonicalName();
 
 	// sound play duration and volume
 	private final Integer SOUND_DURATION_MS = 120;
@@ -97,13 +98,13 @@ public class ToneGeneratorUtils {
 					_mToneGenerator = new ToneGenerator(
 							AudioManager.STREAM_MUSIC, SOUND_VOLUME);
 				} catch (Exception e) {
-					_mToneGenerator = null;
-
-					e.printStackTrace();
-
 					Log.e(LOG_TAG,
 							"Creating local media sound tone generator error, exception message = "
 									+ e.getMessage());
+
+					e.printStackTrace();
+
+					_mToneGenerator = null;
 				}
 			}
 

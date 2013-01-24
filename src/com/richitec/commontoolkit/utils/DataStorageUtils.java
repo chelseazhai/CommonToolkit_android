@@ -196,7 +196,7 @@ public class DataStorageUtils {
 		} else if (value instanceof Boolean) {
 			sharedPreferencesEditor.putBoolean(key, (Boolean) value);
 		} else {
-			Log.e(LOG_TAG, "the object = " + value.toString()
+			Log.e(LOG_TAG, "The object = " + value.toString()
 					+ " can't put to shared preferences editor");
 		}
 

@@ -28,7 +28,8 @@ import com.richitec.commontoolkit.utils.VersionUtils;
 
 public class AppInstructionActivity extends Activity {
 
-	private static final String LOG_TAG = "AppInstructionActivity";
+	private static final String LOG_TAG = AppInstructionActivity.class
+			.getCanonicalName();
 
 	// key for saving application version name
 	public static final String NEED2LAUNCH_APPINSTRUCTION = "application_version_name";
@@ -139,7 +140,7 @@ public class AppInstructionActivity extends Activity {
 						.setImageDrawable(_activeContentImageView.getDrawable());
 			} else {
 				Log.w(LOG_TAG,
-						"active content parent view child imageView is null");
+						"Active content parent view child imageView is null");
 			}
 
 			// remove active button from active content parent view first
@@ -153,7 +154,7 @@ public class AppInstructionActivity extends Activity {
 			_viewFlipperChildRelativeLayout.addView(_activeContentButton);
 		} else {
 			Log.e(LOG_TAG,
-					"application instruction active button lost in active content parent view");
+					"Application instruction active button lost in active content parent view");
 
 			// finish application instruction activity
 			finish();

@@ -36,7 +36,7 @@ import com.richitec.commontoolkit.user.UserManager;
 
 public class HttpUtils {
 
-	private static final String LOG_TAG = "HttpUtils";
+	private static final String LOG_TAG = HttpUtils.class.getCanonicalName();
 
 	// singleton instance
 	private static volatile HttpUtils _singletonInstance;
@@ -109,7 +109,7 @@ public class HttpUtils {
 				}
 			}
 		} else {
-			Log.e(LOG_TAG, "perfect http request url error, url = " + url
+			Log.e(LOG_TAG, "Perfect http request url error, url = " + url
 					+ " and prefix = " + httpUrlPrefix);
 		}
 
@@ -156,8 +156,9 @@ public class HttpUtils {
 				}
 			} catch (Exception e) {
 				Log.e(LOG_TAG,
-						"Send synchronous get request excetion: "
+						"Send synchronous get request excetion message = "
 								+ e.getMessage());
+
 				e.printStackTrace();
 
 				// process needed exception and check http request listener
@@ -229,8 +230,9 @@ public class HttpUtils {
 				}
 			} catch (UnsupportedEncodingException e) {
 				Log.e(LOG_TAG,
-						"post request post body unsupported encoding exception: "
+						"Post request post body unsupported encoding exceptio message = "
 								+ e.getMessage());
+
 				e.printStackTrace();
 			}
 
@@ -252,8 +254,9 @@ public class HttpUtils {
 				}
 			} catch (Exception e) {
 				Log.e(LOG_TAG,
-						"Send synchronous post request excetion: "
+						"Send synchronous post request excetion message = "
 								+ e.getMessage());
+
 				e.printStackTrace();
 
 				// process needed exception and check http request listener
@@ -355,10 +358,10 @@ public class HttpUtils {
 			try {
 				_respEntityString = EntityUtils.toString(response.getEntity());
 			} catch (Exception e) {
-				e.printStackTrace();
+				Log.e(LOG_TAG, "Get http response entity excetion message = "
+						+ e.getMessage());
 
-				Log.e(LOG_TAG,
-						"Get http response entity excetion: " + e.getMessage());
+				e.printStackTrace();
 			}
 		} else {
 			Log.e(LOG_TAG, "Get http response entity, response is null");
@@ -541,8 +544,9 @@ public class HttpUtils {
 				_mHttpResponse = getHttpClient().execute(_mHttpRequest);
 			} catch (Exception e) {
 				Log.e(LOG_TAG,
-						"Send asynchronous http request excetion: "
+						"Send asynchronous http request excetion message = "
 								+ e.getMessage());
+
 				e.printStackTrace();
 
 				// process needed exception and check http request listener

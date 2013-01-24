@@ -8,7 +8,7 @@ import android.util.Log;
 
 public class JSONUtils {
 
-	private static final String LOG_TAG = "JSONUtils";
+	private static final String LOG_TAG = JSONUtils.class.getCanonicalName();
 
 	// get json object value with key and value class name
 	private static Object getJSONObjectValue(JSONObject jsonObject, String key,
@@ -37,12 +37,12 @@ public class JSONUtils {
 					_value = jsonObject.get(key);
 				}
 			} catch (JSONException e) {
-				e.printStackTrace();
-
 				Log.e(LOG_TAG,
 						"Get json = " + jsonObject + " value with key = " + key
 								+ " and value class = " + valueClass.getName()
-								+ " exception: " + e.getMessage());
+								+ " exception message = " + e.getMessage());
+
+				e.printStackTrace();
 			}
 		} else {
 			Log.e(LOG_TAG, "Get json value with key = " + key
@@ -129,12 +129,12 @@ public class JSONUtils {
 						_object = jsonArray.get(index);
 					}
 				} catch (JSONException e) {
-					e.printStackTrace();
-
 					Log.e(LOG_TAG, "Get json array = " + jsonArray
 							+ " object at index = " + index
 							+ " and object class = " + objectClass.getName()
-							+ " exception: " + e.getMessage());
+							+ " exception message = " + e.getMessage());
+
+					e.printStackTrace();
 				}
 			} else {
 				Log.e(LOG_TAG, "Get json array object at index = " + index
@@ -203,10 +203,12 @@ public class JSONUtils {
 			try {
 				_stringJsonObject = new JSONObject(parseString);
 			} catch (JSONException e) {
-				e.printStackTrace();
+				Log.e(LOG_TAG,
+						"Convert string = " + parseString
+								+ " to json object exception message = "
+								+ e.getMessage());
 
-				Log.e(LOG_TAG, "Convert string = " + parseString
-						+ " to json object exception: " + e.getMessage());
+				e.printStackTrace();
 			}
 		} else {
 			Log.e(LOG_TAG, "Convert to json object string is null");
@@ -225,10 +227,12 @@ public class JSONUtils {
 			try {
 				_stringJsonArray = new JSONArray(parseString);
 			} catch (JSONException e) {
-				e.printStackTrace();
+				Log.e(LOG_TAG,
+						"Convert string = " + parseString
+								+ " to json array exception message = "
+								+ e.getMessage());
 
-				Log.e(LOG_TAG, "Convert string = " + parseString
-						+ " to json array exception: " + e.getMessage());
+				e.printStackTrace();
 			}
 		} else {
 			Log.e(LOG_TAG, "Convert to json array string is null");

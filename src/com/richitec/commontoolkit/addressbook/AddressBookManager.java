@@ -165,7 +165,7 @@ public class AddressBookManager {
 		Log.d("AddressBookManager", "traversal addressBook");
 
 		// get all contacts detail info
-		Log.d(LOG_TAG, "getAllContactsDetailInfo - begin");
+		Log.d(LOG_TAG, "GetAllContactsDetailInfo - begin");
 
 		getAllContactsDetailInfo();
 
@@ -174,14 +174,14 @@ public class AddressBookManager {
 		// false,
 		// new ContactsContentObserver());
 
-		Log.d(LOG_TAG, "getAllContactsDetailInfo - end");
+		Log.d(LOG_TAG, "GetAllContactsDetailInfo - end");
 
 		// get all international code
-		Log.d(LOG_TAG, "getAllInternationalCodes - begin");
+		Log.d(LOG_TAG, "GetAllInternationalCodes - begin");
 
 		InternationalCodeHelper.getAllInternationalCodes();
 
-		Log.d(LOG_TAG, "getAllInternationalCodes - end");
+		Log.d(LOG_TAG, "GetAllInternationalCodes - end");
 	}
 
 	// get all contacts detail info
@@ -215,7 +215,7 @@ public class AddressBookManager {
 						.getColumnIndex(Contacts.DISPLAY_NAME));
 
 				// Log.d(LOG_TAG,
-				// "getAllContactsId7DisplayName - aggregatedId: "
+				// "GetAllContactsId7DisplayName - aggregatedId: "
 				// + _aggregatedId + " and displayName: " + _displayName);
 
 				// check contact has been existed in all contacts detail info
@@ -268,7 +268,7 @@ public class AddressBookManager {
 						.getString(_rawIdsCursor
 								.getColumnIndex(RawContacts.ACCOUNT_NAME));
 
-				// Log.d(LOG_TAG, "getAllContactsRawIds - aggregatedId: "
+				// Log.d(LOG_TAG, "GetAllContactsRawIds - aggregatedId: "
 				// + _aggregatedId + " , rawId: " + _rawId
 				// + " and ownership account name: "
 				// + _ownershipAccountName);
@@ -337,7 +337,7 @@ public class AddressBookManager {
 						.getColumnIndex(StructuredName.FAMILY_NAME));
 
 				// Log.d(LOG_TAG,
-				// "getAllContactsStructuredName - aggregatedId: "
+				// "GetAllContactsStructuredName - aggregatedId: "
 				// + _aggregatedId + " , given name: " + _givenName
 				// + " , middle name = " + _middleName
 				// + " and family name: " + _familyName);
@@ -466,7 +466,7 @@ public class AddressBookManager {
 						"-() ");
 
 				// Log.d(LOG_TAG,
-				// "getAllContactsPhoneNumbers - aggregated id = "
+				// "GetAllContactsPhoneNumbers - aggregated id = "
 				// + _aggregatedId + " and phone number = " + _phoneNumber);
 
 				// check contact has been existed in all contacts detail info
@@ -528,7 +528,7 @@ public class AddressBookManager {
 				Long _groupRowId = _groupsCursor.getLong(_groupsCursor
 						.getColumnIndex(GroupMembership.GROUP_ROW_ID));
 
-				// Log.d(LOG_TAG, "getAllContactsGroups - aggregated id = "
+				// Log.d(LOG_TAG, "GetAllContactsGroups - aggregated id = "
 				// + _aggregatedId + " and group row id = " + _groupRowId);
 
 				// check group has been existed in all group members map
@@ -566,7 +566,7 @@ public class AddressBookManager {
 				String _groupTitle = _groupsCursor.getString(_groupsCursor
 						.getColumnIndex(Groups.TITLE));
 
-				// Log.d(LOG_TAG, "getAllContactsGroups - group row id = "
+				// Log.d(LOG_TAG, "GetAllContactsGroups - group row id = "
 				// + _groupRowId + " and group title = " + _groupTitle);
 
 				// check group has been existed in all group members map
@@ -628,7 +628,7 @@ public class AddressBookManager {
 				byte[] _photoData = _photoCursor.getBlob(_photoCursor
 						.getColumnIndex(Photo.PHOTO));
 
-				// Log.d(LOG_TAG, "getAllContactsPhoto - aggregated id = "
+				// Log.d(LOG_TAG, "GetAllContactsPhoto - aggregated id = "
 				// + _aggregatedId + " and photo string = " + _photoData);
 
 				// check contact has been existed in all contacts detail info
@@ -1406,7 +1406,7 @@ public class AddressBookManager {
 				switch (nameMatchingType) {
 				case FUZZY:
 					Log.d(LOG_TAG,
-							"get contacts by Chinese name fuzzy name matching unimplement");
+							"Get contacts by Chinese name fuzzy name matching unimplement");
 					_splitNameUnmatch = true;
 					break;
 
@@ -1555,7 +1555,7 @@ public class AddressBookManager {
 
 		// check contact search name
 		if (null == contactSearchName || 0 == contactSearchName.length()) {
-			Log.d(LOG_TAG, "null or empty search name string mustn't split");
+			Log.d(LOG_TAG, "Null or empty search name string mustn't split");
 		} else if (contactSearchName.length() > 1) {
 			// get first character and others
 			String _firster = contactSearchName.substring(0, 1);
@@ -1855,7 +1855,7 @@ public class AddressBookManager {
 			super.onChange(selfChange);
 
 			// contacts db changed
-			Log.d(LOG_TAG, "contacts database changed");
+			Log.d(LOG_TAG, "Contacts database changed");
 
 			// reset all aggregated contacts raw contacts dirty type, deleted
 			// first
@@ -1925,7 +1925,7 @@ public class AddressBookManager {
 
 						// if none version matched, mark as dirty data
 						if (!_oneVersionMatched) {
-							Log.d(LOG_TAG, "the contact aggregated id = "
+							Log.d(LOG_TAG, "The contact aggregated id = "
 									+ _aggregatedId + " changed");
 
 							// update the contact dirty flag, modified
@@ -1933,7 +1933,7 @@ public class AddressBookManager {
 									ContactDirtyType.MODIFIED);
 						}
 					} else {
-						Log.d(LOG_TAG, "the contact aggregated id = "
+						Log.d(LOG_TAG, "The contact aggregated id = "
 								+ _aggregatedId + " new added");
 
 						// add to all dirty contacts aggregated ids list
@@ -1964,7 +1964,7 @@ public class AddressBookManager {
 					}
 
 					if (_deletedContact) {
-						Log.d(LOG_TAG, "the contact aggregated id = "
+						Log.d(LOG_TAG, "The contact aggregated id = "
 								+ _contact.getId() + " deleted");
 
 						// add to all dirty contacts aggregated ids list
@@ -1987,7 +1987,7 @@ public class AddressBookManager {
 				}
 			}
 
-			Log.d(LOG_TAG, "all dirty contacts ids list = "
+			Log.d(LOG_TAG, "All dirty contacts ids list = "
 					+ _allDirtyContactsIdsList);
 
 			// update dirty contact data
@@ -2036,7 +2036,7 @@ public class AddressBookManager {
 						byte[] _photoData = _dataCursor.getBlob(_dataCursor
 								.getColumnIndex(Photo.PHOTO));
 
-						// Log.d(LOG_TAG, "contact mime type = " + _mimeType
+						// Log.d(LOG_TAG, "Contact mime type = " + _mimeType
 						// + " , display name =" + _displayName
 						// + " , raw id = " + _rawId + " , version = "
 						// + _version + " , account name = "

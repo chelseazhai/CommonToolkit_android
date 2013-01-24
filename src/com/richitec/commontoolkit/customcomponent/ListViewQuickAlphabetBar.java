@@ -26,7 +26,8 @@ import com.richitec.commontoolkit.customadapter.CTListAdapter;
 
 public class ListViewQuickAlphabetBar extends DataSetObserver {
 
-	private static final String LOG_TAG = "ListViewQuickAlphabetBar";
+	private static final String LOG_TAG = ListViewQuickAlphabetBar.class
+			.getCanonicalName();
 
 	// alphabet
 	private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#";

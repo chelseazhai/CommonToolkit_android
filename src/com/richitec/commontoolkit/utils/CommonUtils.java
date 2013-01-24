@@ -13,7 +13,7 @@ import com.richitec.commontoolkit.CTApplication;
 
 public class CommonUtils {
 
-	private static final String LOG_TAG = "CommonUtils";
+	private static final String LOG_TAG = CommonUtils.class.getCanonicalName();
 
 	// convert array to list
 	public static List<?> array2List(Object[] array) {

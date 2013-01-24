@@ -127,7 +127,9 @@ public class CallLogManager {
 				Log.e(LOG_TAG,
 						"Parse call duration string to integer error, duration = "
 								+ updateValues.get(CallLog.Calls.DURATION)
-								+ " and exception = " + e.getMessage());
+								+ " and exception message = " + e.getMessage());
+
+				e.printStackTrace();
 			}
 
 			Log.d(LOG_TAG,
@@ -172,7 +174,7 @@ public class CallLogManager {
 		Integer _callType = queryCursor.getInt(queryCursor
 				.getColumnIndex(CallLog.Calls.TYPE));
 
-		// Log.d(LOG_TAG, "get call log from cursor - callLogId: " + _callLogId
+		// Log.d(LOG_TAG, "Get call log from cursor - callLogId: " + _callLogId
 		// + ", callee name: " + _calleeName + ", callee number: "
 		// + _calleePhone + ", call date: " + _callDate
 		// + ", call duration: " + _callDuration + " and call type: "

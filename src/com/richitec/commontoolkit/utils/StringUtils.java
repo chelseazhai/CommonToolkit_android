@@ -5,7 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import android.util.Log;
+
 public class StringUtils {
+
+	private static final String LOG_TAG = StringUtils.class.getCanonicalName();
 
 	// split the string with given split word
 	public static String[] split(String string, String splitWord) {
@@ -116,6 +120,9 @@ public class StringUtils {
 
 			return new String(_ret);
 		} catch (Exception e) {
+			Log.e(LOG_TAG, "String md5 error, string = " + string
+					+ " and exception message = " + e.getMessage());
+
 			e.printStackTrace();
 
 			return null;

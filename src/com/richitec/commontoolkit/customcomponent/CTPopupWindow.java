@@ -180,7 +180,7 @@ public abstract class CTPopupWindow extends PopupWindow {
 
 		@Override
 		public boolean onKey(View v, int keyCode, KeyEvent event) {
-			Log.d(LOG_TAG, "view = " + v + ", key code = " + keyCode
+			Log.d(LOG_TAG, "View = " + v + ", key code = " + keyCode
 					+ " and key event = " + event);
 
 			// listen back button pressed
