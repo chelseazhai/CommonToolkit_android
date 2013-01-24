@@ -181,6 +181,12 @@ public abstract class AppLaunchActivity extends Activity {
 									"Launch application instruction error, instruction image = "
 											+ _mInstructionImgRes7LayoutIds);
 
+							// save current application version
+							DataStorageUtils
+									.putObject(
+											AppInstructionActivity.NEED2LAUNCH_APPINSTRUCTION,
+											VersionUtils.versionName());
+
 							// go to intent activity
 							startActivity(_mIntent);
 						}
