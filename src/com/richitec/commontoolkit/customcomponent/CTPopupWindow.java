@@ -15,11 +15,15 @@ import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 
 import com.richitec.commontoolkit.CTApplication;
+import com.richitec.commontoolkit.R;
 
 public abstract class CTPopupWindow extends PopupWindow {
 
 	private static final String LOG_TAG = CTPopupWindow.class
 			.getCanonicalName();
+
+	// commonToolkit popup window dismiss animation duration(milliseconds)
+	public final Integer DISMISSANIMATION_DURATION = 400;
 
 	public CTPopupWindow() {
 		super();
@@ -134,6 +138,27 @@ public abstract class CTPopupWindow extends PopupWindow {
 				resetPopupWindow();
 			}
 		}, 0);
+	}
+
+	// show at location with default animation
+	public void showAtLocationWithAnimation(View parent, int gravity, int x,
+			int y) {
+		// set default enter and exit animation
+		setAnimationStyle(R.style.CommonToolkitPopupWindowAnimationPopup);
+
+		// show at location
+		super.showAtLocation(parent, gravity, x, y);
+	}
+
+	// show at location in parent view with gravity, offset x, y and animation
+	// style
+	public void showAtLocation(View parent, int gravity, int x, int y,
+			int animationStyle) {
+		// set default enter and exit animation
+		setAnimationStyle(animationStyle);
+
+		// show at location
+		super.showAtLocation(parent, gravity, x, y);
 	}
 
 	// bind popup window content view and its present child view listener
