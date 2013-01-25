@@ -2,8 +2,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="CommonToolkitPopupWindowAnimationPopup">
-        <item name="android:windowEnterAnimation">@anim/bottom_popup_in</item>
-        <item name="android:windowExitAnimation">@anim/bottom_popup_out</item>
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 
 </resources>
