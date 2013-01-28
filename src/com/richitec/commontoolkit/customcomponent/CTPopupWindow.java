@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.PopupWindow;
 
@@ -187,15 +188,24 @@ public abstract class CTPopupWindow extends PopupWindow {
 		// set default enter and exit animation
 		setAnimationStyle(R.style.CommonToolkitPopupWindowAnimationPopup);
 
+		// get commonToolkit popup window bottom popup out dismiss animation
+		Animation _dismissAnimation = AnimationUtils.loadAnimation(
+				CTApplication.getContext(), R.anim.bottom_popup_out);
+
 		// set animation for all child views of content vie for hiding
 		for (int i = 0; i < ((ViewGroup) getContentView()).getChildCount(); i++) {
 			((ViewGroup) getContentView()).getChildAt(i).startAnimation(
-					AnimationUtils.loadAnimation(CTApplication.getContext(),
-							R.anim.bottom_popup_out));
+					_dismissAnimation);
 		}
 
 		// dismiss and reset popup window
-		dismiss7ResetPopupWindow();
+		new Handler().postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				dismiss7ResetPopupWindow();
+			}
+		}, _dismissAnimation.getDuration());
 	}
 
 	// dismiss with animation
@@ -203,15 +213,24 @@ public abstract class CTPopupWindow extends PopupWindow {
 		// set default enter and exit animation
 		setAnimationStyle(R.style.CommonToolkitPopupWindowAnimationPopup);
 
+		// get commonToolkit popup window dismiss animation
+		Animation _dismissAnimation = AnimationUtils.loadAnimation(
+				CTApplication.getContext(), animationResId);
+
 		// set animation for all child views of content vie for hiding
 		for (int i = 0; i < ((ViewGroup) getContentView()).getChildCount(); i++) {
 			((ViewGroup) getContentView()).getChildAt(i).startAnimation(
-					AnimationUtils.loadAnimation(CTApplication.getContext(),
-							animationResId));
+					_dismissAnimation);
 		}
 
 		// dismiss and reset popup window
-		dismiss7ResetPopupWindow();
+		new Handler().postDelayed(new Runnable() {
+
+			@Override
+			public void run() {
+				dismiss7ResetPopupWindow();
+			}
+		}, _dismissAnimation.getDuration());
 	}
 
 	// bind popup window content view and its present child view listener
