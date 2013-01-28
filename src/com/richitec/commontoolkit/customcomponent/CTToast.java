@@ -188,6 +188,19 @@ public class CTToast {
 		return _mStoreAttrsToast.getView();
 	}
 
+	public boolean isShowing() {
+		// define default
+		boolean _displayPopupWindowShown = false;
+
+		// check commonToolkit toast
+		if (null != _mDisplayPopupWindow) {
+			// update return result
+			_displayPopupWindowShown = _mDisplayPopupWindow.isShowing();
+		}
+
+		return _displayPopupWindowShown;
+	}
+
 	public void show() {
 		// show display popup window
 		if (null != _mDisplayPopupWindow) {
