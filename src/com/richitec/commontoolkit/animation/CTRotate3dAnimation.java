@@ -10,7 +10,7 @@ import android.view.animation.Transformation;
  * angles. This animation also adds a translation on the Z axis (depth) to
  * improve the effect.
  */
-public class CTRotate3dAnimation extends Animation {
+public class CTRotate3DAnimation extends Animation {
 
 	// rotate degree ranges
 	private final float _mFromDegrees;
@@ -48,7 +48,7 @@ public class CTRotate3dAnimation extends Animation {
 	 * @param reverse
 	 *            true if the translation should be reversed, false otherwise
 	 */
-	public CTRotate3dAnimation(float fromDegrees, float toDegrees,
+	public CTRotate3DAnimation(float fromDegrees, float toDegrees,
 			float centerX, float centerY, float depthZ, boolean reverse) {
 		// init degrees, rotate point coordinate and reverse flag variables
 		_mFromDegrees = fromDegrees;
