@@ -34,8 +34,11 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 	// alphabet touched letter toast
 	private AlphabetTouchedLetterToast _mAlphabetTouchedLetterToast;
 
-	// alphabet relativeLayout
-	private RelativeLayout _mAlphabetRelativeLayout;
+	// alphabet touch frameLayout
+	private FrameLayout _mAlphabetTouchFrameLayout;
+
+	// alphabet present relativeLayout
+	private RelativeLayout _mAlphabetPresentRelativeLayout;
 
 	// dependent listView
 	private ListView _mDependentListView;
@@ -62,14 +65,16 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 							Activity.LAYOUT_INFLATER_SERVICE)).inflate(
 					R.layout.listview_quickalphabetbar_layout, null);
 
-			// save alphabet relativeLayout
-			_mAlphabetRelativeLayout = (RelativeLayout) _quickAlphabetBarFrameLayout
-					.findViewById(R.id.alphabet_relativeLayout);
-			_quickAlphabetBarFrameLayout.removeView(_mAlphabetRelativeLayout);
+			// save alphabet touch and present layout
+			_mAlphabetTouchFrameLayout = (FrameLayout) _quickAlphabetBarFrameLayout
+					.findViewById(R.id.alphabet_touch_frameLayout);
+			_mAlphabetPresentRelativeLayout = (RelativeLayout) _mAlphabetTouchFrameLayout
+					.findViewById(R.id.alphabet_present_relativeLayout);
+			_quickAlphabetBarFrameLayout.removeView(_mAlphabetTouchFrameLayout);
 
-			// set alphabet relativeLayout on touch listener
-			_mAlphabetRelativeLayout
-					.setOnTouchListener(new OnAlphabetRelativeLayoutTouchListener());
+			// set alphabet touch frameLayout on touch listener
+			_mAlphabetTouchFrameLayout
+					.setOnTouchListener(new OnAlphabetTouchFrameLayoutTouchListener());
 
 			// init alphabet touched letter toast
 			_mAlphabetTouchedLetterToast = new AlphabetTouchedLetterToast(
@@ -112,9 +117,9 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 			// hide vertical scroll bar
 			dependentListView.setVerticalScrollBarEnabled(false);
 
-			// add alphabet relativeLayout to dependent listView
+			// add alphabet touch frameLayout to dependent listView
 			((FrameLayout) dependentListView.getParent())
-					.addView(_mAlphabetRelativeLayout);
+					.addView(_mAlphabetTouchFrameLayout);
 
 			// register data set changed observer
 			dependentListView.getAdapter().registerDataSetObserver(this);
@@ -134,14 +139,14 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 				.getCount();
 
 		if (dependentListViewAdapter instanceof CTListAdapter) {
-			// clear alphabet relativeLayout
+			// clear alphabet present relativeLayout
 			// hide head letter textView
-			TextView _headLetterTextView = (TextView) _mAlphabetRelativeLayout
+			TextView _headLetterTextView = (TextView) _mAlphabetPresentRelativeLayout
 					.findViewById(R.id.headLetter_textView);
 			_headLetterTextView.setVisibility(View.GONE);
 
 			// hide other letters linearLayout and child letter textView
-			LinearLayout _otherLettersLinearLayout = (LinearLayout) _mAlphabetRelativeLayout
+			LinearLayout _otherLettersLinearLayout = (LinearLayout) _mAlphabetPresentRelativeLayout
 					.findViewById(R.id.otherLetters_linearLayout);
 			_otherLettersLinearLayout.setVisibility(View.GONE);
 			for (int i = 0; i < _otherLettersLinearLayout.getChildCount(); i++) {
@@ -219,18 +224,18 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 		Character _touchedLetter = null;
 
 		if (MotionEvent.ACTION_DOWN == event.getAction()) {
-			// define alphabet relativeLayout original point
+			// define alphabet present relativeLayout original point
 			final Point _alphabetRelativeLayoutOrigPoint = new Point(-1, -1);
 
 			// location object
 			final int[] _location = new int[2];
 
-			// update alphabet relativeLayout original point
-			_mAlphabetRelativeLayout.getLocationOnScreen(_location);
+			// update alphabet present relativeLayout original point
+			_mAlphabetPresentRelativeLayout.getLocationOnScreen(_location);
 			_alphabetRelativeLayoutOrigPoint.set(_location[0], _location[1]);
 
 			// update head letter textView original point and end point
-			TextView _headLetterTextView = (TextView) _mAlphabetRelativeLayout
+			TextView _headLetterTextView = (TextView) _mAlphabetPresentRelativeLayout
 					.findViewById(R.id.headLetter_textView);
 			_headLetterTextView.getLocationOnScreen(_location);
 			headLetterEndPoint.set(
@@ -240,7 +245,7 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 							+ _headLetterTextView.getHeight());
 
 			// update other letters linearLayout original and end point
-			LinearLayout _otherLettersLinearLayout = (LinearLayout) _mAlphabetRelativeLayout
+			LinearLayout _otherLettersLinearLayout = (LinearLayout) _mAlphabetPresentRelativeLayout
 					.findViewById(R.id.otherLetters_linearLayout);
 			_otherLettersLinearLayout.getLocationOnScreen(_location);
 			otherLettersEndPoint.set(_location[0]
@@ -351,8 +356,8 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 
 	}
 
-	// alphabet relativeLayout on touch listener
-	class OnAlphabetRelativeLayoutTouchListener implements
+	// alphabet touch frameLayout on touch listener
+	class OnAlphabetTouchFrameLayoutTouchListener implements
 			android.view.View.OnTouchListener {
 		// define head letter textView and other letters linearLayout end point
 		final Point _headLetterTextViewEndPoint = new Point(-1, -1);
@@ -365,8 +370,9 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 			case MotionEvent.ACTION_DOWN:
 			case MotionEvent.ACTION_MOVE:
 				if (MotionEvent.ACTION_DOWN == event.getAction()) {
-					// update alphabet relativeLayout background resource
-					_mAlphabetRelativeLayout
+					// update alphabet present relativeLayout background
+					// resource
+					_mAlphabetPresentRelativeLayout
 							.setBackgroundResource(R.drawable.listview_alphabetrelativelayout_bg);
 
 					// check dependent listView and on touch listener
@@ -392,15 +398,16 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 					// save touched letter
 					_mAlphabetRelativeLayoutPreviousTouchedLetter = _touchedLetter;
 
-					_mOnTouchListener.onTouch(_mAlphabetRelativeLayout,
+					_mOnTouchListener.onTouch(_mAlphabetPresentRelativeLayout,
 							_mDependentListView, event, _touchedLetter);
 				}
 				break;
 
 			case MotionEvent.ACTION_UP:
 			default:
-				// update alphabet relativeLayout background color
-				_mAlphabetRelativeLayout.setBackgroundColor(Color.TRANSPARENT);
+				// update alphabet present relativeLayout background color
+				_mAlphabetPresentRelativeLayout
+						.setBackgroundColor(Color.TRANSPARENT);
 				break;
 			}
 
@@ -414,7 +421,7 @@ public class ListViewQuickAlphabetBar extends DataSetObserver {
 
 		// listView quick alphabet bar on touch
 		protected abstract boolean onTouch(
-				RelativeLayout alphabetRelativeLayout,
+				RelativeLayout alphabetPresentRelativeLayout,
 				ListView dependentListView, MotionEvent event,
 				Character alphabeticalCharacter);
 
