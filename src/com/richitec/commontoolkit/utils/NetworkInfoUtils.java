@@ -55,17 +55,21 @@ public class NetworkInfoUtils {
 		// define network type, default is mobile
 		Integer _networkType = null;
 
+		// define and get current active network is or not available
+		boolean _currentActiveNetworkAvailable = isAvailable();
+
 		// check current active network available
-		if (isAvailable()) {
+		if (_currentActiveNetworkAvailable) {
 			// get the currently active data network type
 			_networkType = getConnectivityManager().getActiveNetworkInfo()
 					.getType();
 		} else {
 			Log.e(LOG_TAG,
-					"Get current active network type unnecessary, there is no active network currently");
+					"Get current active network type unnecessary, current active network available = "
+							+ _currentActiveNetworkAvailable);
 
 			throw new NoActiveNetworkException(
-					"Get current active network type");
+					"Get current active network type unnecessary");
 		}
 
 		return _networkType;
