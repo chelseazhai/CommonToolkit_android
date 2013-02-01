@@ -17,7 +17,7 @@
 
         <RelativeLayout
             android:id="@+id/alphabet_present_relativeLayout"
-            android:layout_width="32dp"
+            android:layout_width="30dp"
             android:layout_height="fill_parent"
             android:background="@android:color/transparent"
             android:paddingBottom="2dp"
