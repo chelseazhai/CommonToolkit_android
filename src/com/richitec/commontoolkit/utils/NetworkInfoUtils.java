@@ -32,8 +32,8 @@ public class NetworkInfoUtils {
 		return _connectivityManager;
 	}
 
-	// is network available
-	public static boolean isAvailable() {
+	// is current active network available
+	public static boolean isCurrentActiveNetworkAvailable() {
 		// define network available, default is no
 		boolean _networkAvailable = false;
 
@@ -56,7 +56,7 @@ public class NetworkInfoUtils {
 		Integer _networkType = null;
 
 		// define and get current active network is or not available
-		boolean _currentActiveNetworkAvailable = isAvailable();
+		boolean _currentActiveNetworkAvailable = isCurrentActiveNetworkAvailable();
 
 		// check current active network available
 		if (_currentActiveNetworkAvailable) {
