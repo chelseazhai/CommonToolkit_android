@@ -108,12 +108,13 @@ public class CallLogManager {
 	// update call log with call log id
 	public static void updateCallLog(Long callLogId,
 			Map<String, String> updateValues) {
-		// define constant
-		final String _where = CallLog.Calls._ID + "=?";
-		final String[] _selectionArgs = new String[] { Long.toString(callLogId) };
-
 		// check call log id and update values map
 		if (null != callLogId && callLogId >= 1 && null != updateValues) {
+			// define constant
+			final String _where = CallLog.Calls._ID + "=?";
+			final String[] _selectionArgs = new String[] { Long
+					.toString(callLogId) };
+
 			// generate new call log values for update
 			ContentValues _callLogValues = new ContentValues();
 
