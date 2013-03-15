@@ -92,7 +92,7 @@ public class CallLogManager {
 				CallLog.Calls.CONTENT_URI, _callLogValues);
 
 		// check new added call log uri
-		if (null == _newAddedCallLogUri) {
+		if (null != _newAddedCallLogUri) {
 			// reset return new added call log id
 			_ret = ContentUris.parseId(_newAddedCallLogUri);
 
