@@ -97,7 +97,7 @@ public class NavigationActivity extends Activity {
 	@Override
 	public void setContentView(View view) {
 		// set content view
-		super.setContentView(view);
+		super.setContentView(R.layout.navigation_activity_layout);
 
 		// check is hide navigation bar on navigation activity created
 		if (!hideNavigationBarWhenOnCreated()) {
