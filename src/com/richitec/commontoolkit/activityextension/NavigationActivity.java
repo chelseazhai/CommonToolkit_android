@@ -176,20 +176,79 @@ public class NavigationActivity extends Activity {
 		_rightBtnLayout.addView(imageBarButtonItem);
 	}
 
+	// set title view with tag
+	public void setTitle(View titleView, String titleTag) {
+		// check title tag and set navigation activity title
+		if (null == titleTag || "".equalsIgnoreCase(titleTag.trim())) {
+			setTitle(R.string.ct_navigation_title_textView_hint);
+		} else {
+			setTitle(titleTag);
+		}
+
+		// get title content view
+		FrameLayout _titleContentView = (FrameLayout) findViewById(R.id.title_contentView);
+
+		// show title contentView if needed and hide title textView
+		if (View.VISIBLE != _titleContentView.getVisibility()) {
+			_titleContentView.setVisibility(View.VISIBLE);
+
+			((TextView) findViewById(R.id.title_textView))
+					.setVisibility(View.GONE);
+		}
+
+		// clear title contentView
+		_titleContentView.removeAllViews();
+
+		// check and add title view
+		if (null != titleView) {
+			_titleContentView.addView(titleView);
+		} else {
+			Log.e(LOG_TAG, "Title view is null, show nothing.");
+		}
+	}
+
+	// set title view with tag
+	public void setTitle(View titleView) {
+		// use default navigation title hint as back operation button title
+		setTitle(titleView, null);
+	}
+
 	@Override
 	public void setTitle(CharSequence title) {
 		super.setTitle(title);
 
+		// get title textView
+		TextView _titleTextView = (TextView) findViewById(R.id.title_textView);
+
+		// show title textView if needed and hide title contentView
+		if (View.VISIBLE != _titleTextView.getVisibility()) {
+			_titleTextView.setVisibility(View.VISIBLE);
+
+			((FrameLayout) findViewById(R.id.title_contentView))
+					.setVisibility(View.GONE);
+		}
+
 		// set title textView text
-		((TextView) findViewById(R.id.title_textView)).setText(title);
+		_titleTextView.setText(title);
 	}
 
 	@Override
 	public void setTitle(int titleId) {
 		super.setTitle(titleId);
 
-		// set title textView text
-		((TextView) findViewById(R.id.title_textView)).setText(titleId);
+		// get title textView
+		TextView _titleTextView = (TextView) findViewById(R.id.title_textView);
+
+		// show title textView if needed and hide title contentView
+		if (View.VISIBLE != _titleTextView.getVisibility()) {
+			_titleTextView.setVisibility(View.VISIBLE);
+
+			((FrameLayout) findViewById(R.id.title_contentView))
+					.setVisibility(View.GONE);
+		}
+
+		// set title
+		_titleTextView.setText(titleId);
 	}
 
 	@Override

@@ -1,6 +1,13 @@
 package com.richitec.commontoolkit.utils;
 
 import java.util.Locale;
+import java.util.UUID;
+
+import android.content.Context;
+import android.provider.Settings.Secure;
+import android.telephony.TelephonyManager;
+
+import com.richitec.commontoolkit.CTApplication;
 
 public class DeviceUtils {
 
@@ -23,6 +30,27 @@ public class DeviceUtils {
 		}
 
 		return _ret;
+	}
+
+	// device uuid, device id can expose user's info to open
+	public static String deviceUUID() {
+		// get telephony manager
+		final TelephonyManager _telephonyManager = (TelephonyManager) CTApplication
+				.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+
+		// get device id, sim serial number and android id
+		// IMEI for GSM or WCDMA, MEID for CDMA
+		String _deviceId = "" + _telephonyManager.getDeviceId();
+		// IMSI
+		String _simSerialNumber = "" + _telephonyManager.getSimSerialNumber();
+		String _androidId = ""
+				+ Secure.getString(CTApplication.getContext()
+						.getContentResolver(), Secure.ANDROID_ID);
+
+		// generate device uuid and return
+		return new UUID(_androidId.hashCode(),
+				((long) _deviceId.hashCode() << 32)
+						| _simSerialNumber.hashCode()).toString();
 	}
 
 }

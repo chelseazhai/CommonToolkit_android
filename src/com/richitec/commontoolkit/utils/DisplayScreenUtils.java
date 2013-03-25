@@ -23,9 +23,14 @@ public class DisplayScreenUtils {
 				Context.WINDOW_SERVICE)).getDefaultDisplay().getHeight();
 	}
 
-	// get screen density
+	// get screen density, dots-per-inch
 	public static int screenDensity() {
 		return CTApplication.getContext().getResources().getDisplayMetrics().densityDpi;
+	}
+
+	// get the logical density of the display screen
+	public static float screenLogicalDensity() {
+		return CTApplication.getContext().getResources().getDisplayMetrics().density;
 	}
 
 	// get status bar height
