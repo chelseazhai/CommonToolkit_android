@@ -57,7 +57,7 @@ public class DeviceUtils {
 		return getTelephonyManager().getDeviceId();
 	}
 
-	// get sim serial number, IMSI
+	// get sim serial number, ICCID(20bits)
 	public static String simSerialNumber() {
 		// return sim serial number
 		return getTelephonyManager().getSimSerialNumber();

@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -151,14 +153,15 @@ public class NavigationActivity extends Activity {
 		// remove default navigation bar left button item and add the new one
 		FrameLayout _leftBtnLayout = (FrameLayout) findViewById(R.id.left_btn_frameLayout);
 		_leftBtnLayout.removeAllViews();
-		_leftBtnLayout.addView(barButtonItem);
+		_leftBtnLayout.addView(removeViewFromParent4Setting(barButtonItem));
 	}
 
 	public void setLeftBarButtonItem(ImageBarButtonItem imageBarButtonItem) {
 		// remove default navigation bar left button item and add the new one
 		FrameLayout _leftBtnLayout = (FrameLayout) findViewById(R.id.left_btn_frameLayout);
 		_leftBtnLayout.removeAllViews();
-		_leftBtnLayout.addView(imageBarButtonItem);
+		_leftBtnLayout
+				.addView(removeViewFromParent4Setting(imageBarButtonItem));
 	}
 
 	// set right bar button item
@@ -166,14 +169,15 @@ public class NavigationActivity extends Activity {
 		// remove default navigation bar left button item and add the new one
 		FrameLayout _rightBtnLayout = (FrameLayout) findViewById(R.id.right_btn_frameLayout);
 		_rightBtnLayout.removeAllViews();
-		_rightBtnLayout.addView(barButtonItem);
+		_rightBtnLayout.addView(removeViewFromParent4Setting(barButtonItem));
 	}
 
 	public void setRightBarButtonItem(ImageBarButtonItem imageBarButtonItem) {
 		// remove default navigation bar left button item and add the new one
 		FrameLayout _rightBtnLayout = (FrameLayout) findViewById(R.id.right_btn_frameLayout);
 		_rightBtnLayout.removeAllViews();
-		_rightBtnLayout.addView(imageBarButtonItem);
+		_rightBtnLayout
+				.addView(removeViewFromParent4Setting(imageBarButtonItem));
 	}
 
 	// set title view with tag
@@ -201,7 +205,7 @@ public class NavigationActivity extends Activity {
 
 		// check and add title view
 		if (null != titleView) {
-			_titleContentView.addView(titleView);
+			_titleContentView.addView(removeViewFromParent4Setting(titleView));
 		} else {
 			Log.e(LOG_TAG, "Title view is null, show nothing.");
 		}
@@ -325,7 +329,29 @@ public class NavigationActivity extends Activity {
 		// finish self activity
 		finish();
 	}
-	//
+
+	// remove title view, left and right (image)bar button item from its parent
+	// view
+	private View removeViewFromParent4Setting(View view) {
+		// check view
+		if (null != view) {
+			// get view parent
+			ViewParent _viewParent = view.getParent();
+
+			// check view parent and remove view if needed
+			if (null != _viewParent) {
+				// remove view from its parent view
+				((ViewGroup) _viewParent).removeView(view);
+			}
+		} else {
+			Log.e(LOG_TAG,
+					"Remove view from parent for setting error, view is null");
+		}
+
+		// return view for setting
+		return view;
+	}
+
 	// @Override
 	// public void onBackPressed() {
 	// // get alive activity list
