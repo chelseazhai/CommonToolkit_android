@@ -82,9 +82,14 @@ public class NavigationActivity extends Activity {
 			}
 		}
 
+		// get navigation content linearLayout
+		LinearLayout _navigationContentView = (LinearLayout) findViewById(R.id.navContent_relativeLayout);
+
+		// clear navigation content linearLayout
+		_navigationContentView.removeAllViews();
+
 		// set parameter view to navigation content linearLayout
-		getLayoutInflater().inflate(layoutResID,
-				(LinearLayout) findViewById(R.id.navContent_relativeLayout));
+		getLayoutInflater().inflate(layoutResID, _navigationContentView);
 	}
 
 	@Override
@@ -113,9 +118,14 @@ public class NavigationActivity extends Activity {
 			}
 		}
 
+		// get navigation content linearLayout
+		LinearLayout _navigationContentView = (LinearLayout) findViewById(R.id.navContent_relativeLayout);
+
+		// clear navigation content linearLayout
+		_navigationContentView.removeAllViews();
+
 		// set parameter view to navigation content linearLayout
-		((LinearLayout) findViewById(R.id.navContent_relativeLayout))
-				.addView(view);
+		_navigationContentView.addView(removeViewFromParent4Setting(view));
 	}
 
 	// set navBar background color
@@ -330,8 +340,8 @@ public class NavigationActivity extends Activity {
 		finish();
 	}
 
-	// remove title view, left and right (image)bar button item from its parent
-	// view
+	// remove content, title view, left and right (image)bar button item from
+	// its parent view
 	private View removeViewFromParent4Setting(View view) {
 		// check view
 		if (null != view) {
