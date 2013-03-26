@@ -1,7 +1,6 @@
 package com.richitec.commontoolkit.utils;
 
 import java.util.Locale;
-import java.util.UUID;
 
 import android.content.Context;
 import android.provider.Settings.Secure;
@@ -10,6 +9,26 @@ import android.telephony.TelephonyManager;
 import com.richitec.commontoolkit.CTApplication;
 
 public class DeviceUtils {
+
+	// telephony manager
+	private static volatile TelephonyManager _telephonyManager;
+
+	// get telephony manager
+	private static TelephonyManager getTelephonyManager() {
+		// check telephony manager
+		if (null == _telephonyManager) {
+			synchronized (DeviceUtils.class) {
+				if (null == _telephonyManager) {
+					// init telephony manager object
+					_telephonyManager = (TelephonyManager) CTApplication
+							.getContext().getSystemService(
+									Context.TELEPHONY_SERVICE);
+				}
+			}
+		}
+
+		return _telephonyManager;
+	}
 
 	// get system current setting language. zh_CN, zh_TW etc.
 	public static Locale systemSettingLanguage() {
@@ -32,25 +51,24 @@ public class DeviceUtils {
 		return _ret;
 	}
 
-	// device uuid, device id can expose user's info to open
-	public static String deviceUUID() {
-		// get telephony manager
-		final TelephonyManager _telephonyManager = (TelephonyManager) CTApplication
-				.getContext().getSystemService(Context.TELEPHONY_SERVICE);
+	// get device id. IMEI(15bits) for GSM or WCDMA, MEID(14bits) for CDMA
+	public static String deviceId() {
+		// return device id
+		return getTelephonyManager().getDeviceId();
+	}
 
-		// get device id, sim serial number and android id
-		// IMEI for GSM or WCDMA, MEID for CDMA
-		String _deviceId = "" + _telephonyManager.getDeviceId();
-		// IMSI
-		String _simSerialNumber = "" + _telephonyManager.getSimSerialNumber();
-		String _androidId = ""
-				+ Secure.getString(CTApplication.getContext()
-						.getContentResolver(), Secure.ANDROID_ID);
+	// get sim serial number, IMSI
+	public static String simSerialNumber() {
+		// return sim serial number
+		return getTelephonyManager().getSimSerialNumber();
+	}
 
-		// generate device uuid and return
-		return new UUID(_androidId.hashCode(),
-				((long) _deviceId.hashCode() << 32)
-						| _simSerialNumber.hashCode()).toString();
+	// get android id
+	public static String androidId() {
+		// return android id
+		return Secure.getString(
+				CTApplication.getContext().getContentResolver(),
+				Secure.ANDROID_ID);
 	}
 
 }
