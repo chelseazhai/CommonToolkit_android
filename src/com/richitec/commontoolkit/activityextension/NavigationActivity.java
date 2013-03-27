@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -54,8 +53,8 @@ public class NavigationActivity extends Activity {
 						public void onClick(View v) {
 							// finish self activity
 							finish();
-
 						}
+
 					});
 		}
 	}
@@ -82,27 +81,13 @@ public class NavigationActivity extends Activity {
 			}
 		}
 
-		// get navigation content linearLayout
-		LinearLayout _navigationContentView = (LinearLayout) findViewById(R.id.navContent_relativeLayout);
-
-		// clear navigation content linearLayout
-		_navigationContentView.removeAllViews();
-
-		// set parameter view to navigation content linearLayout
-		getLayoutInflater().inflate(layoutResID, _navigationContentView);
+		// set parameter view to navigation content relativeLayout
+		getLayoutInflater().inflate(layoutResID,
+				(RelativeLayout) findViewById(R.id.navContent_relativeLayout));
 	}
 
 	@Override
 	public void setContentView(View view, LayoutParams params) {
-		Log.d(LOG_TAG, "Navigation activity set content view, view: " + view
-				+ " and layout params: " + params);
-
-		// set content view
-		super.setContentView(view, params);
-	}
-
-	@Override
-	public void setContentView(View view) {
 		// set content view
 		super.setContentView(R.layout.navigation_activity_layout);
 
@@ -118,14 +103,24 @@ public class NavigationActivity extends Activity {
 			}
 		}
 
-		// get navigation content linearLayout
-		LinearLayout _navigationContentView = (LinearLayout) findViewById(R.id.navContent_relativeLayout);
+		// get navigation content relativeLayout
+		RelativeLayout _navContentRelativeLayout = (RelativeLayout) findViewById(R.id.navContent_relativeLayout);
 
-		// clear navigation content linearLayout
-		_navigationContentView.removeAllViews();
+		// check content view layout parameter and set parameter view to
+		// navigation content linearLayout
+		if (null == params) {
+			_navContentRelativeLayout
+					.addView(removeViewFromParent4Setting(view));
+		} else {
+			_navContentRelativeLayout.addView(
+					removeViewFromParent4Setting(view), params);
+		}
+	}
 
-		// set parameter view to navigation content linearLayout
-		_navigationContentView.addView(removeViewFromParent4Setting(view));
+	@Override
+	public void setContentView(View view) {
+		// set content view
+		this.setContentView(view, null);
 	}
 
 	// set navBar background color
