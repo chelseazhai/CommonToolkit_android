@@ -30,7 +30,10 @@ public class NavigationActivity extends Activity {
 	// commonToolkit navigation activity onCreate param key
 	private static final String NAV_ACTIVITY_PARAM_KEY = "nav_back_btn_default_title";
 
-	// nav bar back button item
+	// navigation bar relativeLayout
+	private RelativeLayout _mNavigationBar;
+
+	// navigation bar back button item
 	private BarButtonItem _mBackBarBtnItem;
 
 	@Override
@@ -69,17 +72,8 @@ public class NavigationActivity extends Activity {
 		// set content view
 		super.setContentView(R.layout.navigation_activity_layout);
 
-		// check is hide navigation bar on navigation activity created
-		if (!hideNavigationBarWhenOnCreated()) {
-			// show navigation bar
-			((RelativeLayout) findViewById(R.id.navBar_relativeLayout))
-					.setVisibility(View.VISIBLE);
-
-			// set nav bar back button item, if not null
-			if (null != _mBackBarBtnItem) {
-				setLeftBarButtonItem(_mBackBarBtnItem);
-			}
-		}
+		// set navigation bar
+		setNavigationBar();
 
 		// set parameter view to navigation content relativeLayout
 		getLayoutInflater().inflate(layoutResID,
@@ -91,17 +85,8 @@ public class NavigationActivity extends Activity {
 		// set content view
 		super.setContentView(R.layout.navigation_activity_layout);
 
-		// check is hide navigation bar on navigation activity created
-		if (!hideNavigationBarWhenOnCreated()) {
-			// show navigation bar
-			((RelativeLayout) findViewById(R.id.navBar_relativeLayout))
-					.setVisibility(View.VISIBLE);
-
-			// set nav bar back button item, if not null
-			if (null != _mBackBarBtnItem) {
-				setLeftBarButtonItem(_mBackBarBtnItem);
-			}
-		}
+		// set navigation bar
+		setNavigationBar();
 
 		// get navigation content relativeLayout
 		RelativeLayout _navContentRelativeLayout = (RelativeLayout) findViewById(R.id.navContent_relativeLayout);
@@ -333,6 +318,43 @@ public class NavigationActivity extends Activity {
 	public void popActivity() {
 		// finish self activity
 		finish();
+	}
+
+	// set navigation activity navigation bar
+	private void setNavigationBar() {
+		// check navigation bar
+		if (null == _mNavigationBar) {
+			// initialize navigation bar
+			_mNavigationBar = (RelativeLayout) findViewById(R.id.navBar_relativeLayout);
+		} else {
+			// reset navigation bar
+			// get new navigation bar relativeLayout
+			RelativeLayout _navBarRelativelayout = (RelativeLayout) findViewById(R.id.navBar_relativeLayout);
+
+			// get its parent
+			ViewParent _navigationActivityContentView = _navBarRelativelayout
+					.getParent();
+
+			// remove it from its parent
+			((ViewGroup) _navigationActivityContentView)
+					.removeView(_navBarRelativelayout);
+
+			// add navigation bar
+			((ViewGroup) _navigationActivityContentView)
+					.addView(removeViewFromParent4Setting(_mNavigationBar));
+		}
+
+		// check is hide navigation bar on navigation activity created
+		if (!hideNavigationBarWhenOnCreated()) {
+			// show navigation bar
+			((RelativeLayout) findViewById(R.id.navBar_relativeLayout))
+					.setVisibility(View.VISIBLE);
+
+			// set nav bar back button item, if not null
+			if (null != _mBackBarBtnItem) {
+				setLeftBarButtonItem(_mBackBarBtnItem);
+			}
+		}
 	}
 
 	// remove content, title view, left and right (image)bar button item from
