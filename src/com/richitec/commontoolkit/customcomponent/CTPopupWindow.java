@@ -1,9 +1,7 @@
 package com.richitec.commontoolkit.customcomponent;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Handler;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -30,87 +28,6 @@ public abstract class CTPopupWindow extends PopupWindow {
 
 	// android popup window animation style
 	private final int ANDROID_POPUPWINDOW_ANIMATIONSTYLE = getAnimationStyle();
-
-	public CTPopupWindow() {
-		super();
-
-		// bind popup window content view and its present child view listener
-		bindPopupWindowContentView7PresentChildViewListener();
-
-		// bind popup window components listener
-		bindPopupWindowComponentsListener();
-	}
-
-	public CTPopupWindow(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
-
-		// bind popup window content view and its present child view listener
-		bindPopupWindowContentView7PresentChildViewListener();
-
-		// bind popup window components listener
-		bindPopupWindowComponentsListener();
-	}
-
-	public CTPopupWindow(Context context, AttributeSet attrs) {
-		super(context, attrs);
-
-		// bind popup window content view and its present child view listener
-		bindPopupWindowContentView7PresentChildViewListener();
-
-		// bind popup window components listener
-		bindPopupWindowComponentsListener();
-	}
-
-	public CTPopupWindow(Context context) {
-		super(context);
-
-		// bind popup window content view and its present child view listener
-		bindPopupWindowContentView7PresentChildViewListener();
-
-		// bind popup window components listener
-		bindPopupWindowComponentsListener();
-	}
-
-	public CTPopupWindow(int width, int height) {
-		super(width, height);
-
-		// bind popup window content view and its present child view listener
-		bindPopupWindowContentView7PresentChildViewListener();
-
-		// bind popup window components listener
-		bindPopupWindowComponentsListener();
-	}
-
-	public CTPopupWindow(View contentView, int width, int height,
-			boolean focusable) {
-		super(contentView, width, height, focusable);
-
-		// bind popup window content view and its present child view listener
-		bindPopupWindowContentView7PresentChildViewListener();
-
-		// bind popup window components listener
-		bindPopupWindowComponentsListener();
-	}
-
-	public CTPopupWindow(View contentView, int width, int height) {
-		super(contentView, width, height);
-
-		// bind popup window content view and its present child view listener
-		bindPopupWindowContentView7PresentChildViewListener();
-
-		// bind popup window components listener
-		bindPopupWindowComponentsListener();
-	}
-
-	public CTPopupWindow(View contentView) {
-		super(contentView);
-
-		// bind popup window content view and its present child view listener
-		bindPopupWindowContentView7PresentChildViewListener();
-
-		// bind popup window components listener
-		bindPopupWindowComponentsListener();
-	}
 
 	// constructor with popup window layout resource id
 	public CTPopupWindow(int resource, int width, int height,
