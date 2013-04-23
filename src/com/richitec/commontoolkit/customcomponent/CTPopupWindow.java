@@ -210,17 +210,22 @@ public abstract class CTPopupWindow extends PopupWindow {
 
 		@Override
 		public boolean onKey(View v, int keyCode, KeyEvent event) {
-			Log.d(LOG_TAG, "View = " + v + ", key code = " + keyCode
+			Log.d(LOG_TAG, "Content view = " + v + ", key code = " + keyCode
 					+ " and key event = " + event);
 
-			// listen back button pressed
+			boolean _ret = false;
+
+			// listen back button pressed if popup window has no children
 			if (KeyEvent.KEYCODE_BACK == keyCode
 					&& KeyEvent.ACTION_DOWN == event.getAction()) {
 				// dismiss popup window
 				dismiss();
+
+				// reset return result
+				_ret = true;
 			}
 
-			return false;
+			return _ret;
 		}
 
 	}
