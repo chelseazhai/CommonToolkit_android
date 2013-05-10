@@ -341,14 +341,15 @@ public class HttpUtils {
 				pRequestType, httpRequestListener);
 	}
 
-	// get http response entity string
+	// get http response entity string using character encoding UTF-8
 	public static String getHttpResponseEntityString(HttpResponse response) {
 		String _respEntityString = null;
 
 		// check response
 		if (null != response) {
 			try {
-				_respEntityString = EntityUtils.toString(response.getEntity());
+				_respEntityString = EntityUtils.toString(response.getEntity(),
+						HTTP.UTF_8);
 			} catch (Exception e) {
 				Log.e(LOG_TAG, "Get http response entity excetion message = "
 						+ e.getMessage());

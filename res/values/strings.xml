@@ -36,7 +36,12 @@
     <string name="ct_calllog_unknownCallee">Unknown</string>
     <string name="ct_calllog_unknownPhone">Unknown Phone</string>
 
-    <!-- warning and error -->
-    <string name="ct_intent_not_available">Intent is not available for your android phone</string>
+    <!-- application upgrade -->
+    <string name="ct_appUpgrade6theLatestApp_alertDialog_title">App Upgrade Alert</string>
+    <string name="ct_appUpgrade_alertDialog_message">New version *** has been existed,\nWould you like to upgrade your application immediately?\nThis upgrade description:\n***</string>
+    <string name="ct_appUpgrade_alertDialog_upgradeButton_title">Upgrade now</string>
+    <string name="ct_appUpgrade_alertDialog_remindLaterButton_title">Remind later</string>
+    <string name="ct_theLatestApp_alertDialog_message">Your application is the latest, version name:***</string>
+    <string name="ct_theLatestApp_alertDialog_neutralButton_title">OK</string>
 
 </resources>

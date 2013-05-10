@@ -14,7 +14,12 @@
     <string name="ct_calllog_unknownCallee">未知聯繫人</string>
     <string name="ct_calllog_unknownPhone">未知號碼</string>
 
-    <!-- warning and error -->
-    <string name="ct_intent_not_available">您的安卓手機不支持此組件</string>
+    <!-- application upgrade -->
+    <string name="ct_appUpgrade6theLatestApp_alertDialog_title">升級提醒</string>
+    <string name="ct_appUpgrade_alertDialog_message">已發現新的版本 ***，\n是否立即更新您的程序？\n本次更新說明：\n***</string>
+    <string name="ct_appUpgrade_alertDialog_upgradeButton_title">立即升級</string>
+    <string name="ct_appUpgrade_alertDialog_remindLaterButton_title">下次再議</string>
+    <string name="ct_theLatestApp_alertDialog_message">您的程序已是最新版本，版本號：***</string>
+    <string name="ct_theLatestApp_alertDialog_neutralButton_title">好</string>
 
 </resources>

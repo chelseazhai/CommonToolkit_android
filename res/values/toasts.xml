@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- application upgrade -->
+    <string name="ct_toast_upgradedAppId_null">The upgraded application id is null</string>
+    <string name="ct_toast_getUpgradedAppLatestVersion_failed">Unable to get the upgraded application latest version from its version center</string>
+
+    <!-- warning and error -->
+    <string name="ct_toast_intent_not_available">Intent is not available for your android phone</string>
+
+</resources>

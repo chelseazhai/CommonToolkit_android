@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- application upgrade -->
+    <string name="ct_toast_upgradedAppId_null">您需要更新的應用不可用</string>
+    <string name="ct_toast_getUpgradedAppLatestVersion_failed">無法從遠程伺服器上獲取您應用的最新版本，請稍後重識</string>
+
+    <!-- warning and error -->
+    <string name="ct_toast_intent_not_available">您的安卓手機不支持此組件</string>
+
+</resources>
