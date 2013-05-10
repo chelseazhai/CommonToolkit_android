@@ -95,7 +95,9 @@ public class NavigationActivity extends Activity {
 		// navigation content linearLayout
 		if (null == params) {
 			_navContentRelativeLayout
-					.addView(removeViewFromParent4Setting(view));
+					.addView(removeViewFromParent4Setting(view),
+							new LayoutParams(LayoutParams.FILL_PARENT,
+									LayoutParams.FILL_PARENT));
 		} else {
 			_navContentRelativeLayout.addView(
 					removeViewFromParent4Setting(view), params);
