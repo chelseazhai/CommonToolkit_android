@@ -1,6 +1,8 @@
 package com.richitec.commontoolkit.user;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserBean implements Serializable {
 
@@ -16,7 +18,15 @@ public class UserBean implements Serializable {
 	// user key
 	private String userKey;
 
+	// extension map
+	private Map<String, Object> extension;
+
+	// UserBean constructor
 	public UserBean() {
+		super();
+
+		// init extension map
+		extension = new HashMap<String, Object>();
 	}
 
 	public UserBean(String name, String password, String userKey) {
@@ -49,6 +59,14 @@ public class UserBean implements Serializable {
 		this.userKey = userKey;
 	}
 
+	public Map<String, Object> getExtension() {
+		return extension;
+	}
+
+	public void setExtension(Map<String, Object> extension) {
+		this.extension = extension;
+	}
+
 	@Override
 	public String toString() {
 		// init user description
@@ -56,8 +74,9 @@ public class UserBean implements Serializable {
 
 		// append user name, password and userKey
 		_userDescription.append("user name: ").append(name).append(", ");
-		_userDescription.append("password: ").append(password).append(", and ");
-		_userDescription.append("userKey: ").append(userKey).append('\n');
+		_userDescription.append("password: ").append(password).append(", ");
+		_userDescription.append("userKey: ").append(userKey).append(" and ");
+		_userDescription.append("extension: ").append(extension).append("\n");
 
 		return _userDescription.toString();
 	}
