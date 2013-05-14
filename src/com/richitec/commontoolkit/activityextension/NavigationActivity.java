@@ -28,7 +28,8 @@ public class NavigationActivity extends Activity {
 			.getCanonicalName();
 
 	// commonToolkit navigation activity onCreate param key
-	private static final String NAV_ACTIVITY_PARAM_KEY = "nav_back_btn_default_title";
+	private static final String NAV_ACTIVITY_PARAM_BACKBARBTNITEM_KEY = "nav_back_btn_default_title";
+	private static final String NAV_ACTIVITY_PARAM_START4RESULT_KEY = "nav_activity_start4result";
 
 	// navigation bar relativeLayout
 	private RelativeLayout _mNavigationBar;
@@ -45,21 +46,28 @@ public class NavigationActivity extends Activity {
 
 		// get the intent and its parameter data
 		_mNextActivityIntent = getIntent();
-		Bundle _data = getIntent().getExtras();
+		final Bundle _data = getIntent().getExtras();
 
 		// check the data bundle
-		if (null != _data && null != _data.getString(NAV_ACTIVITY_PARAM_KEY)) {
+		if (null != _data
+				&& null != _data
+						.getString(NAV_ACTIVITY_PARAM_BACKBARBTNITEM_KEY)) {
 			// init default nav bar back button item
 			_mBackBarBtnItem = new BarButtonItem(this,
-					_data.getString(NAV_ACTIVITY_PARAM_KEY),
+					_data.getString(NAV_ACTIVITY_PARAM_BACKBARBTNITEM_KEY),
 					BarButtonItemStyle.LEFT_BACK,
 					backBarBtnItemNormalDrawable(),
 					backBarBtnItemPressedDrawable(), new OnClickListener() {
 
 						@Override
 						public void onClick(View v) {
-							// finish self activity
-							finish();
+							// check activity start with request code
+							if (_data
+									.getBoolean(NAV_ACTIVITY_PARAM_START4RESULT_KEY)) {
+								popActivityWithResult();
+							} else {
+								popActivity();
+							}
 						}
 
 					});
@@ -303,7 +311,8 @@ public class NavigationActivity extends Activity {
 			for (String extraDataKey : extraData.keySet()) {
 				// check extra data key, if it equals NAV_ACTIVITY_PARAM_KEY,
 				// skip it
-				if (NAV_ACTIVITY_PARAM_KEY.equalsIgnoreCase(extraDataKey)) {
+				if (NAV_ACTIVITY_PARAM_BACKBARBTNITEM_KEY
+						.equalsIgnoreCase(extraDataKey)) {
 					break;
 				}
 
@@ -442,14 +451,16 @@ public class NavigationActivity extends Activity {
 		Intent _intent = new Intent(this, activityClass);
 
 		// set intent extra parameter data
-		_intent.putExtra(NAV_ACTIVITY_PARAM_KEY, (String) this.getTitle());
+		_intent.putExtra(NAV_ACTIVITY_PARAM_BACKBARBTNITEM_KEY,
+				(String) this.getTitle());
 
 		// process extra data
 		if (null != extraData) {
 			for (String extraDataKey : extraData.keySet()) {
 				// check extra data key, if it equals NAV_ACTIVITY_PARAM_KEY,
 				// skip it
-				if (NAV_ACTIVITY_PARAM_KEY.equalsIgnoreCase(extraDataKey)) {
+				if (NAV_ACTIVITY_PARAM_BACKBARBTNITEM_KEY
+						.equalsIgnoreCase(extraDataKey)) {
 					break;
 				}
 
@@ -492,6 +503,9 @@ public class NavigationActivity extends Activity {
 		if (null == requestCode) {
 			startActivity(_intent);
 		} else {
+			// set intent extra parameter data
+			_intent.putExtra(NAV_ACTIVITY_PARAM_START4RESULT_KEY, true);
+
 			startActivityForResult(_intent, requestCode);
 		}
 	}
