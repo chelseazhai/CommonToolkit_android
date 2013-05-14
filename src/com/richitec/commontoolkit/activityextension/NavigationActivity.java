@@ -44,7 +44,7 @@ public class NavigationActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// get the intent and its parameter data
+		// get the intent, save it and its parameter data
 		_mThisActivityIntent = getIntent();
 		final Bundle _data = getIntent().getExtras();
 
