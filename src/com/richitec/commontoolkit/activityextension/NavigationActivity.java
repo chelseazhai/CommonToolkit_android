@@ -37,15 +37,11 @@ public class NavigationActivity extends Activity {
 	// navigation bar back button item
 	private BarButtonItem _mBackBarBtnItem;
 
-	// this navigation activity intent
-	private Intent _mThisActivityIntent;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// get the intent, save it and its parameter data
-		_mThisActivityIntent = getIntent();
+		// get the intent extra data
 		final Bundle _data = getIntent().getExtras();
 
 		// check the data bundle
@@ -306,8 +302,8 @@ public class NavigationActivity extends Activity {
 	// previous activity using method onActivityResult to process
 	public void popActivityWithResult(Integer resultCode,
 			Map<String, ?> extraData) {
-		// check this activity intent and process extra data
-		if (null != _mThisActivityIntent && null != extraData) {
+		// check and process extra data
+		if (null != extraData) {
 			for (String extraDataKey : extraData.keySet()) {
 				// check extra data key, if it equals NAV_ACTIVITY_PARAM_KEY,
 				// skip it
@@ -321,37 +317,29 @@ public class NavigationActivity extends Activity {
 
 				// check extra data type
 				if (_valueObject instanceof Short) {
-					_mThisActivityIntent.putExtra(extraDataKey,
-							(Short) _valueObject);
+					getIntent().putExtra(extraDataKey, (Short) _valueObject);
 				} else if (_valueObject instanceof Integer) {
-					_mThisActivityIntent.putExtra(extraDataKey,
-							(Integer) _valueObject);
+					getIntent().putExtra(extraDataKey, (Integer) _valueObject);
 				} else if (_valueObject instanceof Long) {
-					_mThisActivityIntent.putExtra(extraDataKey,
-							(Long) _valueObject);
+					getIntent().putExtra(extraDataKey, (Long) _valueObject);
 				} else if (_valueObject instanceof Float) {
-					_mThisActivityIntent.putExtra(extraDataKey,
-							(Float) _valueObject);
+					getIntent().putExtra(extraDataKey, (Float) _valueObject);
 				} else if (_valueObject instanceof Double) {
-					_mThisActivityIntent.putExtra(extraDataKey,
-							(Double) _valueObject);
+					getIntent().putExtra(extraDataKey, (Double) _valueObject);
 				} else if (_valueObject instanceof Character) {
-					_mThisActivityIntent.putExtra(extraDataKey,
-							(Character) _valueObject);
+					getIntent()
+							.putExtra(extraDataKey, (Character) _valueObject);
 				} else if (_valueObject instanceof Byte) {
-					_mThisActivityIntent.putExtra(extraDataKey,
-							(Byte) _valueObject);
+					getIntent().putExtra(extraDataKey, (Byte) _valueObject);
 				} else if (_valueObject instanceof Boolean) {
-					_mThisActivityIntent.putExtra(extraDataKey,
-							(Boolean) _valueObject);
+					getIntent().putExtra(extraDataKey, (Boolean) _valueObject);
 				} else if (_valueObject instanceof String) {
-					_mThisActivityIntent.putExtra(extraDataKey,
-							(String) _valueObject);
+					getIntent().putExtra(extraDataKey, (String) _valueObject);
 				} else if (_valueObject instanceof CharSequence) {
-					_mThisActivityIntent.putExtra(extraDataKey,
+					getIntent().putExtra(extraDataKey,
 							(CharSequence) _valueObject);
 				} else if (_valueObject instanceof Serializable) {
-					_mThisActivityIntent.putExtra(extraDataKey,
+					getIntent().putExtra(extraDataKey,
 							(Serializable) _valueObject);
 				} else {
 					// others, not implementation
@@ -364,9 +352,9 @@ public class NavigationActivity extends Activity {
 
 		// check result code and set result
 		if (null == resultCode) {
-			setResult(RESULT_OK, _mThisActivityIntent);
+			setResult(RESULT_OK, getIntent());
 		} else {
-			setResult(resultCode, _mThisActivityIntent);
+			setResult(resultCode, getIntent());
 		}
 
 		// finish self activity
