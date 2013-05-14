@@ -30,9 +30,13 @@ public class UserBean implements Serializable {
 	}
 
 	public UserBean(String name, String password, String userKey) {
+		// set name, password and user key
 		this.name = name;
 		this.password = password;
 		this.userKey = userKey;
+
+		// init extension map
+		extension = new HashMap<String, Object>();
 	}
 
 	public String getName() {
