@@ -38,7 +38,7 @@ public class NavigationActivity extends Activity {
 	private BarButtonItem _mBackBarBtnItem;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// get the intent extra data

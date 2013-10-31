@@ -26,7 +26,7 @@ public abstract class AppLaunchActivity extends Activity {
 			.getCanonicalName();
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// set content view
