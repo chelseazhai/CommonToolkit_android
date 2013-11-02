@@ -37,6 +37,9 @@ public class NavigationActivity extends Activity {
 	// navigation bar back button item
 	private BarButtonItem _mBackBarBtnItem;
 
+	// navigation bar back button item on click listener
+	protected OnClickListener _mBackBarBtnItemOnClickListener;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -53,7 +56,8 @@ public class NavigationActivity extends Activity {
 					_data.getString(NAV_ACTIVITY_PARAM_BACKBARBTNITEM_KEY),
 					BarButtonItemStyle.LEFT_BACK,
 					backBarBtnItemNormalDrawable(),
-					backBarBtnItemPressedDrawable(), new OnClickListener() {
+					backBarBtnItemPressedDrawable(),
+					_mBackBarBtnItemOnClickListener = new OnClickListener() {
 
 						@Override
 						public void onClick(View v) {
