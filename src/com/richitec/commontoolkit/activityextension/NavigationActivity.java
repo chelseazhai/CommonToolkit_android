@@ -356,7 +356,7 @@ public class NavigationActivity extends Activity {
 
 		// check result code and set result
 		if (null == resultCode) {
-			setResult(RESULT_OK, getIntent());
+			setResult(RESULT_CANCELED, getIntent());
 		} else {
 			setResult(resultCode, getIntent());
 		}
