@@ -28,7 +28,7 @@
             android:name=".activityextension.AppLaunchActivity"
             android:label="@string/ct_title_activity_app_launch"
             android:screenOrientation="portrait"
-            android:theme="@style/AppLaunchActivityTheme" >
+            android:theme="@style/AppLaunchTheme" >
         </activity>
         <activity
             android:name=".activityextension.AppInstructionActivity"
