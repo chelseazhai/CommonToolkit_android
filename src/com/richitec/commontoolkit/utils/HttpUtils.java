@@ -1,5 +1,6 @@
 package com.richitec.commontoolkit.utils;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -21,6 +22,9 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -180,7 +184,7 @@ public class HttpUtils {
 
 	// send post request
 	public static void postRequest(String pUrl, PostRequestFormat pPostFormat,
-			Map<String, String> pParam, Map<String, ?> pUserInfo,
+			Map<String, ?> pParam, Map<String, ?> pUserInfo,
 			HttpRequestType pRequestType,
 			OnHttpRequestListener httpRequestListener) {
 		// new httpPost object
@@ -197,8 +201,24 @@ public class HttpUtils {
 
 					// update urlEncodedForm post request param
 					for (String _paramKey : pParam.keySet()) {
-						_urlEncodedFormPostReqParam.add(new BasicNameValuePair(
-								_paramKey, pParam.get(_paramKey)));
+						// get param value
+						Object _paramVaue = pParam.get(_paramKey);
+
+						// check param value
+						if (_paramVaue instanceof String) {
+							_urlEncodedFormPostReqParam
+									.add(new BasicNameValuePair(_paramKey,
+											(String) _paramVaue));
+						} else {
+							Log.e(LOG_TAG,
+									"Url encoded form post request param value must string, param value = "
+											+ _paramVaue);
+
+							// throw unsupported post request param value
+							// exception
+							throw new UnsupportedPostReqParamValueException(
+									"url encoded form post request param value must string");
+						}
 					}
 
 					// set entity
@@ -212,12 +232,37 @@ public class HttpUtils {
 					// init multipart entity
 					MultipartEntity _multipartEntity = new MultipartEntity();
 
+					// define content body
+					ContentBody _contentBody = null;
+
 					// update multipart entity
 					for (String _paramKey : pParam.keySet()) {
-						_multipartEntity.addPart(
-								_paramKey,
-								new StringBody(pParam.get(_paramKey), Charset
-										.forName(HTTP.UTF_8)));
+						// get param value
+						Object _paramVaue = pParam.get(_paramKey);
+
+						// check param value
+						if (_paramVaue instanceof String) {
+							_contentBody = new StringBody((String) _paramVaue,
+									Charset.forName(HTTP.UTF_8));
+						} else if (_paramVaue instanceof File) {
+							_contentBody = new FileBody((File) _paramVaue);
+						} else if (_paramVaue instanceof byte[]) {
+							_contentBody = new ByteArrayBody(
+									(byte[]) _paramVaue, "fileName");
+						} else {
+							Log.d(LOG_TAG, "Param value = " + _paramVaue
+									+ " not implementation");
+
+							// throw unsupported post request param value
+							// exception
+							throw new UnsupportedPostReqParamValueException(
+									"not implementation");
+						}
+
+						// check content body and add as part
+						if (null != _contentBody) {
+							_multipartEntity.addPart(_paramKey, _contentBody);
+						}
 					}
 
 					// set entity
@@ -227,12 +272,17 @@ public class HttpUtils {
 				}
 			} catch (UnsupportedEncodingException e) {
 				Log.e(LOG_TAG,
-						"Post request post body unsupported encoding exceptio message = "
+						"Post request post body unsupported encoding exception message = "
+								+ e.getMessage());
+
+				e.printStackTrace();
+			} catch (UnsupportedPostReqParamValueException e) {
+				Log.e(LOG_TAG,
+						"Post request param value unsupported exception message = "
 								+ e.getMessage());
 
 				e.printStackTrace();
 			}
-
 		}
 
 		// check http request type
@@ -633,6 +683,21 @@ public class HttpUtils {
 		// request execute result
 		enum RequestExecuteResult {
 			NORMAL, TIMEOUT, UNKNOWN_HOST, UNKNOWN_EXCEPTION
+		}
+
+	}
+
+	// unsupported post request param value exception
+	public static class UnsupportedPostReqParamValueException extends Exception {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -4346450562124139037L;
+
+		public UnsupportedPostReqParamValueException(String reason) {
+			super("Can't process post request parameter value, the reason is "
+					+ reason);
 		}
 
 	}
