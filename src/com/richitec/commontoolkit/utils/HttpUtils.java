@@ -400,6 +400,9 @@ public class HttpUtils {
 			try {
 				_respEntityString = EntityUtils.toString(response.getEntity(),
 						HTTP.UTF_8);
+				
+				// consume content
+				response.getEntity().consumeContent();
 			} catch (Exception e) {
 				Log.e(LOG_TAG, "Get http response entity excetion message = "
 						+ e.getMessage());
