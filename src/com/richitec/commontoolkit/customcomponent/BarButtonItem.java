@@ -14,6 +14,8 @@ public class BarButtonItem extends Button {
 	private Drawable _mNormalBackgroundDrawable;
 	// pressed background drawable
 	private Drawable _mPressedBackgroundDrawable;
+	// disable background drawable
+	private Drawable _mDisableBackgroundDrawable;
 
 	public BarButtonItem(Context context) {
 		super(context);
@@ -70,6 +72,26 @@ public class BarButtonItem extends Button {
 	}
 
 	public BarButtonItem(Context context, CharSequence title,
+			BarButtonItemStyle barBtnItemStyle,
+			Drawable normalBackgroundDrawable,
+			Drawable pressedBackgroundDrawable,
+			Drawable disableBackgroundDrawable, OnClickListener btnClickListener) {
+		this(context, barBtnItemStyle, normalBackgroundDrawable);
+
+		// set title and title color
+		setText(null == title ? "" : title);
+		setTextColor(Color.WHITE);
+
+		// set normal, pressed and disable background drawable
+		_mNormalBackgroundDrawable = normalBackgroundDrawable;
+		_mPressedBackgroundDrawable = pressedBackgroundDrawable;
+		_mDisableBackgroundDrawable = disableBackgroundDrawable;
+
+		// set on click listener
+		setOnClickListener(btnClickListener);
+	}
+
+	public BarButtonItem(Context context, CharSequence title,
 			OnClickListener btnClickListener) {
 		this(context, title, BarButtonItemStyle.RIGHT_GO, null, null,
 				btnClickListener);
@@ -120,6 +142,28 @@ public class BarButtonItem extends Button {
 	}
 
 	public BarButtonItem(Context context, int titleId,
+			int normalBackgroundResId, int pressedBackgroundResId,
+			int disableBackgroundResId, OnClickListener btnClickListener) {
+		this(context, BarButtonItemStyle.RIGHT_GO, context.getResources()
+				.getDrawable(normalBackgroundResId));
+
+		// set title and title color
+		setText(titleId);
+		setTextColor(Color.WHITE);
+
+		// set normal, pressed and disable background drawable
+		_mNormalBackgroundDrawable = getResources().getDrawable(
+				normalBackgroundResId);
+		_mPressedBackgroundDrawable = getResources().getDrawable(
+				pressedBackgroundResId);
+		_mDisableBackgroundDrawable = getResources().getDrawable(
+				disableBackgroundResId);
+
+		// set on click listener
+		setOnClickListener(btnClickListener);
+	}
+
+	public BarButtonItem(Context context, int titleId,
 			OnClickListener btnClickListener) {
 		this(context, context.getResources().getString(titleId),
 				btnClickListener);
@@ -134,14 +178,20 @@ public class BarButtonItem extends Button {
 	@Override
 	protected void onDraw(Canvas canvas) {
 		// set the button background image based on whether the button in its
-		// pressed state
-		if (isPressed()) {
-			if (null != _mPressedBackgroundDrawable) {
-				setBackgroundDrawable(_mPressedBackgroundDrawable);
+		// disable and pressed state
+		if (!isEnabled()) {
+			if (null != _mDisableBackgroundDrawable) {
+				setBackgroundDrawable(_mDisableBackgroundDrawable);
 			}
 		} else {
-			if (null != _mNormalBackgroundDrawable) {
-				setBackgroundDrawable(_mNormalBackgroundDrawable);
+			if (isPressed()) {
+				if (null != _mPressedBackgroundDrawable) {
+					setBackgroundDrawable(_mPressedBackgroundDrawable);
+				}
+			} else {
+				if (null != _mNormalBackgroundDrawable) {
+					setBackgroundDrawable(_mNormalBackgroundDrawable);
+				}
 			}
 		}
 
