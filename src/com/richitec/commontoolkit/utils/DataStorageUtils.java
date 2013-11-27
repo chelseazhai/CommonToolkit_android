@@ -213,9 +213,12 @@ public class DataStorageUtils {
 		// check key class
 		if (keyClass.equals(String.class)) {
 			_ret = null;
-		} else if (keyClass.equals(Integer.class)
-				|| keyClass.equals(Long.class) || keyClass.equals(Float.class)) {
+		} else if (keyClass.equals(Integer.class)) {
 			_ret = 0;
+		} else if (keyClass.equals(Long.class)) {
+			_ret = 0L;
+		} else if (keyClass.equals(Float.class)) {
+			_ret = 0.0f;
 		} else if (keyClass.equals(Boolean.class)) {
 			_ret = false;
 		} else {
