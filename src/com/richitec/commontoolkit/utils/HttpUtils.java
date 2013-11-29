@@ -8,12 +8,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.apache.http.Header;
+import org.apache.http.HeaderIterator;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
+import org.apache.http.ProtocolVersion;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -397,17 +403,20 @@ public class HttpUtils {
 
 		// check response
 		if (null != response) {
-			try {
-				_respEntityString = EntityUtils.toString(response.getEntity(),
-						HTTP.UTF_8);
-				
-				// consume content
-				response.getEntity().consumeContent();
-			} catch (Exception e) {
-				Log.e(LOG_TAG, "Get http response entity excetion message = "
-						+ e.getMessage());
+			if (response instanceof SimpleHttpResponse) {
+				_respEntityString = ((SimpleHttpResponse) response)
+						.getEntityString();
+			} else {
+				try {
+					_respEntityString = EntityUtils.toString(
+							response.getEntity(), HTTP.UTF_8);
+				} catch (Exception e) {
+					Log.e(LOG_TAG,
+							"Get http response entity excetion message = "
+									+ e.getMessage());
 
-				e.printStackTrace();
+					e.printStackTrace();
+				}
 			}
 		} else {
 			Log.e(LOG_TAG, "Get http response entity, response is null");
@@ -584,6 +593,166 @@ public class HttpUtils {
 
 	}
 
+	// simple http response
+	static class SimpleHttpResponse implements HttpResponse {
+
+		// apache http response
+		private HttpResponse _mApacheHttpResponse;
+
+		// simple response entity string
+		private String _mSimpleResponseEntityString;
+
+		// constructor, mustn't constructor in main thread
+		public SimpleHttpResponse(HttpResponse apacheHttpResponse) {
+			super();
+
+			// save apache http response and entity string
+			_mApacheHttpResponse = apacheHttpResponse;
+			_mSimpleResponseEntityString = getHttpResponseEntityString(apacheHttpResponse);
+		}
+
+		@Override
+		public void addHeader(Header header) {
+			_mApacheHttpResponse.addHeader(header);
+		}
+
+		@Override
+		public void addHeader(String name, String value) {
+			_mApacheHttpResponse.addHeader(name, value);
+		}
+
+		@Override
+		public boolean containsHeader(String name) {
+			return _mApacheHttpResponse.containsHeader(name);
+		}
+
+		@Override
+		public Header[] getAllHeaders() {
+			return _mApacheHttpResponse.getAllHeaders();
+		}
+
+		@Override
+		public Header getFirstHeader(String name) {
+			return _mApacheHttpResponse.getFirstHeader(name);
+		}
+
+		@Override
+		public Header[] getHeaders(String name) {
+			return _mApacheHttpResponse.getHeaders(name);
+		}
+
+		@Override
+		public Header getLastHeader(String name) {
+			return _mApacheHttpResponse.getLastHeader(name);
+		}
+
+		@Override
+		public HttpParams getParams() {
+			return _mApacheHttpResponse.getParams();
+		}
+
+		@Override
+		public ProtocolVersion getProtocolVersion() {
+			return _mApacheHttpResponse.getProtocolVersion();
+		}
+
+		@Override
+		public HeaderIterator headerIterator() {
+			return _mApacheHttpResponse.headerIterator();
+		}
+
+		@Override
+		public HeaderIterator headerIterator(String name) {
+			return _mApacheHttpResponse.headerIterator(name);
+		}
+
+		@Override
+		public void removeHeader(Header header) {
+			_mApacheHttpResponse.removeHeader(header);
+		}
+
+		@Override
+		public void removeHeaders(String name) {
+			_mApacheHttpResponse.removeHeaders(name);
+		}
+
+		@Override
+		public void setHeader(Header header) {
+			_mApacheHttpResponse.setHeader(header);
+		}
+
+		@Override
+		public void setHeader(String name, String value) {
+			_mApacheHttpResponse.setHeader(name, value);
+		}
+
+		@Override
+		public void setHeaders(Header[] headers) {
+			_mApacheHttpResponse.setHeaders(headers);
+		}
+
+		@Override
+		public void setParams(HttpParams params) {
+			_mApacheHttpResponse.setParams(params);
+		}
+
+		@Override
+		public HttpEntity getEntity() {
+			return _mApacheHttpResponse.getEntity();
+		}
+
+		@Override
+		public Locale getLocale() {
+			return _mApacheHttpResponse.getLocale();
+		}
+
+		@Override
+		public StatusLine getStatusLine() {
+			return _mApacheHttpResponse.getStatusLine();
+		}
+
+		@Override
+		public void setEntity(HttpEntity entity) {
+			_mApacheHttpResponse.setEntity(entity);
+		}
+
+		@Override
+		public void setLocale(Locale loc) {
+			_mApacheHttpResponse.setLocale(loc);
+		}
+
+		@Override
+		public void setReasonPhrase(String reason) throws IllegalStateException {
+			_mApacheHttpResponse.setReasonPhrase(reason);
+		}
+
+		@Override
+		public void setStatusCode(int code) throws IllegalStateException {
+			_mApacheHttpResponse.setStatusCode(code);
+		}
+
+		@Override
+		public void setStatusLine(StatusLine statusline) {
+			_mApacheHttpResponse.setStatusLine(statusline);
+		}
+
+		@Override
+		public void setStatusLine(ProtocolVersion ver, int code) {
+			_mApacheHttpResponse.setStatusLine(ver, code);
+		}
+
+		@Override
+		public void setStatusLine(ProtocolVersion ver, int code, String reason) {
+			_mApacheHttpResponse.setStatusLine(ver, code, reason);
+		}
+
+		// get entity string
+		public String getEntityString() {
+			return _mSimpleResponseEntityString;
+		}
+
+	}
+
 	// asynchronous http request task
 	// Objects: HttpUriRequest, OnHttpRequestListener
 	static class AsyncHttpRequestTask extends
@@ -591,8 +760,8 @@ public class HttpUtils {
 
 		// http request
 		private HttpUriRequest _mHttpRequest;
-		// http response
-		private HttpResponse _mHttpResponse;
+		// simple http response
+		private SimpleHttpResponse _mSimpleHttpResponse;
 		// http request listener
 		private OnHttpRequestListener _mHttpRequestListener;
 
@@ -609,7 +778,8 @@ public class HttpUtils {
 
 			// save http response
 			try {
-				_mHttpResponse = getHttpClient().execute(_mHttpRequest);
+				_mSimpleHttpResponse = new SimpleHttpResponse(getHttpClient()
+						.execute(_mHttpRequest));
 			} catch (Exception e) {
 				Log.e(LOG_TAG,
 						"Send asynchronous http request excetion message = "
@@ -660,7 +830,7 @@ public class HttpUtils {
 				case NORMAL:
 				default:
 					_mHttpRequestListener.bindReqRespCallBackFunction(
-							_mHttpRequest, _mHttpResponse);
+							_mHttpRequest, _mSimpleHttpResponse);
 					break;
 				}
 			}
