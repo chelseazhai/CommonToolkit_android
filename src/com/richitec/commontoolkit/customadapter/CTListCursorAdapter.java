@@ -1,6 +1,7 @@
 package com.richitec.commontoolkit.customadapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -31,10 +32,30 @@ public abstract class CTListCursorAdapter extends CursorAdapter {
 	// cursor data list
 	protected List<Object> _mData;
 
+	// cursor
+	private Cursor _mCursor;
+
 	public CTListCursorAdapter(Context context, int itemsLayoutResId, Cursor c,
 			String[] dataKeys, int[] itemsComponentResIds) {
 		super(context, c);
 
+		// initialize commonToolkit list cursor adapter
+		initCTListCursorAdapter(context, itemsLayoutResId, c, dataKeys,
+				itemsComponentResIds);
+	}
+
+	public CTListCursorAdapter(Context context, int itemsLayoutResId, Cursor c,
+			String[] dataKeys, int[] itemsComponentResIds, boolean autoRequery) {
+		super(context, c, autoRequery);
+
+		// initialize commonToolkit list cursor adapter
+		initCTListCursorAdapter(context, itemsLayoutResId, c, dataKeys,
+				itemsComponentResIds);
+	}
+
+	// initialize commonToolkit list cursor adapter
+	private void initCTListCursorAdapter(Context context, int itemsLayoutResId,
+			Cursor c, String[] dataKeys, int[] itemsComponentResIds) {
 		// save context, layout inflater, items layout resource id, data keys
 		// and items component resource identities
 		_mContext = context;
@@ -46,22 +67,47 @@ public abstract class CTListCursorAdapter extends CursorAdapter {
 
 		// init cursor data list
 		_mData = new ArrayList<Object>();
+
+		// save cursor
+		_mCursor = c;
 	}
 
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		// check cursor position and append cursor data
-		if (cursor.getPosition() >= _mData.size()) {
-			appendCursorData(_mData, cursor);
+		// check cursor
+		if (_mCursor != cursor) {
+			// reset data with cursor
+			// clear old cursor data list
+			_mData.clear();
+
+			// append cursor data
+			do {
+				appendCursorData(_mData, cursor);
+			} while (cursor.moveToPrevious());
+
+			// reverse data list
+			Collections.reverse(_mData);
+
+			// cursor recover
+			cursor.move(_mData.size());
+
+			// update cursor
+			_mCursor = cursor;
 		} else {
-			Log.d(LOG_TAG, "Rollback, mustn't append cursor data");
+			// check cursor position and append cursor data
+			if (cursor.getPosition() >= _mData.size()) {
+				appendCursorData(_mData, cursor);
+			} else {
+				Log.d(LOG_TAG, "Rollback, mustn't append cursor data");
+			}
 		}
 
 		// set item component view subViews
 		for (int i = 0; i < _mItemsComponentResIds.length; i++) {
 			// recombination data and bind item component view data
 			bindView(
-					view.findViewById(_mItemsComponentResIds[i]),
+					((CTAdapterViewHolder) view.getTag()).getViews4Holding()
+							.get(_mItemsComponentResIds[i]),
 					recombinationData(_mDataKeys[i],
 							_mData.get(cursor.getPosition())), _mDataKeys[i]);
 		}
@@ -69,7 +115,23 @@ public abstract class CTListCursorAdapter extends CursorAdapter {
 
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
-		return _mLayoutInflater.inflate(_mItemsLayoutResId, parent, false);
+		// define and int view holder object
+		CTAdapterViewHolder _viewHolder = new CTAdapterViewHolder();
+
+		// inflate convert view
+		View _convertView = _mLayoutInflater.inflate(_mItemsLayoutResId,
+				parent, false);
+
+		// set item component view subViews
+		for (int i = 0; i < _mItemsComponentResIds.length; i++) {
+			_viewHolder.getViews4Holding().append(_mItemsComponentResIds[i],
+					_convertView.findViewById(_mItemsComponentResIds[i]));
+		}
+
+		// set tag
+		_convertView.setTag(_viewHolder);
+
+		return _convertView;
 	}
 
 	public List<Object> getDataList() {

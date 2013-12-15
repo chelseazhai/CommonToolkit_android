@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import android.content.Context;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,18 +60,19 @@ public abstract class CTListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		// define view holer object
-		ViewHolder _viewHolder;
+		// define view holder object
+		CTAdapterViewHolder _viewHolder;
 
 		// check convert view
 		if (null == convertView) {
 			convertView = _mLayoutInflater.inflate(_mItemsLayoutResId, null);
 
 			// init view holder and set its views for holding
-			_viewHolder = new ViewHolder();
+			_viewHolder = new CTAdapterViewHolder();
 			// set item component view subViews
 			for (int i = 0; i < _mItemsComponentResIds.length; i++) {
-				_viewHolder.views4Holding.append(_mItemsComponentResIds[i],
+				_viewHolder.getViews4Holding().append(
+						_mItemsComponentResIds[i],
 						convertView.findViewById(_mItemsComponentResIds[i]));
 			}
 
@@ -80,7 +80,7 @@ public abstract class CTListAdapter extends BaseAdapter {
 			convertView.setTag(_viewHolder);
 		} else {
 			// get view holder
-			_viewHolder = (ViewHolder) convertView.getTag();
+			_viewHolder = (CTAdapterViewHolder) convertView.getTag();
 		}
 
 		// set item component view subViews
@@ -88,8 +88,10 @@ public abstract class CTListAdapter extends BaseAdapter {
 			// bind item component view data
 			// bindView(convertView.findViewById(_mItemsComponentResIds[i]),
 			// _mData.get(position), _mDataKeys[i]);
-			bindView(_viewHolder.views4Holding.get(_mItemsComponentResIds[i]),
-					_mData.get(position), _mDataKeys[i]);
+			bindView(
+					_viewHolder.getViews4Holding().get(
+							_mItemsComponentResIds[i]), _mData.get(position),
+					_mDataKeys[i]);
 		}
 
 		return convertView;
@@ -177,19 +179,5 @@ public abstract class CTListAdapter extends BaseAdapter {
 	// bind view and data
 	protected abstract void bindView(View view, Map<String, ?> dataMap,
 			String dataKey);
-
-	// inner class
-	class ViewHolder {
-		// views for holding
-		SparseArray<View> views4Holding;
-
-		public ViewHolder() {
-			super();
-
-			// init views sparse array for holding
-			views4Holding = new SparseArray<View>();
-		}
-
-	}
 
 }
