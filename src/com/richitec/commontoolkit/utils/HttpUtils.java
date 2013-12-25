@@ -2,6 +2,7 @@ package com.richitec.commontoolkit.utils;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -790,7 +791,8 @@ public class HttpUtils {
 				// check http request listener
 				if (null != _mHttpRequestListener) {
 					// process the exception and update request execute result
-					if (ConnectTimeoutException.class == e.getClass()) {
+					if (ConnectTimeoutException.class == e.getClass()
+							|| SocketException.class == e.getClass()) {
 						// timeout
 						_ret = RequestExecuteResult.TIMEOUT;
 					} else if (UnknownHostException.class == e.getClass()) {
