@@ -31,7 +31,8 @@ public class CommonUtils {
 	}
 
 	// compare two list
-	public static boolean compareList(List<?> leftList, List<?> rightList) {
+	public static boolean compareList(List<?> leftList, List<?> rightList,
+			boolean isOrdered) {
 		boolean _ret = false;
 
 		// check left and right list
@@ -63,21 +64,37 @@ public class CommonUtils {
 							"Not need to compare two object list, both left list and right list are empty, set equals");
 				} else {
 					for (int i = 0; i < leftList.size(); i++) {
-						if (!leftList.get(i).equals(rightList.get(i))) {
-							Log.d(LOG_TAG,
-									"Left list element = "
-											+ leftList.get(i)
-											+ " at index = "
-											+ i
-											+ " not equals to the right list element = "
-											+ rightList.get(i)
-											+ " at the same position");
+						// check compare ordered or unordered
+						if (isOrdered) {
+							if (!leftList.get(i).equals(rightList.get(i))) {
+								Log.d(LOG_TAG,
+										"Left list element = "
+												+ leftList.get(i)
+												+ " at index = "
+												+ i
+												+ " not equals to the right list element = "
+												+ rightList.get(i)
+												+ " at the same position");
 
-							// break immediately
-							break;
+								// break immediately
+								break;
+							}
+						} else {
+							if (!rightList.contains(leftList.get(i))) {
+								Log.d(LOG_TAG, "Left list element = "
+										+ leftList.get(i) + " at index = " + i
+										+ " not contains in the right list");
+
+								// break immediately
+								break;
+							} else {
+								// remove the matched object from right list
+								rightList.remove(rightList.indexOf(leftList
+										.get(i)));
+							}
 						}
 
-						if (rightList.size() - 1 == i) {
+						if (leftList.size() - 1 == i) {
 							_ret = true;
 						}
 					}
