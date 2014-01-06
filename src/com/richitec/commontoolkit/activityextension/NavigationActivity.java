@@ -60,14 +60,14 @@ public class NavigationActivity extends Activity {
 					_mBackBarBtnItemOnClickListener = new OnClickListener() {
 
 						@Override
-						public void onClick(View v) {
-							// check activity start with request code
-							if (_data
-									.getBoolean(NAV_ACTIVITY_PARAM_START4RESULT_KEY)) {
-								popActivityWithResult();
-							} else {
-								popActivity();
-							}
+						public void onClick(View backBarBtnItem) {
+							// set activity start with request code as back bar
+							// button item tag
+							backBarBtnItem.setTag(_data
+									.getBoolean(NAV_ACTIVITY_PARAM_START4RESULT_KEY));
+
+							// perform back bar button item on click
+							onBackBarButtonItemClick(backBarBtnItem);
 						}
 
 					});
@@ -150,6 +150,20 @@ public class NavigationActivity extends Activity {
 	protected Drawable backBarBtnItemPressedDrawable() {
 		return getResources().getDrawable(
 				R.drawable.img_leftbarbtnitem_touchdown_bg);
+	}
+
+	// nav back bar button item on click
+	protected void onBackBarButtonItemClick(View backBarBtnItem) {
+		// get check back bar button item tag as activity start with request
+		// code
+		Boolean _isNavActivityStartWithReqCode = (Boolean) backBarBtnItem
+				.getTag();
+		if (null != _isNavActivityStartWithReqCode
+				&& true == _isNavActivityStartWithReqCode) {
+			popActivityWithResult();
+		} else {
+			popActivity();
+		}
 	}
 
 	// set left bar button item
