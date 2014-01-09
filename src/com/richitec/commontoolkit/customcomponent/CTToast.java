@@ -38,7 +38,7 @@ public class CTToast {
 	private Toast _mStoreAttrsToast;
 
 	// commonToolkit toast content view
-	private ViewGroup _mContentView;
+	protected ViewGroup _mContentView;
 
 	// display popup window
 	private PopupWindow _mDisplayPopupWindow;
