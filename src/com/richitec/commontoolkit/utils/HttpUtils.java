@@ -28,12 +28,17 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
@@ -75,8 +80,17 @@ public class HttpUtils {
 				_mTimeoutConnection);
 		HttpConnectionParams.setSoTimeout(_httpParameters, _mTimeoutSocket);
 
+		// define scheme registry for http and https
+		SchemeRegistry _schemeRegistry = new SchemeRegistry();
+		_schemeRegistry.register(new Scheme(HttpUrlPrefix.HTTP.name()
+				.toLowerCase(), PlainSocketFactory.getSocketFactory(), 80));
+		_schemeRegistry.register(new Scheme(HttpUrlPrefix.HTTPS.name()
+				.toLowerCase(), SSLSocketFactory.getSocketFactory(), 443));
+
 		// init http client
-		_mDefaultHttpClient = new DefaultHttpClient(_httpParameters);
+		_mDefaultHttpClient = new DefaultHttpClient(
+				new ThreadSafeClientConnManager(_httpParameters,
+						_schemeRegistry), _httpParameters);
 	}
 
 	private HttpClient getDefaultHttpClient() {
