@@ -27,7 +27,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.params.ConnManagerParams;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -62,6 +64,9 @@ public class HttpUtils {
 	// apache default http client
 	private HttpClient _mDefaultHttpClient;
 
+	// get connection from connection manager timeout
+	private int _mTimeoutGetConnection = 1000;
+
 	// connection and socket timeout
 	private int _mTimeoutConnection = 5000;
 	private int _mTimeoutSocket = 10000;
@@ -76,6 +81,7 @@ public class HttpUtils {
 		HttpParams _httpParameters = new BasicHttpParams();
 
 		// set timeout
+		ConnManagerParams.setTimeout(_httpParameters, _mTimeoutGetConnection);
 		HttpConnectionParams.setConnectionTimeout(_httpParameters,
 				_mTimeoutConnection);
 		HttpConnectionParams.setSoTimeout(_httpParameters, _mTimeoutSocket);
@@ -87,10 +93,11 @@ public class HttpUtils {
 		_schemeRegistry.register(new Scheme(HttpUrlPrefix.HTTPS.name()
 				.toLowerCase(), SSLSocketFactory.getSocketFactory(), 443));
 
-		// init http client
-		_mDefaultHttpClient = new DefaultHttpClient(
-				new ThreadSafeClientConnManager(_httpParameters,
-						_schemeRegistry), _httpParameters);
+		// initialize http client using thread safe client connection manager
+		ClientConnectionManager _clientConnectionManager = new ThreadSafeClientConnManager(
+				_httpParameters, _schemeRegistry);
+		_mDefaultHttpClient = new DefaultHttpClient(_clientConnectionManager,
+				_httpParameters);
 	}
 
 	private HttpClient getDefaultHttpClient() {
