@@ -430,8 +430,15 @@ public class HttpUtils {
 						.getEntityString();
 			} else {
 				try {
-					_respEntityString = EntityUtils.toString(
-							response.getEntity(), HTTP.UTF_8);
+					// get http response entiry
+					HttpEntity _responseEntiry = response.getEntity();
+
+					// save response entity as string
+					_respEntityString = EntityUtils.toString(_responseEntiry,
+							HTTP.UTF_8);
+
+					// consume response entity content
+					_responseEntiry.consumeContent();
 				} catch (Exception e) {
 					Log.e(LOG_TAG,
 							"Get http response entity excetion message = "
