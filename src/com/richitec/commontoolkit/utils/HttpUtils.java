@@ -30,6 +30,7 @@ import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.conn.params.ConnPerRouteBean;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -64,6 +65,11 @@ public class HttpUtils {
 	// apache default http client
 	private HttpClient _mDefaultHttpClient;
 
+	// max connection count
+	public final static int MAX_TOTAL_CONNECTIONS = 400;
+	// max connection count per route
+	public final static int MAX_ROUTE_CONNECTIONS = 200;
+
 	// get connection from connection manager timeout
 	private int _mTimeoutGetConnection = 1000;
 
@@ -79,6 +85,12 @@ public class HttpUtils {
 	private HttpUtils() {
 		// init http param
 		HttpParams _httpParameters = new BasicHttpParams();
+
+		// set connection count
+		ConnManagerParams.setMaxTotalConnections(_httpParameters,
+				MAX_TOTAL_CONNECTIONS);
+		ConnManagerParams.setMaxConnectionsPerRoute(_httpParameters,
+				new ConnPerRouteBean(MAX_ROUTE_CONNECTIONS));
 
 		// set timeout
 		ConnManagerParams.setTimeout(_httpParameters, _mTimeoutGetConnection);
