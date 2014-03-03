@@ -200,6 +200,9 @@ public class HttpUtils {
 					httpRequestListener.bindReqRespCallBackFunction(
 							_getHttpRequest, _response);
 				}
+
+				// shutdown the http connection
+				getHttpClient().getConnectionManager().shutdown();
 			} catch (Exception e) {
 				Log.e(LOG_TAG,
 						"Send synchronous get request excetion message = "
@@ -339,6 +342,9 @@ public class HttpUtils {
 					httpRequestListener.bindReqRespCallBackFunction(
 							_postHttpRequest, _response);
 				}
+
+				// shutdown the http connection
+				getHttpClient().getConnectionManager().shutdown();
 			} catch (Exception e) {
 				Log.e(LOG_TAG,
 						"Send synchronous post request excetion message = "
@@ -844,6 +850,9 @@ public class HttpUtils {
 					}
 				}
 			}
+
+			// shutdown the http connection
+			getHttpClient().getConnectionManager().shutdown();
 
 			return _ret;
 		}
