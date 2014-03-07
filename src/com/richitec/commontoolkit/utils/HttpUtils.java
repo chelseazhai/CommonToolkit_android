@@ -101,9 +101,11 @@ public class HttpUtils {
 		// define scheme registry for http and https
 		SchemeRegistry _schemeRegistry = new SchemeRegistry();
 		_schemeRegistry.register(new Scheme(HttpUrlPrefix.HTTP.name()
-				.toLowerCase(), PlainSocketFactory.getSocketFactory(), 80));
+				.toLowerCase(Locale.US), PlainSocketFactory.getSocketFactory(),
+				80));
 		_schemeRegistry.register(new Scheme(HttpUrlPrefix.HTTPS.name()
-				.toLowerCase(), SSLSocketFactory.getSocketFactory(), 443));
+				.toLowerCase(Locale.US), SSLSocketFactory.getSocketFactory(),
+				443));
 
 		// initialize http client using thread safe client connection manager
 		ClientConnectionManager _clientConnectionManager = new ThreadSafeClientConnManager(
