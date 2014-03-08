@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -496,6 +497,8 @@ public class NavigationActivity extends Activity {
 					_intent.putExtra(extraDataKey, (CharSequence) _valueObject);
 				} else if (_valueObject instanceof Serializable) {
 					_intent.putExtra(extraDataKey, (Serializable) _valueObject);
+				} else if (_valueObject instanceof Parcelable) {
+					_intent.putExtra(extraDataKey, (Parcelable) _valueObject);
 				} else {
 					// others, not implementation
 					Log.d(LOG_TAG, "Type = "
